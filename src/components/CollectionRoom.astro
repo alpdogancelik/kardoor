@@ -1,4 +1,4 @@
-﻿---
+---
 import type { Collection } from "../data/collections";
 import DoorVisual from "./DoorVisual.astro";
 import TechnicalCallouts from "./TechnicalCallouts.astro";
@@ -11,23 +11,33 @@ const { collection } = Astro.props;
 ---
 
 <article class="collection-room" data-collection-room style={`--room-accent:${collection.accentColor};`}>
-  <div class="collection-room-content" data-reveal>
-    <p class="collection-room-number">{collection.number}</p>
-    <h3 class="kardoor-display collection-room-title" data-split>{collection.title}</h3>
-    <p class="collection-room-description">{collection.description}</p>
-
-    <ul class="collection-model-codes">
-      {collection.modelCodes.map((code) => <li>{code}</li>)}
-    </ul>
-
-    <div class="collection-room-actions">
-      <a href={`/koleksiyonlar/${collection.slug}`} class="btn btn-primary">Seriyi İncele</a>
-      <a href="/teklif" class="btn btn-secondary">Teklif Al</a>
-    </div>
+  <div class="collection-room-scene" aria-hidden="true">
+    <div class="collection-room-floor"></div>
+    <div class="collection-room-beam collection-room-beam--left"></div>
+    <div class="collection-room-beam collection-room-beam--right"></div>
   </div>
 
-  <div class="collection-room-visual" data-reveal>
-    <DoorVisual image={collection.image} alt={collection.title} size="room" />
-    <TechnicalCallouts labels={collection.materials} />
+  <div class="collection-room-grid">
+    <div class="collection-room-content">
+      <p class="collection-room-number">{collection.number}</p>
+      <h3 class="kardoor-display collection-room-title" data-split>{collection.title}</h3>
+      <p class="collection-room-description">{collection.description}</p>
+
+      <ul class="collection-model-codes">
+        {collection.modelCodes.map((code) => <li>{code}</li>)}
+      </ul>
+
+      <div class="collection-room-actions">
+        <a href={`/koleksiyonlar/${collection.slug}`} class="btn btn-primary">Seriyi İncele</a>
+        <a href="/teklif" class="btn btn-secondary">Teklif Al</a>
+      </div>
+    </div>
+
+    <div class="collection-room-visual">
+      <div class="collection-door-stage">
+        <DoorVisual image={collection.image} alt={collection.title} size="room" />
+        <TechnicalCallouts labels={collection.materials} />
+      </div>
+    </div>
   </div>
 </article>

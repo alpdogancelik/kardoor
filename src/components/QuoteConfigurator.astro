@@ -1,62 +1,75 @@
-﻿<section class="quote-configurator" data-quote-config>
+<section class="quote-configurator" data-quote-config>
   <div class="quote-shell">
-    <div class="section-intro" data-reveal>
-      <p class="kardoor-kicker">Guided Quote</p>
-      <h2 class="kardoor-display" data-split>Kapınız için doğru modeli birlikte seçelim</h2>
+    <div class="quote-copy" data-reveal>
+      <p class="kardoor-kicker">TEKLİF AKIŞI</p>
+
+      <h2 class="kardoor-display" data-split>
+        Kapınız için doğru modeli birlikte seçelim
+      </h2>
+
+      <p>
+        Kullanım alanı, seri ve model tercihinize göre en uygun Kardoor çözümünü
+        belirleyelim. Formu doldurun, proje ihtiyacınıza göre teklif sürecini başlatalım.
+      </p>
     </div>
 
-    <div class="quote-grid">
-      <article class="quote-step" data-reveal>
+    <div class="quote-panel" data-reveal>
+      <div class="quote-step">
         <p class="quote-step-index">1. Kullanım Alanı</p>
-        <ul>
-          <li>Villa</li>
-          <li>Apartman</li>
-          <li>Proje</li>
-          <li>Dış İklim</li>
-        </ul>
-      </article>
+        <div class="quote-options">
+          <button type="button">Villa</button>
+          <button type="button">Apartman</button>
+          <button type="button">Proje</button>
+          <button type="button">Dış İklim</button>
+        </div>
+      </div>
 
-      <article class="quote-step" data-reveal>
+      <div class="quote-step">
         <p class="quote-step-index">2. Seri Seçimi</p>
-        <ul>
-          <li>Alüminyum</li>
-          <li>Termo Wood</li>
-          <li>Kompozit</li>
-          <li>Laminoks</li>
-        </ul>
-      </article>
+        <div class="quote-options">
+          <button type="button">Alüminyum</button>
+          <button type="button">Termo Wood</button>
+          <button type="button">Kompozit</button>
+          <button type="button">Laminoks</button>
+        </div>
+      </div>
 
-      <article class="quote-step" data-reveal>
+      <div class="quote-step">
         <p class="quote-step-index">3. Model Seçimi</p>
-        <ul>
-          <li>K1001</li>
-          <li>K1051</li>
-          <li>K1101</li>
-        </ul>
-      </article>
+        <div class="quote-options">
+          <button type="button">K1001</button>
+          <button type="button">K1051</button>
+          <button type="button">K1101</button>
+        </div>
+      </div>
 
-      <article class="quote-step quote-step--form" data-reveal>
+      <form class="quote-form">
         <p class="quote-step-index">4. Teklif Talebi</p>
 
         <label>
           Ad Soyad
-          <input type="text" placeholder="Adınız Soyadınız" />
-        </label>
-        <label>
-          Telefon
-          <input type="tel" placeholder="05xx xxx xx xx" />
-        </label>
-        <label>
-          Şehir
-          <input type="text" placeholder="Şehir" />
-        </label>
-        <label>
-          Mesaj
-          <textarea rows="3" placeholder="Proje detaylarınızı paylaşın"></textarea>
+          <input type="text" name="name" placeholder="Adınız Soyadınız" />
         </label>
 
-        <button type="button" class="btn btn-primary">Teklif Talep Et</button>
-      </article>
+        <label>
+          Telefon
+          <input type="tel" name="phone" placeholder="05xx xxx xx xx" />
+        </label>
+
+        <label>
+          Şehir
+          <input type="text" name="city" placeholder="Şehir" />
+        </label>
+
+        <label>
+          Mesaj
+          <textarea name="message" rows="4" placeholder="Proje detaylarınızı paylaşın"></textarea>
+        </label>
+
+        <button type="submit" class="btn btn-primary">
+          Teklif Talep Et
+        </button>
+      </form>
     </div>
   </div>
 </section>

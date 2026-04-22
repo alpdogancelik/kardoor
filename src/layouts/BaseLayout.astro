@@ -9,8 +9,8 @@ interface Props {
 }
 
 const {
-  title = "Kardoor | Premium Celik Kapi Showroomu",
-  description = "Kardoor premium celik kapi ve giris kapisi cozumlerini immersive showroom deneyimiyle sunar."
+  title = "Kardoor | Premium Çelik Kapı Showroomu",
+  description = "Kardoor premium çelik kapı ve giriş kapısı çözümlerini dijital showroom deneyimiyle sunar."
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString();
@@ -23,47 +23,54 @@ const ogImage = new URL("/images/doors/door-midnight.svg", Astro.site ?? Astro.u
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#060A11" />
+    <meta name="theme-color" content="#050B10" />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+
     <link rel="canonical" href={canonical} />
     <title>{title}</title>
 
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      name: "Kardoor",
-      url: Astro.site ?? Astro.url.origin,
-      description,
-      contactPoint: {
-        "@type": "ContactPoint",
-        telephone: "+90-500-000-00-00",
-        contactType: "sales",
-        areaServed: "TR"
-      }
-    })}></script>
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Kardoor",
+        url: Astro.site ?? Astro.url.origin,
+        description,
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+90-500-000-00-00",
+          contactType: "sales",
+          areaServed: "TR"
+        }
+      })}
+    />
   </head>
 
   <body>
     <Header />
+
     <main>
       <slot />
     </main>
+
     <Footer />
 
     <script>
-      import { initLenis } from "../scripts/lenis";
       import { initGsapReveals } from "../scripts/gsap-reveals";
 
       const boot = () => {
-        initLenis();
         initGsapReveals();
       };
 
