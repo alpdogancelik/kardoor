@@ -1,37 +1,23 @@
 ﻿---
-import DoorVisual from "./DoorVisual.astro";
+import { collections } from "../data/collections";
+import CollectionRoom from "./CollectionRoom.astro";
 ---
 
-<section id="door-transition" class="door-entry-transition">
-  <div class="door-entry-bg" aria-hidden="true"></div>
+<section class="collection-walk" data-collection-walk>
+  <div class="collection-walk-intro" data-reveal>
+    <p class="kardoor-kicker">KOLEKSİYON ODALARI</p>
 
-  <div class="door-entry-shell">
-    <div class="door-entry-copy" data-reveal>
-      <p class="kardoor-kicker">KAPIDAN İÇERİ GİRİN</p>
+    <h2 class="kardoor-display" data-split>
+      Kapı Kapı Keşfedin
+    </h2>
 
-      <h2 class="kardoor-display" data-split>
-        Showroom’a Hoş Geldiniz
-      </h2>
+    <p>
+      Kardoor serileri klasik katalog kartları olarak değil, showroom içinde
+      ayrı karaktere sahip kapı sahneleri olarak sunulur.
+    </p>
+  </div>
 
-      <p>
-        Kardoor koleksiyonlarını, her serinin kendi karakterini taşıdığı premium
-        bir dijital showroom deneyimi içinde keşfedin.
-      </p>
-    </div>
-
-    <div class="door-entry-stage" data-reveal>
-      <div class="door-entry-light" aria-hidden="true"></div>
-      <div class="door-entry-frame" aria-hidden="true"></div>
-
-      <div class="door-entry-door">
-        <DoorVisual
-          image="/images/doors/door-midnight.svg"
-          alt="Kardoor showroom giriş kapısı"
-          size="portal"
-        />
-      </div>
-
-      <div class="door-entry-floor" aria-hidden="true"></div>
-    </div>
+  <div class="collection-track" data-collection-track>
+    {collections.map((collection) => <CollectionRoom collection={collection} />)}
   </div>
 </section>
