@@ -11,42 +11,305 @@ const { collection } = Astro.props;
 ---
 
 <article
-  class="collection-room"
+  class="collection-room-scene"
   data-collection-room
   style={`--room-accent:${collection.accentColor};`}
 >
-  <div class="collection-room-content" data-reveal>
-    <p class="collection-room-number">{collection.number}</p>
+  <div class="room-ambient" aria-hidden="true"></div>
+  <div class="room-grid" aria-hidden="true"></div>
 
-    <h3 class="kardoor-display collection-room-title" data-split>
-      {collection.title}
-    </h3>
+  <div class="room-shell">
+    <div class="room-copy" data-reveal>
+      <p class="room-number">KOLEKSİYON {collection.number}</p>
 
-    <p class="collection-room-description">
-      {collection.description}
-    </p>
+      <h3 class="kardoor-display room-title" data-split>
+        {collection.title}
+      </h3>
 
-    <ul class="collection-model-codes" aria-label={`${collection.title} model kodları`}>
-      {collection.modelCodes.map((code) => <li>{code}</li>)}
-    </ul>
+      <p class="room-description">
+        {collection.description}
+      </p>
 
-    <div class="collection-room-actions">
-      <a href={`/koleksiyonlar/${collection.slug}`} class="btn btn-primary">
-        Seriyi İncele
-      </a>
+      <ul class="room-model-codes" aria-label={`${collection.title} model kodları`}>
+        {collection.modelCodes.map((code) => (
+          <li>{code}</li>
+        ))}
+      </ul>
 
-      <a href="/teklif" class="btn btn-secondary">
-        Teklif Al
-      </a>
+      <div class="room-actions">
+        <a href={`/koleksiyonlar/${collection.slug}`} class="btn btn-primary">
+          Seriyi İncele
+        </a>
+
+        <a href="/teklif" class="btn btn-secondary">
+          Teklif Al
+        </a>
+      </div>
+    </div>
+
+    <div class="room-stage" data-reveal>
+      <div class="room-stage-label room-stage-label-top">
+        {collection.shortTitle}
+      </div>
+
+      <div class="room-stage-label room-stage-label-bottom">
+        {collection.modelCodes.join(" • ")}
+      </div>
+
+      <div class="room-back-panel" aria-hidden="true"></div>
+      <div class="room-light" aria-hidden="true"></div>
+      <div class="room-floor" aria-hidden="true"></div>
+
+      <div class="room-door-object">
+        <DoorVisual image={collection.image} alt={collection.title} size="room" />
+      </div>
+
+      <TechnicalCallouts labels={collection.materials} />
     </div>
   </div>
 
-  <div class="collection-room-visual" data-reveal>
-    <div class="collection-room-light" aria-hidden="true"></div>
-    <div class="collection-room-frame" aria-hidden="true"></div>
+  <style>
+    .collection-room-scene {
+      position: relative;
+      min-height: 100svh;
+      width: 100%;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 72% 48%, color-mix(in srgb, var(--room-accent), transparent 84%), transparent 34%),
+        radial-gradient(circle at 24% 24%, rgba(255, 255, 255, 0.045), transparent 28%),
+        linear-gradient(180deg, #050b10 0%, #07111a 100%);
+    }
 
-    <DoorVisual image={collection.image} alt={collection.title} size="room" />
+    .room-ambient {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(44, 227, 255, 0.06), transparent 24%, transparent 76%, rgba(44, 227, 255, 0.05)),
+        radial-gradient(circle at 72% 52%, color-mix(in srgb, var(--room-accent), transparent 78%), transparent 24%);
+      opacity: 0.86;
+    }
 
-    <TechnicalCallouts labels={collection.materials} />
-  </div>
+    .room-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(44, 227, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(44, 227, 255, 0.03) 1px, transparent 1px);
+      background-size: 180px 180px;
+      mask-image: radial-gradient(circle at 72% 50%, black, transparent 74%);
+      opacity: 0.52;
+    }
+
+    .room-shell {
+      position: relative;
+      z-index: 3;
+      width: min(1380px, calc(100% - 2rem));
+      min-height: 100svh;
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(480px, 1.12fr);
+      gap: clamp(2rem, 5vw, 5.5rem);
+      align-items: center;
+      padding-block: clamp(5rem, 8vw, 8rem);
+    }
+
+    .room-copy {
+      max-width: 680px;
+    }
+
+    .room-number {
+      margin: 0;
+      color: var(--room-accent);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .room-title {
+      margin: 0.58rem 0 0;
+      font-size: clamp(3.8rem, 7.2vw, 8rem);
+      line-height: 0.86;
+      letter-spacing: 0.012em;
+    }
+
+    .room-description {
+      max-width: 630px;
+      margin: 1rem 0 0;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 1.38vw, 1.16rem);
+      line-height: 1.72;
+    }
+
+    .room-model-codes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin: 1.15rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .room-model-codes li {
+      border: 1px solid rgba(170, 190, 210, 0.3);
+      border-radius: 999px;
+      padding: 0.38rem 0.72rem;
+      background: rgba(5, 11, 18, 0.58);
+      color: #dce8f3;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .room-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.4rem;
+    }
+
+    .room-stage {
+      position: relative;
+      min-height: 660px;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+      perspective: 1400px;
+    }
+
+    .room-back-panel {
+      position: absolute;
+      width: min(560px, 74vw);
+      height: min(760px, 88vw);
+      border: 1px solid color-mix(in srgb, var(--room-accent), transparent 74%);
+      border-radius: 1.55rem;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.08)),
+        rgba(6, 13, 21, 0.4);
+      box-shadow:
+        inset 0 0 90px rgba(0, 0, 0, 0.42),
+        0 0 90px color-mix(in srgb, var(--room-accent), transparent 88%);
+    }
+
+    .room-light {
+      position: absolute;
+      width: min(720px, 78vw);
+      height: min(720px, 78vw);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, color-mix(in srgb, var(--room-accent), transparent 72%), transparent 64%),
+        radial-gradient(circle, rgba(255, 184, 107, 0.08), transparent 48%);
+      filter: blur(34px);
+      opacity: 0.9;
+    }
+
+    .room-floor {
+      position: absolute;
+      bottom: 4rem;
+      width: min(680px, 84vw);
+      height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--room-accent), transparent 82%), transparent 68%);
+      filter: blur(12px);
+    }
+
+    .room-door-object {
+      position: relative;
+      z-index: 5;
+      transform: translateY(-0.5rem);
+    }
+
+    .room-door-object :global(.door-visual--room .door-visual-image) {
+      width: min(400px, 64vw);
+    }
+
+    .room-door-object :global(.door-visual--room .door-visual-reflection) {
+      width: min(380px, 62vw);
+      opacity: 0.2;
+    }
+
+    .room-stage-label {
+      position: absolute;
+      z-index: 8;
+      border: 1px solid color-mix(in srgb, var(--room-accent), transparent 68%);
+      border-radius: 999px;
+      padding: 0.46rem 0.72rem;
+      background: rgba(3, 8, 14, 0.74);
+      color: #dce8f3;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .room-stage-label-top {
+      top: 5.5rem;
+      right: 8%;
+    }
+
+    .room-stage-label-bottom {
+      left: 6%;
+      bottom: 6.4rem;
+    }
+
+    .room-stage :global(.technical-callouts span) {
+      border-color: color-mix(in srgb, var(--room-accent), #9bb7ca 45%);
+      background: rgba(3, 8, 14, 0.78);
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 1100px) {
+      .room-shell {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding-block: clamp(4rem, 10vw, 6rem);
+      }
+
+      .room-copy {
+        max-width: 780px;
+      }
+
+      .room-stage {
+        min-height: 560px;
+      }
+
+      .room-stage-label-top {
+        top: 3rem;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .room-shell {
+        width: min(100% - 1rem, 1380px);
+      }
+
+      .room-title {
+        font-size: clamp(3rem, 16vw, 4.7rem);
+      }
+
+      .room-stage {
+        min-height: 460px;
+      }
+
+      .room-door-object :global(.door-visual--room .door-visual-image) {
+        width: min(320px, 72vw);
+      }
+
+      .room-door-object :global(.door-visual--room .door-visual-reflection) {
+        width: min(300px, 70vw);
+      }
+
+      .room-stage-label {
+        display: none;
+      }
+    }
+  </style>
 </article>
