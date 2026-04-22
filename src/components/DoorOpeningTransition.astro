@@ -2,30 +2,47 @@
 import DoorVisual from "./DoorVisual.astro";
 ---
 
-<section id="door-transition" class="door-entry-transition is-animated-portal" data-door-entry>
-  <div class="door-entry-bg" aria-hidden="true"></div>
-  <div class="door-entry-interior" data-door-interior aria-hidden="true"></div>
+<section id="door-transition" class="showroom-journey" data-showroom-journey>
+  <div class="showroom-journey-fixed" data-journey-fixed>
+    <div class="journey-bg" aria-hidden="true"></div>
+    <div class="journey-grid" aria-hidden="true"></div>
 
-  <div class="door-entry-shell">
-    <div class="door-entry-copy" data-door-copy data-reveal>
+    <div class="journey-copy" data-journey-copy>
       <p class="kardoor-kicker">KAPIDAN İÇERİ GİRİN</p>
 
-      <h2 class="kardoor-display" data-split>
-        Showroom’a Hoş Geldiniz
+      <h2 class="kardoor-display">
+        Showroom Kapısı Açılıyor
       </h2>
 
       <p>
-        Kardoor koleksiyonlarını, her serinin kendi karakterini taşıdığı premium
-        bir dijital showroom deneyimi içinde keşfedin.
+        Kardoor koleksiyonları artık sayfa aşağı kaydırılarak değil; kapıdan
+        içeri geçilen premium bir dijital showroom deneyimi içinde keşfedilir.
       </p>
+
+      <div class="journey-steps">
+        <span>01 Kapıya yaklaş</span>
+        <span>02 İçeri gir</span>
+        <span>03 Koleksiyonlara geç</span>
+      </div>
     </div>
 
-    <div class="door-entry-stage" data-door-stage data-reveal>
-      <div class="door-entry-light" data-door-light aria-hidden="true"></div>
-      <div class="door-entry-depth" data-door-depth aria-hidden="true"></div>
-      <div class="door-entry-frame" data-door-frame aria-hidden="true"></div>
+    <div class="journey-portal" data-journey-portal>
+      <div class="journey-light" data-door-light aria-hidden="true"></div>
 
-      <div class="door-entry-door" data-door-leaf>
+      <div class="journey-depth" data-door-depth aria-hidden="true">
+        <div class="tunnel-ceiling"></div>
+        <div class="tunnel-wall tunnel-wall-left"></div>
+        <div class="tunnel-wall tunnel-wall-right"></div>
+        <div class="tunnel-floor"></div>
+        <div class="tunnel-axis"></div>
+        <div class="tunnel-end"></div>
+      </div>
+
+      <div class="journey-frame" data-door-frame aria-hidden="true">
+        <span></span>
+      </div>
+
+      <div class="journey-door" data-door-leaf>
         <DoorVisual
           image="/images/doors/door-midnight.svg"
           alt="Kardoor showroom giriş kapısı"
@@ -33,179 +50,661 @@ import DoorVisual from "./DoorVisual.astro";
         />
       </div>
 
-      <div class="door-entry-floor" aria-hidden="true"></div>
+      <div class="journey-label journey-label-left">KASA</div>
+      <div class="journey-label journey-label-right">SHOWROOM</div>
+      <div class="journey-label journey-label-bottom">İÇERİ GEÇ</div>
+    </div>
+
+    <div class="journey-corridor" data-journey-corridor>
+      <div class="corridor-copy">
+        <p class="kardoor-kicker">SHOWROOM CORRIDOR</p>
+
+        <h2 class="kardoor-display">
+          Koleksiyonlar Arasında Yürüyün
+        </h2>
+
+        <p>
+          Kapıdan içeri girdiniz. Şimdi her seri kendi karakterine sahip ayrı
+          bir showroom alanı gibi açılır.
+        </p>
+
+        <div class="corridor-path-list">
+          <div>
+            <strong>01</strong>
+            <span>Seri karakteri</span>
+          </div>
+
+          <div>
+            <strong>02</strong>
+            <span>Model kodları</span>
+          </div>
+
+          <div>
+            <strong>03</strong>
+            <span>Teklif akışı</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="corridor-visual" aria-hidden="true">
+        <div class="corridor-ceiling">
+          <span></span>
+        </div>
+
+        <div class="corridor-side corridor-side-left"></div>
+        <div class="corridor-side corridor-side-right"></div>
+
+        <div class="corridor-display corridor-display-left">
+          <span></span>
+        </div>
+
+        <div class="corridor-display corridor-display-right">
+          <span></span>
+        </div>
+
+        <div class="corridor-door">
+          <span class="corridor-door-line corridor-door-line-left"></span>
+          <span class="corridor-door-line corridor-door-line-center"></span>
+          <span class="corridor-door-handle"></span>
+        </div>
+
+        <div class="corridor-floor"></div>
+        <div class="corridor-axis"></div>
+        <div class="corridor-dot"></div>
+
+        <div class="corridor-label corridor-label-left">ALÜMİNYUM</div>
+        <div class="corridor-label corridor-label-right">LAMİNOKS</div>
+        <div class="corridor-label corridor-label-bottom">ROTA</div>
+      </div>
     </div>
   </div>
 
   <style>
-    .is-animated-portal {
-      min-height: 100svh;
-      padding: 0;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
+    .showroom-journey {
+      position: relative;
+      height: 320svh;
+      background: #050b10;
       isolation: isolate;
     }
 
-    .is-animated-portal .door-entry-bg {
+    .showroom-journey-fixed {
+      position: relative;
+      height: 100svh;
+      overflow: hidden;
+      isolation: isolate;
+      background: #050b10;
+    }
+
+    .journey-bg {
       position: absolute;
       inset: 0;
       z-index: 0;
       background:
-        radial-gradient(circle at 66% 48%, rgba(44, 227, 255, 0.14), transparent 34%),
-        radial-gradient(circle at 50% 100%, rgba(255, 184, 107, 0.16), transparent 40%),
-        linear-gradient(180deg, #050b10 0%, #07111a 56%, #050b10 100%);
+        radial-gradient(circle at 67% 48%, rgba(44, 227, 255, 0.18), transparent 34%),
+        radial-gradient(circle at 56% 78%, rgba(255, 184, 107, 0.14), transparent 38%),
+        linear-gradient(180deg, #050b10 0%, #07121b 58%, #050b10 100%);
     }
 
-    .is-animated-portal .door-entry-bg::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(44, 227, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(44, 227, 255, 0.035) 1px, transparent 1px);
-      background-size: 150px 150px;
-      mask-image: radial-gradient(circle at 64% 50%, black, transparent 74%);
-      opacity: 0.45;
-    }
-
-    .is-animated-portal .door-entry-interior {
+    .journey-grid {
       position: absolute;
       inset: 0;
       z-index: 1;
-      opacity: 0;
-      transform: scale(0.96);
+      pointer-events: none;
       background:
-        radial-gradient(circle at 64% 52%, rgba(255, 184, 107, 0.28), transparent 22%),
-        linear-gradient(90deg, transparent 0 18%, rgba(44, 227, 255, 0.07) 18% 19%, transparent 19% 81%, rgba(44, 227, 255, 0.07) 81% 82%, transparent 82% 100%),
-        linear-gradient(180deg, rgba(10, 20, 31, 0.16), rgba(5, 11, 18, 0.82));
+        linear-gradient(90deg, rgba(44, 227, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(44, 227, 255, 0.026) 1px, transparent 1px);
+      background-size: 150px 150px;
+      mask-image: radial-gradient(circle at 66% 50%, black, transparent 76%);
+      opacity: 0.52;
     }
 
-    .is-animated-portal .door-entry-shell {
-      position: relative;
-      z-index: 3;
-      width: min(1240px, calc(100% - 2rem));
-      min-height: 100svh;
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
-      gap: clamp(2rem, 5vw, 5rem);
-      align-items: center;
-      padding-top: var(--header-height);
+    .journey-copy {
+      position: absolute;
+      z-index: 8;
+      left: max(2rem, calc((100vw - 1320px) / 2));
+      top: 50%;
+      width: min(560px, 44vw);
+      transform: translateY(-50%);
     }
 
-    .is-animated-portal .door-entry-copy {
-      max-width: 620px;
+    .journey-copy h2,
+    .corridor-copy h2 {
+      margin: 0.5rem 0 0;
+      font-size: clamp(3.8rem, 7.2vw, 7.8rem);
+      line-height: 0.86;
+      letter-spacing: 0.012em;
     }
 
-    .is-animated-portal .door-entry-copy h2 {
-      margin: 0.45rem 0 0;
-      font-size: clamp(3.4rem, 7vw, 7rem);
-      line-height: 0.9;
-    }
-
-    .is-animated-portal .door-entry-copy p:not(.kardoor-kicker) {
+    .journey-copy p:not(.kardoor-kicker),
+    .corridor-copy p:not(.kardoor-kicker) {
       margin: 1rem 0 0;
+      max-width: 560px;
       color: var(--text-muted);
-      font-size: clamp(1rem, 1.4vw, 1.15rem);
-      line-height: 1.65;
+      font-size: clamp(1rem, 1.35vw, 1.13rem);
+      line-height: 1.72;
     }
 
-    .is-animated-portal .door-entry-stage {
-      position: relative;
-      min-height: 640px;
+    .journey-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1.2rem;
+    }
+
+    .journey-steps span {
+      border: 1px solid rgba(138, 166, 190, 0.24);
+      border-radius: 999px;
+      padding: 0.42rem 0.72rem;
+      background: rgba(4, 10, 17, 0.55);
+      color: #dce8f3;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .journey-portal {
+      position: absolute;
+      z-index: 6;
+      inset: var(--header-height) 0 0;
       display: grid;
       place-items: center;
-      perspective: 1400px;
+      perspective: 1700px;
       transform-style: preserve-3d;
-      isolation: isolate;
-      will-change: transform;
+      will-change: transform, opacity;
     }
 
-    .is-animated-portal .door-entry-light {
+    .journey-light {
       position: absolute;
-      width: min(620px, 72vw);
-      height: min(620px, 72vw);
+      z-index: 0;
+      width: min(760px, 76vw);
+      height: min(760px, 76vw);
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 184, 107, 0.42), transparent 66%);
-      opacity: 0.35;
-      filter: blur(28px);
-      transform: translateX(7%) scale(0.9);
-      will-change: transform, opacity;
+      background:
+        radial-gradient(circle, rgba(255, 184, 107, 0.28), transparent 44%),
+        radial-gradient(circle, rgba(44, 227, 255, 0.23), transparent 66%);
+      filter: blur(34px);
+      opacity: 0.42;
+      transform: scale(0.92);
+      will-change: opacity, transform;
     }
 
-    .is-animated-portal .door-entry-depth {
+    .journey-depth {
       position: absolute;
-      width: min(560px, 74vw);
-      height: min(760px, 88vw);
-      border-radius: 1.6rem;
+      z-index: 1;
+      width: min(620px, 76vw);
+      height: min(780px, 88vw);
+      border-radius: 1.7rem;
+      overflow: hidden;
       opacity: 0;
-      transform: translateX(8%) scale(0.88);
+      transform: scale(0.9);
       background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.48), transparent 28%, transparent 72%, rgba(0, 0, 0, 0.5)),
-        radial-gradient(circle at 50% 45%, rgba(255, 184, 107, 0.42), transparent 58%),
-        linear-gradient(180deg, #14202b 0%, #050a10 100%);
+        radial-gradient(circle at 50% 54%, rgba(255, 184, 107, 0.2), transparent 30%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 28%, transparent 72%, rgba(0, 0, 0, 0.55)),
+        linear-gradient(180deg, #1b2a36 0%, #08111a 54%, #04080d 100%);
       box-shadow:
-        inset 0 0 80px rgba(0, 0, 0, 0.65),
-        0 0 90px rgba(255, 184, 107, 0.18);
-      will-change: transform, opacity;
+        inset 0 0 110px rgba(0, 0, 0, 0.72),
+        0 0 100px rgba(255, 184, 107, 0.12),
+        0 0 90px rgba(44, 227, 255, 0.09);
+      will-change: opacity, transform;
     }
 
-    .is-animated-portal .door-entry-frame {
+    .tunnel-ceiling {
       position: absolute;
-      width: min(500px, 74vw);
-      height: min(730px, 88vw);
-      border: 1px solid rgba(44, 227, 255, 0.24);
-      border-radius: 1.45rem;
-      background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 22%, transparent 78%, rgba(255, 255, 255, 0.08)),
-        rgba(7, 14, 22, 0.42);
-      transform: translateX(4%);
-      box-shadow: 0 0 80px rgba(44, 227, 255, 0.08);
-      will-change: transform, opacity;
+      left: 18%;
+      right: 18%;
+      top: 16%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255, 184, 107, 0.72), transparent);
+      box-shadow: 0 0 34px rgba(255, 184, 107, 0.3);
     }
 
-    .is-animated-portal .door-entry-door {
-      position: relative;
+    .tunnel-wall {
+      position: absolute;
+      top: 16%;
+      bottom: 12%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.45), transparent);
+    }
+
+    .tunnel-wall-left {
+      left: 24%;
+      transform: skewX(-18deg);
+      transform-origin: bottom center;
+    }
+
+    .tunnel-wall-right {
+      right: 24%;
+      transform: skewX(18deg);
+      transform-origin: bottom center;
+    }
+
+    .tunnel-floor {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: 9%;
+      height: 48%;
+      border: 1px solid rgba(44, 227, 255, 0.12);
+      border-top-color: rgba(255, 184, 107, 0.2);
+      transform: perspective(900px) rotateX(62deg);
+      transform-origin: bottom center;
+      background:
+        linear-gradient(90deg, transparent 0 49.8%, rgba(44, 227, 255, 0.24) 49.8% 50.2%, transparent 50.2% 100%),
+        radial-gradient(circle at 50% 90%, rgba(255, 184, 107, 0.16), transparent 56%);
+    }
+
+    .tunnel-axis {
+      position: absolute;
+      left: 50%;
+      top: 16%;
+      bottom: 10%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.55), transparent);
+      box-shadow: 0 0 24px rgba(44, 227, 255, 0.28);
+    }
+
+    .tunnel-end {
+      position: absolute;
+      left: 50%;
+      top: 31%;
+      width: 120px;
+      height: 170px;
+      border: 1px solid rgba(255, 184, 107, 0.22);
+      border-radius: 0.8rem;
+      transform: translateX(-50%) scale(0.82);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 184, 107, 0.16), transparent 60%),
+        rgba(5, 9, 14, 0.72);
+      box-shadow: 0 0 42px rgba(255, 184, 107, 0.11);
+    }
+
+    .journey-frame {
+      position: absolute;
       z-index: 3;
+      width: min(520px, 74vw);
+      height: min(760px, 88vw);
+      border: 1px solid rgba(44, 227, 255, 0.28);
+      border-radius: 1.5rem;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.09), transparent 22%, transparent 78%, rgba(255, 255, 255, 0.08)),
+        rgba(7, 14, 22, 0.32);
+      box-shadow:
+        inset 0 0 90px rgba(0, 0, 0, 0.36),
+        0 0 90px rgba(44, 227, 255, 0.11);
+      will-change: opacity, transform;
+    }
+
+    .journey-frame span {
+      position: absolute;
+      inset: 8% 10%;
+      border: 1px solid rgba(44, 227, 255, 0.16);
+      border-radius: 1rem;
+    }
+
+    .journey-door {
+      position: relative;
+      z-index: 5;
       transform-origin: left center;
       transform-style: preserve-3d;
       will-change: transform, opacity;
     }
 
-    .is-animated-portal .door-entry-floor {
-      position: absolute;
-      bottom: 2.2rem;
-      width: min(620px, 80vw);
-      height: 140px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(44, 227, 255, 0.16), transparent 66%);
-      filter: blur(12px);
-      opacity: 0.9;
+    .journey-door :global(.door-visual--portal .door-visual-image) {
+      width: min(440px, 66vw);
+      filter:
+        drop-shadow(0 36px 44px rgba(0, 0, 0, 0.7))
+        drop-shadow(0 0 28px rgba(44, 227, 255, 0.08));
     }
 
-    @media (max-width: 1023px) {
-      .is-animated-portal .door-entry-shell {
-        grid-template-columns: 1fr;
-        gap: 0;
-        padding-block: calc(var(--header-height) + 2rem) 3rem;
+    .journey-door :global(.door-visual-reflection),
+    .journey-door :global(.door-visual-floor-shadow) {
+      opacity: 0;
+    }
+
+    .journey-label {
+      position: absolute;
+      z-index: 8;
+      border: 1px solid rgba(44, 227, 255, 0.34);
+      border-radius: 999px;
+      padding: 0.44rem 0.7rem;
+      background: rgba(3, 8, 14, 0.78);
+      color: #dce8f3;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .journey-label-left {
+      left: 40%;
+      top: 41%;
+    }
+
+    .journey-label-right {
+      right: 13%;
+      top: 34%;
+    }
+
+    .journey-label-bottom {
+      left: 50%;
+      bottom: 13%;
+      transform: translateX(-50%);
+    }
+
+    .journey-corridor {
+      position: absolute;
+      z-index: 4;
+      inset: var(--header-height) 0 0;
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(560px, 1.22fr);
+      gap: clamp(2rem, 5vw, 5.5rem);
+      align-items: center;
+      width: min(1320px, calc(100% - 2rem));
+      margin-inline: auto;
+      opacity: 0;
+      transform: translateY(48px) scale(0.96);
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .corridor-copy {
+      max-width: 690px;
+    }
+
+    .corridor-path-list {
+      display: grid;
+      gap: 0.72rem;
+      margin-top: 1.45rem;
+    }
+
+    .corridor-path-list div {
+      border: 1px solid rgba(138, 166, 190, 0.24);
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
+      background: rgba(4, 10, 17, 0.56);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.75rem;
+      align-items: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .corridor-path-list strong {
+      color: var(--accent);
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+    }
+
+    .corridor-path-list span {
+      color: #dce8f3;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .corridor-visual {
+      position: relative;
+      min-height: 650px;
+      border: 1px solid rgba(138, 166, 190, 0.24);
+      border-radius: 1.75rem;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 50% 72%, rgba(44, 227, 255, 0.14), transparent 36%),
+        linear-gradient(180deg, rgba(8, 16, 26, 0.94), rgba(2, 6, 11, 0.96));
+      box-shadow:
+        inset 0 0 100px rgba(0, 0, 0, 0.46),
+        0 32px 100px rgba(0, 0, 0, 0.28);
+    }
+
+    .corridor-ceiling {
+      position: absolute;
+      left: 16%;
+      right: 16%;
+      top: 15%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255, 184, 107, 0.58), transparent);
+      box-shadow: 0 0 28px rgba(255, 184, 107, 0.22);
+    }
+
+    .corridor-ceiling span {
+      position: absolute;
+      left: 50%;
+      top: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 184, 107, 0.8);
+      box-shadow: 0 0 30px rgba(255, 184, 107, 0.44);
+    }
+
+    .corridor-side {
+      position: absolute;
+      top: 15%;
+      bottom: 12%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.48), transparent);
+    }
+
+    .corridor-side-left {
+      left: 25%;
+      transform: skewX(-18deg);
+      transform-origin: bottom center;
+    }
+
+    .corridor-side-right {
+      right: 25%;
+      transform: skewX(18deg);
+      transform-origin: bottom center;
+    }
+
+    .corridor-display {
+      position: absolute;
+      top: 28%;
+      width: 116px;
+      height: 248px;
+      border: 1px solid rgba(44, 227, 255, 0.18);
+      border-radius: 0.95rem;
+      background: rgba(5, 12, 20, 0.56);
+      display: grid;
+      place-items: center;
+      opacity: 0.78;
+    }
+
+    .corridor-display span {
+      width: 44px;
+      height: 148px;
+      border-radius: 0.45rem;
+      background:
+        linear-gradient(160deg, rgba(44, 227, 255, 0.18), rgba(255, 255, 255, 0.045)),
+        #111d29;
+    }
+
+    .corridor-display-left {
+      left: 9%;
+      transform: perspective(900px) rotateY(30deg) scale(0.9);
+    }
+
+    .corridor-display-right {
+      right: 9%;
+      transform: perspective(900px) rotateY(-30deg) scale(0.9);
+    }
+
+    .corridor-door {
+      position: absolute;
+      left: 50%;
+      top: 30%;
+      width: 138px;
+      height: 218px;
+      border: 1px solid rgba(220, 232, 243, 0.18);
+      border-radius: 0.85rem;
+      transform: translateX(-50%) scale(0.9);
+      background: linear-gradient(160deg, #263645, #111a24 56%, #071019);
+    }
+
+    .corridor-door-line {
+      position: absolute;
+      top: 31px;
+      bottom: 27px;
+      border-radius: 999px;
+      background: rgba(44, 227, 255, 0.18);
+    }
+
+    .corridor-door-line-left {
+      left: 29px;
+      width: 8px;
+    }
+
+    .corridor-door-line-center {
+      left: 56px;
+      width: 5px;
+      background: rgba(220, 232, 243, 0.16);
+    }
+
+    .corridor-door-handle {
+      position: absolute;
+      top: 64px;
+      right: 27px;
+      width: 10px;
+      height: 104px;
+      border-radius: 999px;
+      background: #dce8f3;
+      box-shadow: 0 0 20px rgba(220, 232, 243, 0.28);
+    }
+
+    .corridor-floor {
+      position: absolute;
+      left: 11%;
+      right: 11%;
+      bottom: 9%;
+      height: 50%;
+      border: 1px solid rgba(44, 227, 255, 0.14);
+      border-top-color: rgba(255, 184, 107, 0.2);
+      transform: perspective(840px) rotateX(62deg);
+      transform-origin: bottom center;
+      background:
+        linear-gradient(90deg, transparent 0 49.8%, rgba(44, 227, 255, 0.26) 49.8% 50.2%, transparent 50.2% 100%),
+        radial-gradient(circle at 50% 100%, rgba(44, 227, 255, 0.12), transparent 56%),
+        radial-gradient(circle at 50% 38%, rgba(255, 184, 107, 0.11), transparent 48%);
+    }
+
+    .corridor-axis {
+      position: absolute;
+      top: 16%;
+      bottom: 8%;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.66), transparent);
+      box-shadow: 0 0 20px rgba(44, 227, 255, 0.28);
+    }
+
+    .corridor-dot {
+      position: absolute;
+      left: 50%;
+      top: 53%;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--accent);
+      box-shadow: 0 0 30px rgba(44, 227, 255, 0.76);
+    }
+
+    .corridor-label {
+      position: absolute;
+      z-index: 4;
+      border: 1px solid rgba(44, 227, 255, 0.32);
+      border-radius: 999px;
+      padding: 0.44rem 0.72rem;
+      background: rgba(3, 8, 14, 0.78);
+      color: #dce8f3;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .corridor-label-left {
+      left: 8%;
+      top: 18%;
+    }
+
+    .corridor-label-right {
+      right: 8%;
+      top: 18%;
+    }
+
+    .corridor-label-bottom {
+      left: 50%;
+      bottom: 7%;
+      transform: translateX(-50%);
+    }
+
+    @media (max-width: 1100px) {
+      .showroom-journey {
+        height: auto;
       }
 
-      .is-animated-portal .door-entry-stage {
-        min-height: 500px;
+      .showroom-journey-fixed {
+        height: auto;
+        min-height: 100svh;
+        padding-top: var(--header-height);
+      }
+
+      .journey-copy,
+      .journey-portal,
+      .journey-corridor {
+        position: relative;
+        inset: auto;
+        transform: none;
+      }
+
+      .journey-copy {
+        width: min(760px, calc(100% - 2rem));
+        margin: 3rem auto 0;
+      }
+
+      .journey-portal {
+        min-height: 560px;
+      }
+
+      .journey-corridor {
+        width: min(100% - 2rem, 1320px);
+        grid-template-columns: 1fr;
+        opacity: 1;
+        pointer-events: auto;
+        margin-top: 3rem;
+        padding-bottom: 4rem;
+      }
+
+      .corridor-visual {
+        min-height: 540px;
       }
     }
 
     @media (max-width: 760px) {
-      .is-animated-portal .door-entry-shell {
-        width: min(100% - 1rem, 1240px);
+      .journey-copy h2,
+      .corridor-copy h2 {
+        font-size: clamp(3rem, 16vw, 4.8rem);
       }
 
-      .is-animated-portal .door-entry-copy h2 {
-        font-size: clamp(3rem, 16vw, 4.6rem);
+      .journey-door :global(.door-visual--portal .door-visual-image) {
+        width: min(300px, 72vw);
       }
 
-      .is-animated-portal .door-entry-stage {
+      .journey-label,
+      .corridor-label,
+      .corridor-display {
+        display: none;
+      }
+
+      .corridor-visual {
         min-height: 430px;
+        border-radius: 1.25rem;
       }
     }
   </style>
