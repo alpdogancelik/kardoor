@@ -1,4 +1,4 @@
-﻿import { gsap } from "gsap";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,10 +21,8 @@ function splitTextReveals() {
 
     node.dataset.splitReady = "true";
 
-    const words = node.querySelectorAll<HTMLElement>(".split-word");
-
     gsap.fromTo(
-      words,
+      node.querySelectorAll<HTMLElement>(".split-word"),
       { y: 28, opacity: 0 },
       {
         y: 0,
@@ -133,17 +131,9 @@ function setupHeroParallax() {
   timeline.to(stage, { y: 30, scale: 0.985, duration: 1 }, 0);
   timeline.to(door, { y: -16, scale: 1.018, duration: 1 }, 0);
 
-  if (halo) {
-    timeline.to(halo, { scale: 1.07, opacity: 0.72, duration: 1 }, 0);
-  }
-
-  if (frame) {
-    timeline.to(frame, { scale: 1.012, opacity: 0.86, duration: 1 }, 0);
-  }
-
-  if (callouts.length) {
-    timeline.to(callouts, { y: -10, opacity: 0.7, duration: 1 }, 0);
-  }
+  if (halo) timeline.to(halo, { scale: 1.07, opacity: 0.72, duration: 1 }, 0);
+  if (frame) timeline.to(frame, { scale: 1.012, opacity: 0.86, duration: 1 }, 0);
+  if (callouts.length) timeline.to(callouts, { y: -10, opacity: 0.7, duration: 1 }, 0);
 }
 
 function setupShowroomJourney() {
@@ -167,21 +157,20 @@ function setupShowroomJourney() {
   const mm = gsap.matchMedia();
 
   mm.add("(min-width: 901px)", () => {
-    gsap.set(copy, {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      scale: 1
-    });
+    const originalHeight = journey.style.height;
 
+    journey.style.height = "100svh";
+
+    gsap.set(fixed, { opacity: 1 });
+    gsap.set(copy, { opacity: 1, x: 0, y: 0, scale: 1 });
     gsap.set(portal, {
       opacity: 1,
       scale: 1,
       x: 0,
       y: 0,
+      rotate: 0,
       transformOrigin: "center center"
     });
-
     gsap.set(leaf, {
       opacity: 1,
       rotateY: 0,
@@ -189,156 +178,98 @@ function setupShowroomJourney() {
       z: 0,
       scale: 1,
       transformOrigin: "left center",
-      transformPerspective: 1800
+      transformPerspective: 1850
     });
-
-    gsap.set(frame, {
-      opacity: 1,
-      scale: 1,
-      x: 0
-    });
-
-    gsap.set(light, {
-      opacity: 0.42,
-      scale: 0.92
-    });
-
-    gsap.set(depth, {
-      opacity: 0,
-      scale: 0.9,
-      x: 0,
-      y: 0
-    });
-
-    gsap.set(blackout, {
-      opacity: 0
-    });
-
-    if (labels.length) {
-      gsap.set(labels, {
-        opacity: 1,
-        y: 0
-      });
-    }
+    gsap.set(frame, { opacity: 1, scale: 1, x: 0, y: 0 });
+    gsap.set(light, { opacity: 0.42, scale: 0.92 });
+    gsap.set(depth, { opacity: 0, scale: 0.9, x: 0, y: 0 });
+    gsap.set(blackout, { opacity: 0 });
+    if (labels.length) gsap.set(labels, { opacity: 1, y: 0 });
 
     const timeline = gsap.timeline({
-      defaults: {
-        ease: "none"
-      },
+      defaults: { ease: "none" },
       scrollTrigger: {
         trigger: journey,
         start: "top top",
-        end: "bottom bottom",
-        scrub: 0.85,
+        end: "+=125%",
+        scrub: 0.8,
         pin: fixed,
-        pinSpacing: false,
+        pinSpacing: true,
         anticipatePin: 1,
         invalidateOnRefresh: true
       }
     });
 
-    timeline.to(copy, { opacity: 0.78, y: -8, duration: 0.12 }, 0);
-    timeline.to(portal, { scale: 1.04, y: -6, duration: 0.18 }, 0);
-    timeline.to(light, { opacity: 0.75, scale: 1.06, duration: 0.18 }, 0.02);
-    timeline.to(depth, { opacity: 0.38, scale: 0.96, duration: 0.18 }, 0.04);
+    timeline.to(copy, { opacity: 0.76, y: -8, duration: 0.1 }, 0);
+    timeline.to(portal, { scale: 1.04, y: -6, duration: 0.12 }, 0);
+    timeline.to(light, { opacity: 0.76, scale: 1.06, duration: 0.12 }, 0.02);
+    timeline.to(depth, { opacity: 0.32, scale: 0.96, duration: 0.12 }, 0.04);
 
     timeline.to(
       leaf,
-      {
-        rotateY: -28,
-        x: -7,
-        z: 28,
-        scale: 1.01,
-        duration: 0.18
-      },
+      { rotateY: -30, x: -8, z: 42, scale: 1.012, duration: 0.16 },
       0.08
     );
+    timeline.to(frame, { scale: 1.02, opacity: 0.94, duration: 0.16 }, 0.08);
 
-    timeline.to(frame, { scale: 1.02, opacity: 0.95, duration: 0.18 }, 0.08);
-
-    timeline.to(copy, { opacity: 0.22, y: -30, scale: 0.98, duration: 0.2 }, 0.22);
-    timeline.to(light, { opacity: 1, scale: 1.16, duration: 0.22 }, 0.2);
-    timeline.to(depth, { opacity: 1, scale: 1.04, duration: 0.24 }, 0.22);
-
+    timeline.to(copy, { opacity: 0.22, y: -32, scale: 0.98, duration: 0.18 }, 0.22);
+    timeline.to(light, { opacity: 1, scale: 1.18, duration: 0.2 }, 0.2);
+    timeline.to(depth, { opacity: 1, scale: 1.05, duration: 0.22 }, 0.22);
     timeline.to(
       leaf,
-      {
-        rotateY: -64,
-        x: -30,
-        z: 92,
-        scale: 1.035,
-        duration: 0.26
-      },
+      { rotateY: -66, x: -44, z: 128, scale: 1.04, duration: 0.24 },
       0.24
     );
+    timeline.to(frame, { scale: 1.1, x: 14, opacity: 0.65, duration: 0.22 }, 0.26);
+    timeline.to(portal, { scale: 1.17, y: -10, duration: 0.24 }, 0.28);
 
-    timeline.to(frame, { scale: 1.08, x: 10, opacity: 0.72, duration: 0.24 }, 0.26);
-    timeline.to(portal, { scale: 1.15, y: -8, duration: 0.28 }, 0.28);
+    if (labels.length) timeline.to(labels, { opacity: 0, y: -10, duration: 0.1 }, 0.32);
 
-    if (labels.length) {
-      timeline.to(labels, { opacity: 0, y: -10, duration: 0.12 }, 0.32);
-    }
-
-    timeline.to(copy, { opacity: 0, y: -48, duration: 0.16 }, 0.38);
-
+    timeline.to(copy, { opacity: 0, y: -54, duration: 0.16 }, 0.38);
     timeline.to(
       leaf,
       {
-        rotateY: -82,
-        x: -92,
-        z: 165,
-        scale: 1.08,
-        opacity: 0,
-        duration: 0.22
-      },
-      0.42
-    );
-
-    timeline.to(frame, { opacity: 0.08, scale: 1.18, duration: 0.2 }, 0.46);
-    timeline.to(depth, { scale: 1.22, opacity: 0.72, duration: 0.24 }, 0.46);
-    timeline.to(light, { opacity: 0.72, scale: 1.26, duration: 0.24 }, 0.48);
-
-    timeline.to(
-      portal,
-      {
-        scale: 1.38,
-        y: -18,
+        rotateY: -85,
+        x: -138,
+        z: 260,
+        scale: 1.14,
         opacity: 0.16,
         duration: 0.26
       },
+      0.42
+    );
+    timeline.to(frame, { opacity: 0.1, scale: 1.22, duration: 0.18 }, 0.46);
+    timeline.to(depth, { scale: 1.3, opacity: 0.78, duration: 0.22 }, 0.46);
+    timeline.to(light, { opacity: 0.78, scale: 1.34, duration: 0.22 }, 0.48);
+    timeline.to(
+      portal,
+      { scale: 1.72, x: -92, y: -18, opacity: 0.26, duration: 0.28 },
       0.54
     );
 
-    timeline.to(blackout, { opacity: 0.92, duration: 0.22 }, 0.7);
-    timeline.to(portal, { opacity: 0, scale: 1.46, duration: 0.18 }, 0.74);
+    timeline.to(blackout, { opacity: 0.98, duration: 0.22 }, 0.72);
+    timeline.to(portal, { opacity: 0, scale: 1.9, duration: 0.16 }, 0.78);
+    timeline.to(fixed, { opacity: 1, duration: 0.1 }, 0.9);
 
     return () => {
+      journey.style.height = originalHeight;
       timeline.scrollTrigger?.kill();
       timeline.kill();
     };
   });
 
   mm.add("(max-width: 900px)", () => {
-    gsap.set([copy, portal], {
-      opacity: 1,
-      clearProps: "transform"
-    });
-
+    gsap.set([copy, portal], { opacity: 1, clearProps: "transform" });
+    gsap.set(blackout, { opacity: 0 });
     gsap.set(leaf, {
       rotateY: -8,
       transformOrigin: "left center",
       transformPerspective: 1200
     });
-
-    gsap.set(depth, {
-      opacity: 0.78,
-      scale: 1
-    });
+    gsap.set(depth, { opacity: 0.78, scale: 1 });
 
     const timeline = gsap.timeline({
-      defaults: {
-        ease: "none"
-      },
+      defaults: { ease: "none" },
       scrollTrigger: {
         trigger: portal,
         start: "top 70%",
@@ -365,17 +296,81 @@ function setupCollectionCarousel() {
 
   const stage = carousel.querySelector<HTMLElement>("[data-carousel-stage]");
   const track = carousel.querySelector<HTMLElement>("[data-carousel-track]");
-  const slides = gsap.utils.toArray<HTMLElement>("[data-carousel-slide]");
   const progress = carousel.querySelector<HTMLElement>("[data-carousel-progress]");
+  const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-carousel-slide]"));
 
   if (!stage || !track || slides.length < 2) return;
+
+  const setActiveSlide = (activeIndex: number) => {
+    slides.forEach((slide, index) => {
+      const isActive = index === activeIndex;
+      slide.classList.toggle("is-active", isActive);
+
+      const title = slide.querySelector<HTMLElement>(".showcase-title");
+      const door = slide.querySelector<HTMLElement>(".showcase-door-stage");
+      const info = slide.querySelector<HTMLElement>(".showcase-info");
+      const actions = slide.querySelector<HTMLElement>(".showcase-actions");
+      const lamp = slide.querySelector<HTMLElement>(".showcase-lamp");
+      const sideDoors = slide.querySelectorAll<HTMLElement>(".showcase-side-door");
+      const ghosts = slide.querySelectorAll<HTMLElement>(".showcase-ghost");
+
+      gsap.to(title, {
+        opacity: isActive ? 1 : 0.18,
+        y: isActive ? 0 : 18,
+        scale: isActive ? 1 : 0.98,
+        duration: 0.28,
+        overwrite: true,
+        ease: "power2.out"
+      });
+
+      gsap.to(door, {
+        opacity: isActive ? 1 : 0.45,
+        scale: isActive ? 1 : 0.92,
+        duration: 0.28,
+        overwrite: true,
+        ease: "power2.out"
+      });
+
+      gsap.to([info, actions], {
+        opacity: isActive ? 1 : 0.12,
+        y: isActive ? 0 : 12,
+        duration: 0.28,
+        overwrite: true,
+        ease: "power2.out"
+      });
+
+      gsap.to(lamp, {
+        opacity: isActive ? 1 : 0.25,
+        duration: 0.28,
+        overwrite: true,
+        ease: "power2.out"
+      });
+
+      gsap.to(sideDoors, {
+        opacity: isActive ? 0.4 : 0.12,
+        x: isActive ? 0 : 26,
+        duration: 0.28,
+        overwrite: true,
+        ease: "power2.out"
+      });
+
+      gsap.to(ghosts, {
+        opacity: isActive ? 1 : 0.22,
+        duration: 0.28,
+        overwrite: true,
+        ease: "power2.out"
+      });
+    });
+  };
 
   const mm = gsap.matchMedia();
 
   mm.add("(min-width: 1101px)", () => {
-    slides[0]?.classList.add("is-active");
+    setActiveSlide(0);
+    gsap.set(track, { x: 0 });
+    if (progress) progress.style.transform = "scaleY(0)";
 
-    const getDistance = () => track.scrollWidth - window.innerWidth;
+    const getDistance = () => Math.max(1, track.scrollWidth - window.innerWidth);
 
     const tween = gsap.to(track, {
       x: () => -getDistance(),
@@ -386,6 +381,7 @@ function setupCollectionCarousel() {
         end: () => `+=${getDistance()}`,
         scrub: 0.9,
         pin: stage,
+        pinSpacing: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
@@ -394,9 +390,7 @@ function setupCollectionCarousel() {
             Math.max(0, Math.round(self.progress * (slides.length - 1)))
           );
 
-          slides.forEach((slide, index) => {
-            slide.classList.toggle("is-active", index === activeIndex);
-          });
+          setActiveSlide(activeIndex);
 
           if (progress) {
             progress.style.transform = `scaleY(${self.progress})`;
@@ -408,22 +402,21 @@ function setupCollectionCarousel() {
     return () => {
       tween.scrollTrigger?.kill();
       tween.kill();
+      gsap.set(track, { clearProps: "transform" });
     };
   });
 
   mm.add("(max-width: 1100px)", () => {
-    gsap.set(track, {
-      clearProps: "transform"
-    });
-
-    slides.forEach((slide) => {
-      slide.classList.add("is-active");
-    });
+    gsap.set(track, { clearProps: "transform" });
+    slides.forEach((slide) => slide.classList.add("is-active"));
+    if (progress) progress.style.transform = "scaleY(1)";
   });
 }
 
 function setupCorridorMicroAnimations() {
-  const dots = gsap.utils.toArray<HTMLElement>(".corridor-dot, .corridor-wayfinding-dot");
+  const dots = gsap.utils.toArray<HTMLElement>(
+    ".corridor-dot, .corridor-wayfinding-dot"
+  );
 
   dots.forEach((dot) => {
     gsap.to(dot, {
@@ -573,22 +566,29 @@ function forceVisible() {
     node.style.transform = "none";
   });
 
+  const journey = document.querySelector<HTMLElement>("[data-showroom-journey]");
+  const portal = document.querySelector<HTMLElement>("[data-journey-portal]");
+  const blackout = document.querySelector<HTMLElement>("[data-journey-blackout]");
   const track = document.querySelector<HTMLElement>("[data-carousel-track]");
-  const slides = gsap.utils.toArray<HTMLElement>("[data-carousel-slide]");
+  const progress = document.querySelector<HTMLElement>("[data-carousel-progress]");
+  const slides = document.querySelectorAll<HTMLElement>("[data-carousel-slide]");
 
-  if (track) {
-    track.style.transform = "none";
-  }
-
-  slides.forEach((slide) => {
-    slide.classList.add("is-active");
-  });
+  if (journey) journey.style.height = "auto";
+  if (portal) portal.style.opacity = "1";
+  if (blackout) blackout.style.opacity = "0";
+  if (track) track.style.transform = "none";
+  if (progress) progress.style.transform = "scaleY(1)";
+  slides.forEach((slide) => slide.classList.add("is-active"));
 }
 
 export function initGsapReveals() {
   if (initialized || typeof window === "undefined") return;
 
   initialized = true;
+
+  ScrollTrigger.config({
+    ignoreMobileResize: true
+  });
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     forceVisible();
