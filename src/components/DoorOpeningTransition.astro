@@ -2,36 +2,35 @@
 import DoorVisual from "./DoorVisual.astro";
 ---
 
-<section id="door-transition" class="showroom-journey" data-showroom-journey>
-  <div class="showroom-journey-fixed" data-journey-fixed>
-    <div class="journey-bg" aria-hidden="true"></div>
-    <div class="journey-grid" aria-hidden="true"></div>
-    <div class="journey-vignette" aria-hidden="true"></div>
+<section id="door-transition" class="door-entry-journey" data-showroom-journey>
+  <div class="door-entry-fixed" data-journey-fixed>
+    <div class="entry-bg" aria-hidden="true"></div>
+    <div class="entry-grid" aria-hidden="true"></div>
+    <div class="entry-vignette" aria-hidden="true"></div>
 
-    <div class="journey-copy" data-journey-copy>
-      <p class="kardoor-kicker">KAPIDAN İÇERİ GİRİN</p>
+    <div class="entry-copy" data-journey-copy>
+      <p class="kardoor-kicker">Kapıdan içeri girin</p>
 
-      <h2 class="kardoor-display">
-        Showroom Kapısı Açılıyor
-      </h2>
+      <h2 class="kardoor-display">Showroom Kapısı Açılıyor</h2>
 
       <p>
-        Kardoor koleksiyonlarını klasik katalog akışı gibi değil; kapının
-        içinden geçilen premium bir dijital showroom deneyimi olarak keşfedin.
+        Kardoor koleksiyonlarını sayfa aşağı kaydırılan klasik katalog gibi değil;
+        kapıdan içeri girilen premium bir dijital showroom deneyimi olarak keşfedin.
       </p>
 
-      <div class="journey-steps">
+      <div class="entry-steps" aria-hidden="true">
         <span>01 Yaklaş</span>
         <span>02 Kapı açılsın</span>
-        <span>03 Showroom’a gir</span>
+        <span>03 İçeri gir</span>
       </div>
     </div>
 
-    <div class="journey-portal" data-journey-portal>
-      <div class="journey-light" data-door-light aria-hidden="true"></div>
+    <div class="entry-portal" data-journey-portal>
+      <div class="entry-light" data-door-light aria-hidden="true"></div>
 
-      <div class="journey-depth" data-door-depth aria-hidden="true">
+      <div class="entry-depth" data-door-depth aria-hidden="true">
         <div class="depth-glow"></div>
+        <div class="depth-ceiling"></div>
         <div class="depth-axis"></div>
         <div class="depth-line depth-line-left"></div>
         <div class="depth-line depth-line-right"></div>
@@ -39,11 +38,11 @@ import DoorVisual from "./DoorVisual.astro";
         <div class="depth-target"></div>
       </div>
 
-      <div class="journey-frame" data-door-frame aria-hidden="true">
+      <div class="entry-frame" data-door-frame aria-hidden="true">
         <span></span>
       </div>
 
-      <div class="journey-door" data-door-leaf>
+      <div class="entry-door" data-door-leaf>
         <DoorVisual
           image="/images/doors/door-midnight.svg"
           alt="Kardoor showroom giriş kapısı"
@@ -51,158 +50,160 @@ import DoorVisual from "./DoorVisual.astro";
         />
       </div>
 
-      <div class="journey-label journey-label-left">KASA</div>
-      <div class="journey-label journey-label-right">SHOWROOM</div>
-      <div class="journey-label journey-label-bottom">İÇERİ GEÇ</div>
+      <div class="journey-label journey-label-left">Kasa</div>
+      <div class="journey-label journey-label-right">Showroom</div>
+      <div class="journey-label journey-label-bottom">İçeri geç</div>
     </div>
 
-    <div class="journey-blackout" data-journey-blackout aria-hidden="true"></div>
+    <div class="entry-blackout" data-journey-blackout aria-hidden="true"></div>
   </div>
 
   <style>
-    .showroom-journey {
+    .door-entry-journey {
       position: relative;
-      height: 230svh;
+      height: 100svh;
       background: #02060b;
       isolation: isolate;
+      overflow: clip;
     }
 
-    .showroom-journey-fixed {
+    .door-entry-fixed {
       position: relative;
       height: 100svh;
       overflow: hidden;
-      isolation: isolate;
       background: #02060b;
+      isolation: isolate;
     }
 
-    .journey-bg,
-    .journey-grid,
-    .journey-vignette,
-    .journey-blackout {
+    .entry-bg,
+    .entry-grid,
+    .entry-vignette,
+    .entry-blackout {
       position: absolute;
       inset: 0;
       pointer-events: none;
     }
 
-    .journey-bg {
+    .entry-bg {
       z-index: 0;
       background:
-        radial-gradient(circle at 68% 47%, rgba(44, 227, 255, 0.18), transparent 34%),
-        radial-gradient(circle at 55% 82%, rgba(255, 184, 107, 0.13), transparent 35%),
-        linear-gradient(180deg, #050b10 0%, #07121b 58%, #02060b 100%);
+        radial-gradient(circle at 66% 48%, rgba(44, 227, 255, 0.2), transparent 34%),
+        radial-gradient(circle at 50% 84%, rgba(255, 184, 107, 0.13), transparent 36%),
+        linear-gradient(180deg, #050b10 0%, #07131d 58%, #02060b 100%);
     }
 
-    .journey-grid {
+    .entry-grid {
       z-index: 1;
-      background:
-        linear-gradient(90deg, rgba(44, 227, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(44, 227, 255, 0.022) 1px, transparent 1px);
-      background-size: 150px 150px;
-      mask-image: radial-gradient(circle at 64% 48%, black, transparent 78%);
       opacity: 0.5;
+      background:
+        linear-gradient(90deg, rgba(44, 227, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(44, 227, 255, 0.025) 1px, transparent 1px);
+      background-size: 150px 150px;
+      mask-image: radial-gradient(circle at 63% 48%, black, transparent 78%);
     }
 
-    .journey-vignette {
+    .entry-vignette {
       z-index: 2;
       background:
-        radial-gradient(circle at center, transparent 38%, rgba(0, 0, 0, 0.58)),
-        linear-gradient(180deg, rgba(2, 6, 11, 0), rgba(2, 6, 11, 0.25));
+        radial-gradient(circle at center, transparent 34%, rgba(0, 0, 0, 0.68)),
+        linear-gradient(90deg, rgba(2, 6, 11, 0.12), transparent 40%, transparent 64%, rgba(2, 6, 11, 0.24));
     }
 
-    .journey-blackout {
-      z-index: 30;
-      background: #02060b;
+    .entry-blackout {
+      z-index: 40;
       opacity: 0;
+      background: #02060b;
     }
 
-    .journey-copy {
+    .entry-copy {
       position: absolute;
-      z-index: 8;
-      left: max(2rem, calc((100vw - 1320px) / 2));
+      z-index: 9;
+      left: max(2rem, calc((100vw - 1380px) / 2));
       top: 50%;
-      width: min(570px, 42vw);
+      width: min(610px, 43vw);
       transform: translateY(-50%);
       will-change: opacity, transform;
     }
 
-    .journey-copy h2 {
-      margin: 0.5rem 0 0;
-      font-size: clamp(3.6rem, 6.8vw, 7.3rem);
-      line-height: 0.87;
-      letter-spacing: 0.012em;
+    .entry-copy h2 {
+      margin: 0.55rem 0 0;
+      max-width: 610px;
+      font-size: clamp(4rem, 7.7vw, 8.3rem);
+      line-height: 0.84;
+      letter-spacing: 0.01em;
     }
 
-    .journey-copy p:not(.kardoor-kicker) {
+    .entry-copy p:not(.kardoor-kicker) {
       margin: 1rem 0 0;
-      max-width: 560px;
+      max-width: 570px;
       color: var(--text-muted);
-      font-size: clamp(1rem, 1.25vw, 1.1rem);
+      font-size: clamp(1rem, 1.28vw, 1.16rem);
       line-height: 1.72;
     }
 
-    .journey-steps {
+    .entry-steps {
       display: flex;
       flex-wrap: wrap;
       gap: 0.55rem;
       margin-top: 1.2rem;
     }
 
-    .journey-steps span {
+    .entry-steps span {
       border: 1px solid rgba(138, 166, 190, 0.24);
       border-radius: 999px;
-      padding: 0.42rem 0.72rem;
-      background: rgba(4, 10, 17, 0.58);
+      padding: 0.42rem 0.74rem;
+      background: rgba(4, 10, 17, 0.6);
       color: #dce8f3;
       font-size: 0.72rem;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       backdrop-filter: blur(10px);
     }
 
-    .journey-portal {
+    .entry-portal {
       position: absolute;
-      z-index: 6;
+      z-index: 7;
       inset: var(--header-height) 0 0;
       display: grid;
       place-items: center;
-      perspective: 1800px;
+      perspective: 1850px;
       transform-style: preserve-3d;
       will-change: opacity, transform;
     }
 
-    .journey-light {
+    .entry-light {
       position: absolute;
       z-index: 0;
-      width: min(760px, 68vw);
-      height: min(760px, 68vw);
+      width: min(800px, 68vw);
+      height: min(800px, 68vw);
       border-radius: 50%;
       background:
-        radial-gradient(circle, rgba(255, 184, 107, 0.22), transparent 42%),
-        radial-gradient(circle, rgba(44, 227, 255, 0.24), transparent 66%);
+        radial-gradient(circle, rgba(255, 184, 107, 0.24), transparent 42%),
+        radial-gradient(circle, rgba(44, 227, 255, 0.25), transparent 66%);
       filter: blur(34px);
       opacity: 0.42;
       transform: scale(0.92);
       will-change: opacity, transform;
     }
 
-    .journey-depth {
+    .entry-depth {
       position: absolute;
       z-index: 1;
-      width: min(570px, 62vw);
-      height: min(710px, 78vw);
-      border-radius: 1.7rem;
+      width: min(590px, 62vw);
+      height: min(730px, 76vh);
+      border-radius: 1.8rem;
       overflow: hidden;
       opacity: 0;
       transform: scale(0.9);
       background:
-        radial-gradient(circle at 50% 54%, rgba(255, 184, 107, 0.18), transparent 30%),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 28%, transparent 72%, rgba(0, 0, 0, 0.55)),
+        radial-gradient(circle at 50% 45%, rgba(255, 184, 107, 0.18), transparent 30%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.58), transparent 28%, transparent 72%, rgba(0, 0, 0, 0.58)),
         linear-gradient(180deg, #1b2a36 0%, #08111a 54%, #04080d 100%);
       box-shadow:
-        inset 0 0 110px rgba(0, 0, 0, 0.72),
-        0 0 100px rgba(255, 184, 107, 0.12),
-        0 0 90px rgba(44, 227, 255, 0.09);
+        inset 0 0 120px rgba(0, 0, 0, 0.76),
+        0 0 110px rgba(255, 184, 107, 0.13),
+        0 0 96px rgba(44, 227, 255, 0.1);
       will-change: opacity, transform;
     }
 
@@ -210,36 +211,45 @@ import DoorVisual from "./DoorVisual.astro";
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 50% 45%, rgba(255, 184, 107, 0.2), transparent 38%),
-        radial-gradient(circle at 50% 80%, rgba(44, 227, 255, 0.14), transparent 42%);
+        radial-gradient(circle at 50% 45%, rgba(255, 184, 107, 0.22), transparent 38%),
+        radial-gradient(circle at 50% 82%, rgba(44, 227, 255, 0.15), transparent 42%);
+    }
+
+    .depth-ceiling {
+      position: absolute;
+      top: 8%;
+      left: 18%;
+      right: 18%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 184, 107, 0.36), transparent);
     }
 
     .depth-axis {
       position: absolute;
       left: 50%;
-      top: 14%;
-      bottom: 10%;
+      top: 12%;
+      bottom: 9%;
       width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.55), transparent);
-      box-shadow: 0 0 24px rgba(44, 227, 255, 0.28);
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.58), transparent);
+      box-shadow: 0 0 24px rgba(44, 227, 255, 0.32);
     }
 
     .depth-line {
       position: absolute;
-      top: 15%;
+      top: 14%;
       bottom: 10%;
       width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.42), transparent);
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.44), transparent);
       transform-origin: bottom center;
     }
 
     .depth-line-left {
-      left: 25%;
+      left: 24%;
       transform: skewX(-18deg);
     }
 
     .depth-line-right {
-      right: 25%;
+      right: 24%;
       transform: skewX(18deg);
     }
 
@@ -248,14 +258,14 @@ import DoorVisual from "./DoorVisual.astro";
       left: 12%;
       right: 12%;
       bottom: 8%;
-      height: 48%;
-      border: 1px solid rgba(44, 227, 255, 0.12);
+      height: 50%;
+      border: 1px solid rgba(44, 227, 255, 0.13);
       border-top-color: rgba(255, 184, 107, 0.18);
       transform: perspective(900px) rotateX(62deg);
       transform-origin: bottom center;
       background:
-        linear-gradient(90deg, transparent 0 49.8%, rgba(44, 227, 255, 0.24) 49.8% 50.2%, transparent 50.2% 100%),
-        radial-gradient(circle at 50% 90%, rgba(255, 184, 107, 0.16), transparent 56%);
+        linear-gradient(90deg, transparent 0 49.8%, rgba(44, 227, 255, 0.26) 49.8% 50.2%, transparent 50.2% 100%),
+        radial-gradient(circle at 50% 90%, rgba(255, 184, 107, 0.17), transparent 56%);
     }
 
     .depth-target {
@@ -272,11 +282,11 @@ import DoorVisual from "./DoorVisual.astro";
         rgba(5, 9, 14, 0.72);
     }
 
-    .journey-frame {
+    .entry-frame {
       position: absolute;
       z-index: 3;
-      width: min(470px, 58vw);
-      height: min(680px, 76vw);
+      width: min(490px, 58vw);
+      height: min(700px, 76vh);
       border: 1px solid rgba(44, 227, 255, 0.28);
       border-radius: 1.5rem;
       background:
@@ -288,14 +298,14 @@ import DoorVisual from "./DoorVisual.astro";
       will-change: opacity, transform;
     }
 
-    .journey-frame span {
+    .entry-frame span {
       position: absolute;
       inset: 8% 10%;
       border: 1px solid rgba(44, 227, 255, 0.16);
       border-radius: 1rem;
     }
 
-    .journey-door {
+    .entry-door {
       position: relative;
       z-index: 5;
       transform-origin: left center;
@@ -303,15 +313,15 @@ import DoorVisual from "./DoorVisual.astro";
       will-change: opacity, transform;
     }
 
-    .journey-door :global(.door-visual--portal .door-visual-image) {
-      width: min(400px, 52vw);
+    .entry-door :global(.door-visual--portal .door-visual-image) {
+      width: min(410px, 52vw);
       filter:
-        drop-shadow(0 36px 44px rgba(0, 0, 0, 0.7))
+        drop-shadow(0 36px 44px rgba(0, 0, 0, 0.72))
         drop-shadow(0 0 28px rgba(44, 227, 255, 0.08));
     }
 
-    .journey-door :global(.door-visual-reflection),
-    .journey-door :global(.door-visual-floor-shadow) {
+    .entry-door :global(.door-visual-reflection),
+    .entry-door :global(.door-visual-floor-shadow) {
       opacity: 0;
     }
 
@@ -320,11 +330,11 @@ import DoorVisual from "./DoorVisual.astro";
       z-index: 8;
       border: 1px solid rgba(44, 227, 255, 0.34);
       border-radius: 999px;
-      padding: 0.44rem 0.7rem;
+      padding: 0.44rem 0.72rem;
       background: rgba(3, 8, 14, 0.78);
       color: #dce8f3;
       font-size: 0.68rem;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: 0.11em;
       text-transform: uppercase;
       backdrop-filter: blur(10px);
@@ -336,7 +346,7 @@ import DoorVisual from "./DoorVisual.astro";
     }
 
     .journey-label-right {
-      right: 13%;
+      right: 12%;
       top: 35%;
     }
 
@@ -347,39 +357,39 @@ import DoorVisual from "./DoorVisual.astro";
     }
 
     @media (max-width: 900px) {
-      .showroom-journey {
+      .door-entry-journey {
         height: auto;
       }
 
-      .showroom-journey-fixed {
+      .door-entry-fixed {
         height: auto;
         min-height: 100svh;
         padding-top: var(--header-height);
       }
 
-      .journey-copy,
-      .journey-portal {
+      .entry-copy,
+      .entry-portal {
         position: relative;
         inset: auto;
         transform: none;
       }
 
-      .journey-copy {
+      .entry-copy {
         width: min(760px, calc(100% - 2rem));
         margin: 3rem auto 0;
       }
 
-      .journey-portal {
+      .entry-portal {
         min-height: 560px;
       }
     }
 
     @media (max-width: 760px) {
-      .journey-copy h2 {
+      .entry-copy h2 {
         font-size: clamp(3rem, 16vw, 4.6rem);
       }
 
-      .journey-door :global(.door-visual--portal .door-visual-image) {
+      .entry-door :global(.door-visual--portal .door-visual-image) {
         width: min(300px, 72vw);
       }
 
