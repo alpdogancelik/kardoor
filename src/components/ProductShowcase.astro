@@ -1,0 +1,20 @@
+﻿---
+import ProductCard from "./ProductCard.astro";
+import { products } from "../data/products";
+---
+
+<section class="section-shell">
+  <div class="site-container space-y-8">
+    <div class="space-y-3" data-reveal>
+      <p class="kardoor-kicker">Öne Çıkan Modeller</p>
+      <h2 class="kardoor-display text-4xl text-white sm:text-5xl">Projeye Değer Katan Kapılar</h2>
+      <p class="max-w-2xl text-slate-300">
+        Koleksiyonlarımızdan seçilen premium modelleri teknik altyapı ve tasarım diliyle birlikte inceleyin.
+      </p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {products.map((product) => <ProductCard product={product} />)}
+    </div>
+  </div>
+</section>

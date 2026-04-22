@@ -1,0 +1,23 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import { products } from "../../data/products";
+---
+
+<BaseLayout title="Ürünler | Kardoor" description="Kardoor koleksiyonlarından premium çelik kapı modellerini inceleyin.">
+  <section class="section-shell">
+    <div class="site-container space-y-8">
+      <div class="space-y-3" data-reveal>
+        <p class="kardoor-kicker">Koleksiyonlar</p>
+        <h1 class="kardoor-display text-5xl text-white sm:text-6xl">Tüm Ürünler</h1>
+        <p class="max-w-2xl text-slate-300">
+          Kardoor ürün ailesini model bazında inceleyin, teknik detaylara inin ve projeniz için doğru çözümü seçin.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {products.map((product) => <ProductCard product={product} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

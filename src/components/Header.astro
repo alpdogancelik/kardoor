@@ -1,0 +1,27 @@
+﻿---
+const navLinks = [
+  { href: "/", label: "Ana Sayfa" },
+  { href: "/urunler", label: "Urunler" },
+  { href: "/iletisim", label: "Iletisim" }
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-white/10 bg-showroom-950/90 backdrop-blur-md">
+  <div class="site-container flex items-center justify-between py-4">
+    <a href="/" class="kardoor-display text-4xl tracking-wide text-white">Kardoor</a>
+
+    <nav class="hidden items-center gap-7 text-sm text-slate-300 md:flex">
+      {
+        navLinks.map((item) => (
+          <a href={item.href} class="transition hover:text-white">
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a href="/iletisim" class="btn btn-primary hidden md:inline-flex">Teklif Al</a>
+
+    <a href="/iletisim" class="btn btn-secondary md:hidden">Iletisim</a>
+  </div>
+</header>

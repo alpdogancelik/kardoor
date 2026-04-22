@@ -1,0 +1,39 @@
+﻿---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="İletişim | Kardoor"
+  description="Kardoor premium çelik kapı teklif ve danışmanlık formu."
+>
+  <section class="section-shell">
+    <div class="site-container">
+      <div class="panel mx-auto max-w-3xl space-y-6 p-6 sm:p-8" data-reveal>
+        <div class="space-y-3">
+          <p class="kardoor-kicker">İletişim</p>
+          <h1 class="kardoor-display text-5xl text-white">Projeniz İçin Teklif Alın</h1>
+          <p class="text-slate-300">
+            Model, ölçü ve kullanım alanı bilgilerinizi paylaşın; ekibimiz size en uygun çözümü hızlıca hazırlasın.
+          </p>
+        </div>
+
+        <form class="grid gap-4">
+          <label class="grid gap-2 text-sm text-slate-300">
+            Ad Soyad
+            <input class="rounded-xl border border-white/15 bg-showroom-900 px-4 py-3 text-white outline-none ring-accent-400 focus:ring-2" type="text" placeholder="Adınız Soyadınız" />
+          </label>
+          <label class="grid gap-2 text-sm text-slate-300">
+            Telefon
+            <input class="rounded-xl border border-white/15 bg-showroom-900 px-4 py-3 text-white outline-none ring-accent-400 focus:ring-2" type="tel" placeholder="05xx xxx xx xx" />
+          </label>
+          <label class="grid gap-2 text-sm text-slate-300">
+            Proje Notu
+            <textarea class="min-h-32 rounded-xl border border-white/15 bg-showroom-900 px-4 py-3 text-white outline-none ring-accent-400 focus:ring-2" placeholder="Seri tercihi, ölçü, kullanım alanı"></textarea>
+          </label>
+
+          <button type="submit" class="btn btn-primary w-full sm:w-auto">Teklif Talebi Gönder</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
