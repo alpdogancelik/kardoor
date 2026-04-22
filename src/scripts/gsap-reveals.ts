@@ -45,6 +45,7 @@ function splitTextReveals() {
 function blockReveals() {
   gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((node) => {
     if (node.closest("[data-showroom-journey]")) return;
+    if (node.closest("[data-collection-carousel]")) return;
 
     gsap.fromTo(
       node,
@@ -156,20 +157,16 @@ function setupShowroomJourney() {
   const light = journey.querySelector<HTMLElement>("[data-door-light]");
   const depth = journey.querySelector<HTMLElement>("[data-door-depth]");
   const frame = journey.querySelector<HTMLElement>("[data-door-frame]");
-  const corridor = journey.querySelector<HTMLElement>("[data-journey-corridor]");
+  const blackout = journey.querySelector<HTMLElement>("[data-journey-blackout]");
   const labels = journey.querySelectorAll<HTMLElement>(".journey-label");
 
-  if (!fixed || !copy || !portal || !leaf || !light || !depth || !frame || !corridor) {
+  if (!fixed || !copy || !portal || !leaf || !light || !depth || !frame || !blackout) {
     return;
   }
 
   const mm = gsap.matchMedia();
 
-  mm.add("(min-width: 1101px)", () => {
-    gsap.set(fixed, {
-      opacity: 1
-    });
-
+  mm.add("(min-width: 901px)", () => {
     gsap.set(copy, {
       opacity: 1,
       x: 0,
@@ -192,7 +189,7 @@ function setupShowroomJourney() {
       z: 0,
       scale: 1,
       transformOrigin: "left center",
-      transformPerspective: 1700
+      transformPerspective: 1800
     });
 
     gsap.set(frame, {
@@ -213,11 +210,8 @@ function setupShowroomJourney() {
       y: 0
     });
 
-    gsap.set(corridor, {
-      opacity: 0,
-      y: 52,
-      scale: 0.94,
-      pointerEvents: "none"
+    gsap.set(blackout, {
+      opacity: 0
     });
 
     if (labels.length) {
@@ -235,7 +229,7 @@ function setupShowroomJourney() {
         trigger: journey,
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.9,
+        scrub: 0.85,
         pin: fixed,
         pinSpacing: false,
         anticipatePin: 1,
@@ -243,7 +237,7 @@ function setupShowroomJourney() {
       }
     });
 
-    timeline.to(copy, { opacity: 0.82, y: -8, duration: 0.12 }, 0);
+    timeline.to(copy, { opacity: 0.78, y: -8, duration: 0.12 }, 0);
     timeline.to(portal, { scale: 1.04, y: -6, duration: 0.18 }, 0);
     timeline.to(light, { opacity: 0.75, scale: 1.06, duration: 0.18 }, 0.02);
     timeline.to(depth, { opacity: 0.38, scale: 0.96, duration: 0.18 }, 0.04);
@@ -262,7 +256,7 @@ function setupShowroomJourney() {
 
     timeline.to(frame, { scale: 1.02, opacity: 0.95, duration: 0.18 }, 0.08);
 
-    timeline.to(copy, { opacity: 0.28, y: -28, scale: 0.98, duration: 0.2 }, 0.22);
+    timeline.to(copy, { opacity: 0.22, y: -30, scale: 0.98, duration: 0.2 }, 0.22);
     timeline.to(light, { opacity: 1, scale: 1.16, duration: 0.22 }, 0.2);
     timeline.to(depth, { opacity: 1, scale: 1.04, duration: 0.24 }, 0.22);
 
@@ -279,7 +273,7 @@ function setupShowroomJourney() {
     );
 
     timeline.to(frame, { scale: 1.08, x: 10, opacity: 0.72, duration: 0.24 }, 0.26);
-    timeline.to(portal, { scale: 1.14, y: -8, duration: 0.28 }, 0.28);
+    timeline.to(portal, { scale: 1.15, y: -8, duration: 0.28 }, 0.28);
 
     if (labels.length) {
       timeline.to(labels, { opacity: 0, y: -10, duration: 0.12 }, 0.32);
@@ -291,8 +285,8 @@ function setupShowroomJourney() {
       leaf,
       {
         rotateY: -82,
-        x: -88,
-        z: 160,
+        x: -92,
+        z: 165,
         scale: 1.08,
         opacity: 0,
         duration: 0.22
@@ -307,38 +301,16 @@ function setupShowroomJourney() {
     timeline.to(
       portal,
       {
-        scale: 1.34,
+        scale: 1.38,
         y: -18,
-        opacity: 0.18,
+        opacity: 0.16,
         duration: 0.26
       },
-      0.52
+      0.54
     );
 
-    timeline.to(
-      corridor,
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.28
-      },
-      0.56
-    );
-
-    timeline.set(corridor, { pointerEvents: "auto" }, 0.7);
-
-    timeline.to(portal, { opacity: 0, scale: 1.42, duration: 0.18 }, 0.72);
-
-    timeline.to(
-      corridor,
-      {
-        y: -10,
-        scale: 1.015,
-        duration: 0.22
-      },
-      0.78
-    );
+    timeline.to(blackout, { opacity: 0.92, duration: 0.22 }, 0.7);
+    timeline.to(portal, { opacity: 0, scale: 1.46, duration: 0.18 }, 0.74);
 
     return () => {
       timeline.scrollTrigger?.kill();
@@ -346,10 +318,10 @@ function setupShowroomJourney() {
     };
   });
 
-  mm.add("(max-width: 1100px)", () => {
-    gsap.set([copy, portal, corridor], {
+  mm.add("(max-width: 900px)", () => {
+    gsap.set([copy, portal], {
       opacity: 1,
-      clearProps: "transform,pointerEvents"
+      clearProps: "transform"
     });
 
     gsap.set(leaf, {
@@ -384,6 +356,69 @@ function setupShowroomJourney() {
       timeline.scrollTrigger?.kill();
       timeline.kill();
     };
+  });
+}
+
+function setupCollectionCarousel() {
+  const carousel = document.querySelector<HTMLElement>("[data-collection-carousel]");
+  if (!carousel) return;
+
+  const stage = carousel.querySelector<HTMLElement>("[data-carousel-stage]");
+  const track = carousel.querySelector<HTMLElement>("[data-carousel-track]");
+  const slides = gsap.utils.toArray<HTMLElement>("[data-carousel-slide]");
+  const progress = carousel.querySelector<HTMLElement>("[data-carousel-progress]");
+
+  if (!stage || !track || slides.length < 2) return;
+
+  const mm = gsap.matchMedia();
+
+  mm.add("(min-width: 1101px)", () => {
+    slides[0]?.classList.add("is-active");
+
+    const getDistance = () => track.scrollWidth - window.innerWidth;
+
+    const tween = gsap.to(track, {
+      x: () => -getDistance(),
+      ease: "none",
+      scrollTrigger: {
+        trigger: carousel,
+        start: "top top",
+        end: () => `+=${getDistance()}`,
+        scrub: 0.9,
+        pin: stage,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const activeIndex = Math.min(
+            slides.length - 1,
+            Math.max(0, Math.round(self.progress * (slides.length - 1)))
+          );
+
+          slides.forEach((slide, index) => {
+            slide.classList.toggle("is-active", index === activeIndex);
+          });
+
+          if (progress) {
+            progress.style.transform = `scaleY(${self.progress})`;
+          }
+        }
+      }
+    });
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  });
+
+  mm.add("(max-width: 1100px)", () => {
+    gsap.set(track, {
+      clearProps: "transform"
+    });
+
+    slides.forEach((slide) => {
+      slide.classList.add("is-active");
+    });
   });
 }
 
@@ -538,19 +573,16 @@ function forceVisible() {
     node.style.transform = "none";
   });
 
-  const journeyCorridor = document.querySelector<HTMLElement>("[data-journey-corridor]");
-  const journeyPortal = document.querySelector<HTMLElement>("[data-journey-portal]");
+  const track = document.querySelector<HTMLElement>("[data-carousel-track]");
+  const slides = gsap.utils.toArray<HTMLElement>("[data-carousel-slide]");
 
-  if (journeyCorridor) {
-    journeyCorridor.style.opacity = "1";
-    journeyCorridor.style.transform = "none";
-    journeyCorridor.style.pointerEvents = "auto";
+  if (track) {
+    track.style.transform = "none";
   }
 
-  if (journeyPortal) {
-    journeyPortal.style.opacity = "1";
-    journeyPortal.style.transform = "none";
-  }
+  slides.forEach((slide) => {
+    slide.classList.add("is-active");
+  });
 }
 
 export function initGsapReveals() {
@@ -570,6 +602,7 @@ export function initGsapReveals() {
 
   setupHeroParallax();
   setupShowroomJourney();
+  setupCollectionCarousel();
   setupCorridorMicroAnimations();
   setupCollectionRoomAnimations();
   setupModelStageAnimations();
