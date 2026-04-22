@@ -198,6 +198,225 @@ function setupDoorEntryAnimation() {
   });
 }
 
+function setupHeroParallax() {
+  const hero = document.querySelector<HTMLElement>(".hero-portal");
+  if (!hero) return;
+
+  const stage = hero.querySelector<HTMLElement>(".hero-stage");
+  const door = hero.querySelector<HTMLElement>(".hero-door-object");
+  const halo = hero.querySelector<HTMLElement>(".hero-door-halo");
+  const frame = hero.querySelector<HTMLElement>(".hero-door-frame");
+  const callouts = hero.querySelectorAll<HTMLElement>(".hero-callout, .hero-stage-label");
+
+  if (!stage || !door) return;
+
+  const timeline = gsap.timeline({
+    defaults: {
+      ease: "none"
+    },
+    scrollTrigger: {
+      trigger: hero,
+      start: "top top",
+      end: "bottom top",
+      scrub: 0.8,
+      invalidateOnRefresh: true
+    }
+  });
+
+  timeline.to(stage, { y: 42, scale: 0.98, duration: 1 }, 0);
+  timeline.to(door, { y: -26, scale: 1.035, duration: 1 }, 0);
+  timeline.to(halo, { scale: 1.12, opacity: 0.72, duration: 1 }, 0);
+  timeline.to(frame, { scale: 1.025, opacity: 0.86, duration: 1 }, 0);
+
+  if (callouts.length) {
+    timeline.to(callouts, { y: -18, opacity: 0.72, duration: 1 }, 0);
+  }
+}
+
+function setupCorridorMicroAnimations() {
+  const dot = document.querySelector<HTMLElement>(".corridor-wayfinding-dot");
+
+  if (dot) {
+    gsap.to(dot, {
+      scale: 1.28,
+      opacity: 0.68,
+      duration: 1,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut"
+    });
+  }
+
+  const visual = document.querySelector<HTMLElement>(".corridor-visual");
+  if (!visual) return;
+
+  const door = visual.querySelector<HTMLElement>(".corridor-vanishing-door");
+  const floor = visual.querySelector<HTMLElement>(".corridor-floor-plane");
+  const displays = visual.querySelectorAll<HTMLElement>(".corridor-display-zone");
+
+  const timeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: visual,
+      start: "top 82%",
+      once: true
+    }
+  });
+
+  timeline.fromTo(
+    visual,
+    { opacity: 0, y: 34 },
+    { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+    0
+  );
+
+  if (door) {
+    timeline.fromTo(
+      door,
+      { opacity: 0, scale: 0.72 },
+      { opacity: 1, scale: 0.88, duration: 0.8, ease: "power3.out" },
+      0.18
+    );
+  }
+
+  if (floor) {
+    timeline.fromTo(
+      floor,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.8, ease: "power2.out" },
+      0.24
+    );
+  }
+
+  if (displays.length) {
+    timeline.fromTo(
+      displays,
+      { opacity: 0, y: 18 },
+      { opacity: 0.72, y: 0, duration: 0.65, stagger: 0.08, ease: "power2.out" },
+      0.34
+    );
+  }
+}
+
+function setupCollectionRoomAnimations() {
+  const rooms = gsap.utils.toArray<HTMLElement>(".collection-room-scene");
+
+  rooms.forEach((room) => {
+    const door = room.querySelector<HTMLElement>(".room-door-object");
+    const light = room.querySelector<HTMLElement>(".room-light");
+    const panel = room.querySelector<HTMLElement>(".room-back-panel");
+    const chips = room.querySelectorAll<HTMLElement>(".room-model-codes li");
+    const labels = room.querySelectorAll<HTMLElement>(".room-stage-label");
+    const callouts = room.querySelectorAll<HTMLElement>(".technical-callouts span");
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: room,
+        start: "top 72%",
+        once: true
+      }
+    });
+
+    if (panel) {
+      timeline.fromTo(
+        panel,
+        { opacity: 0, scale: 0.92 },
+        { opacity: 1, scale: 1, duration: 0.75, ease: "power3.out" },
+        0
+      );
+    }
+
+    if (light) {
+      timeline.fromTo(
+        light,
+        { opacity: 0, scale: 0.82 },
+        { opacity: 0.9, scale: 1, duration: 0.9, ease: "power3.out" },
+        0.05
+      );
+    }
+
+    if (door) {
+      timeline.fromTo(
+        door,
+        { opacity: 0, y: 42, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.85, ease: "power3.out" },
+        0.15
+      );
+    }
+
+    if (chips.length) {
+      timeline.fromTo(
+        chips,
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.45, stagger: 0.05, ease: "power2.out" },
+        0.28
+      );
+    }
+
+    if (labels.length) {
+      timeline.fromTo(
+        labels,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.45, stagger: 0.06, ease: "power2.out" },
+        0.34
+      );
+    }
+
+    if (callouts.length) {
+      timeline.fromTo(
+        callouts,
+        { opacity: 0, scale: 0.92 },
+        { opacity: 1, scale: 1, duration: 0.45, stagger: 0.06, ease: "power2.out" },
+        0.42
+      );
+    }
+  });
+}
+
+function setupModelStageAnimations() {
+  const stages = gsap.utils.toArray<HTMLElement>(".model-stage");
+
+  stages.forEach((stage) => {
+    const door = stage.querySelector<HTMLElement>(".model-stage-door");
+    const halo = stage.querySelector<HTMLElement>(".model-stage-halo");
+    const chips = stage.querySelectorAll<HTMLElement>(".model-stage-chip");
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: stage,
+        start: "top 78%",
+        once: true
+      }
+    });
+
+    if (halo) {
+      timeline.fromTo(
+        halo,
+        { opacity: 0, scale: 0.78 },
+        { opacity: 1, scale: 1, duration: 0.85, ease: "power3.out" },
+        0
+      );
+    }
+
+    if (door) {
+      timeline.fromTo(
+        door,
+        { opacity: 0, y: 34, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.85, ease: "power3.out" },
+        0.12
+      );
+    }
+
+    if (chips.length) {
+      timeline.fromTo(
+        chips,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "power2.out" },
+        0.28
+      );
+    }
+  });
+}
+
 function forceVisible() {
   const nodes = gsap.utils.toArray<HTMLElement>(
     "[data-reveal], [data-split], [data-callout], [data-product-stage]"
@@ -223,7 +442,12 @@ export function initGsapReveals() {
   blockReveals();
   calloutReveals();
   productStageReveals();
+
+  setupHeroParallax();
   setupDoorEntryAnimation();
+  setupCorridorMicroAnimations();
+  setupCollectionRoomAnimations();
+  setupModelStageAnimations();
 
   window.addEventListener(
     "load",

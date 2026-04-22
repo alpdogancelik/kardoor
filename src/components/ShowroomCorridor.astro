@@ -1,6 +1,9 @@
-<section class="showroom-corridor" data-showroom-corridor>
-  <div class="showroom-corridor-shell">
-    <div class="showroom-corridor-copy" data-reveal>
+<section class="corridor-scene" data-showroom-corridor>
+  <div class="corridor-scene-bg" aria-hidden="true"></div>
+  <div class="corridor-scene-grid" aria-hidden="true"></div>
+
+  <div class="corridor-shell">
+    <div class="corridor-copy" data-reveal>
       <p class="kardoor-kicker">SHOWROOM CORRIDOR</p>
 
       <h2 class="kardoor-display" data-split>
@@ -12,15 +15,380 @@
         Kapının yüzeyinden kasa detayına kadar bütün yapı tek bir premium giriş
         deneyimi için kurgulanır.
       </p>
+
+      <div class="corridor-path-list" aria-label="Showroom akışı">
+        <div>
+          <strong>01</strong>
+          <span>Seri karakteri</span>
+        </div>
+
+        <div>
+          <strong>02</strong>
+          <span>Model kodları</span>
+        </div>
+
+        <div>
+          <strong>03</strong>
+          <span>Teknik detaylar</span>
+        </div>
+      </div>
     </div>
 
-    <div class="showroom-corridor-visual" aria-hidden="true" data-reveal>
+    <div class="corridor-visual" aria-hidden="true" data-reveal>
+      <div class="corridor-ceiling-light corridor-ceiling-light-left"></div>
+      <div class="corridor-ceiling-light corridor-ceiling-light-right"></div>
+
       <div class="corridor-wall corridor-wall-left"></div>
       <div class="corridor-wall corridor-wall-right"></div>
-      <div class="corridor-ceiling"></div>
-      <div class="corridor-floor"></div>
-      <div class="corridor-axis"></div>
+
+      <div class="corridor-display-zone corridor-display-zone-left">
+        <span></span>
+      </div>
+
+      <div class="corridor-display-zone corridor-display-zone-right">
+        <span></span>
+      </div>
+
+      <div class="corridor-vanishing-door">
+        <span class="corridor-door-line corridor-door-line-left"></span>
+        <span class="corridor-door-line corridor-door-line-center"></span>
+        <span class="corridor-door-handle"></span>
+      </div>
+
+      <div class="corridor-floor-plane"></div>
+      <div class="corridor-axis-line"></div>
+      <div class="corridor-wayfinding-dot"></div>
       <div class="corridor-glow"></div>
     </div>
   </div>
+
+  <style>
+    .corridor-scene {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: clamp(5rem, 9vw, 8rem) 0;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 58% 68%, rgba(44, 227, 255, 0.12), transparent 36%),
+        radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.045), transparent 28%),
+        linear-gradient(180deg, #050b10 0%, #07111a 100%);
+    }
+
+    .corridor-scene-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(44, 227, 255, 0.05), transparent 26%, transparent 74%, rgba(44, 227, 255, 0.045)),
+        radial-gradient(circle at 62% 56%, rgba(44, 227, 255, 0.14), transparent 30%);
+      opacity: 0.9;
+    }
+
+    .corridor-scene-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(44, 227, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(44, 227, 255, 0.026) 1px, transparent 1px);
+      background-size: 170px 170px;
+      mask-image: radial-gradient(circle at 62% 52%, black, transparent 74%);
+      opacity: 0.52;
+    }
+
+    .corridor-shell {
+      position: relative;
+      z-index: 3;
+      width: min(1320px, calc(100% - 2rem));
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(520px, 1.18fr);
+      gap: clamp(2rem, 5vw, 5.5rem);
+      align-items: center;
+    }
+
+    .corridor-copy {
+      max-width: 680px;
+    }
+
+    .corridor-copy h2 {
+      margin: 0.45rem 0 0;
+      font-size: clamp(3.6rem, 7vw, 7.4rem);
+      line-height: 0.88;
+      letter-spacing: 0.012em;
+    }
+
+    .corridor-copy > p:not(.kardoor-kicker) {
+      margin: 1rem 0 0;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 1.35vw, 1.15rem);
+      line-height: 1.72;
+    }
+
+    .corridor-path-list {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .corridor-path-list div {
+      border: 1px solid rgba(138, 166, 190, 0.22);
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
+      background: rgba(4, 10, 17, 0.52);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.75rem;
+      align-items: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .corridor-path-list strong {
+      color: var(--accent);
+      font-size: 0.86rem;
+      letter-spacing: 0.12em;
+    }
+
+    .corridor-path-list span {
+      color: #dce8f3;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .corridor-visual {
+      position: relative;
+      min-height: 620px;
+      border: 1px solid rgba(138, 166, 190, 0.24);
+      border-radius: 1.7rem;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 50% 72%, rgba(44, 227, 255, 0.13), transparent 36%),
+        linear-gradient(180deg, rgba(8, 16, 26, 0.94), rgba(2, 6, 11, 0.96));
+      box-shadow:
+        inset 0 0 90px rgba(0, 0, 0, 0.42),
+        0 30px 90px rgba(0, 0, 0, 0.24);
+    }
+
+    .corridor-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.03)),
+        linear-gradient(180deg, rgba(44, 227, 255, 0.05), transparent 42%);
+      opacity: 0.86;
+    }
+
+    .corridor-ceiling-light {
+      position: absolute;
+      top: 12%;
+      width: 32%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(44, 227, 255, 0.62), transparent);
+      box-shadow: 0 0 24px rgba(44, 227, 255, 0.24);
+    }
+
+    .corridor-ceiling-light-left {
+      left: 16%;
+      transform: skewX(-18deg);
+    }
+
+    .corridor-ceiling-light-right {
+      right: 16%;
+      transform: skewX(18deg);
+    }
+
+    .corridor-wall {
+      position: absolute;
+      top: 14%;
+      bottom: 12%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.55), transparent);
+      opacity: 0.9;
+    }
+
+    .corridor-wall-left {
+      left: 24%;
+      transform: skewX(-17deg);
+      transform-origin: bottom center;
+    }
+
+    .corridor-wall-right {
+      right: 24%;
+      transform: skewX(17deg);
+      transform-origin: bottom center;
+    }
+
+    .corridor-display-zone {
+      position: absolute;
+      top: 26%;
+      width: 108px;
+      height: 238px;
+      border: 1px solid rgba(44, 227, 255, 0.16);
+      border-radius: 0.9rem;
+      background: rgba(5, 12, 20, 0.54);
+      display: grid;
+      place-items: center;
+      opacity: 0.72;
+    }
+
+    .corridor-display-zone span {
+      width: 42px;
+      height: 142px;
+      border-radius: 0.45rem;
+      background:
+        linear-gradient(160deg, rgba(44, 227, 255, 0.16), rgba(255, 255, 255, 0.04)),
+        #111d29;
+      box-shadow: 0 0 30px rgba(44, 227, 255, 0.08);
+    }
+
+    .corridor-display-zone-left {
+      left: 9%;
+      transform: perspective(900px) rotateY(28deg) scale(0.9);
+    }
+
+    .corridor-display-zone-right {
+      right: 9%;
+      transform: perspective(900px) rotateY(-28deg) scale(0.9);
+    }
+
+    .corridor-vanishing-door {
+      position: absolute;
+      left: 50%;
+      top: 27%;
+      width: 132px;
+      height: 210px;
+      border: 1px solid rgba(220, 232, 243, 0.16);
+      border-radius: 0.8rem;
+      transform: translateX(-50%) scale(0.88);
+      background:
+        linear-gradient(160deg, #263645, #111a24 56%, #071019);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.28),
+        0 0 50px rgba(44, 227, 255, 0.08);
+    }
+
+    .corridor-door-line {
+      position: absolute;
+      top: 30px;
+      bottom: 26px;
+      border-radius: 999px;
+      background: rgba(44, 227, 255, 0.18);
+    }
+
+    .corridor-door-line-left {
+      left: 28px;
+      width: 8px;
+    }
+
+    .corridor-door-line-center {
+      left: 54px;
+      width: 5px;
+      background: rgba(220, 232, 243, 0.16);
+    }
+
+    .corridor-door-handle {
+      position: absolute;
+      top: 62px;
+      right: 26px;
+      width: 10px;
+      height: 100px;
+      border-radius: 999px;
+      background: #dce8f3;
+    }
+
+    .corridor-floor-plane {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: 10%;
+      height: 48%;
+      border: 1px solid rgba(44, 227, 255, 0.14);
+      border-top-color: rgba(44, 227, 255, 0.24);
+      transform: perspective(820px) rotateX(62deg);
+      transform-origin: bottom center;
+      background:
+        linear-gradient(90deg, transparent 0 49.8%, rgba(44, 227, 255, 0.22) 49.8% 50.2%, transparent 50.2% 100%),
+        radial-gradient(circle at 50% 100%, rgba(44, 227, 255, 0.11), transparent 52%);
+    }
+
+    .corridor-axis-line {
+      position: absolute;
+      top: 18%;
+      bottom: 9%;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(44, 227, 255, 0.64), transparent);
+      box-shadow: 0 0 18px rgba(44, 227, 255, 0.26);
+    }
+
+    .corridor-wayfinding-dot {
+      position: absolute;
+      left: 50%;
+      top: 51%;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--accent);
+      box-shadow: 0 0 28px rgba(44, 227, 255, 0.74);
+    }
+
+    .corridor-glow {
+      position: absolute;
+      left: 50%;
+      bottom: 10%;
+      width: 62%;
+      height: 140px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(44, 227, 255, 0.2), transparent 68%);
+      filter: blur(16px);
+    }
+
+    @media (max-width: 1023px) {
+      .corridor-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .corridor-copy {
+        max-width: 780px;
+      }
+
+      .corridor-visual {
+        min-height: 520px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .corridor-shell {
+        width: min(100% - 1rem, 1320px);
+      }
+
+      .corridor-copy h2 {
+        font-size: clamp(3rem, 16vw, 4.8rem);
+      }
+
+      .corridor-visual {
+        min-height: 420px;
+        border-radius: 1.25rem;
+      }
+
+      .corridor-display-zone {
+        display: none;
+      }
+
+      .corridor-vanishing-door {
+        top: 25%;
+        transform: translateX(-50%) scale(0.72);
+      }
+    }
+  </style>
 </section>
