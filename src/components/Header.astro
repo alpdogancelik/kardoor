@@ -10,18 +10,20 @@ const navItems = [
 
 <header class="site-header">
   <div class="site-header-inner">
-    <a href="/" class="site-logo">KARDOOR</a>
+    <a href="/" class="site-logo" aria-label="Kardoor ana sayfa">
+      KARDOOR
+    </a>
 
     <nav class="site-nav" aria-label="Ana navigasyon">
-      {
-        navItems.map((item) => (
-          <a href={item.href} class="site-nav-link">
-            {item.label}
-          </a>
-        ))
-      }
+      {navItems.map((item) => (
+        <a href={item.href} class="site-nav-link">
+          {item.label}
+        </a>
+      ))}
     </nav>
 
-    <a href="/teklif" class="btn btn-primary site-header-cta">Teklif Al</a>
+    <a href="/teklif" class="btn btn-primary site-header-cta">
+      Teklif Al
+    </a>
   </div>
 </header>

@@ -4,8 +4,11 @@ interface Props {
 }
 
 const { labels } = Astro.props;
+const safeLabels = labels.slice(0, 6);
 ---
 
-<div class="technical-callouts">
-  {labels.slice(0, 6).map((label) => <span data-callout>{label}</span>)}
+<div class="technical-callouts" aria-hidden="true">
+  {safeLabels.map((label) => (
+    <span data-callout>{label}</span>
+  ))}
 </div>

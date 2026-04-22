@@ -12,10 +12,27 @@ const {
   size = "room",
   className = ""
 } = Astro.props;
+
+const loading = size === "portal" ? "eager" : "lazy";
+const fetchPriority = size === "portal" ? "high" : "auto";
 ---
 
 <div class:list={["door-visual-wrap", `door-visual--${size}`, className]}>
-  <div class="door-visual-floor-shadow"></div>
-  <img src={image} alt={alt} class="door-visual-image" loading="lazy" />
-  <img src={image} alt="" aria-hidden="true" class="door-visual-reflection" loading="lazy" />
+  <div class="door-visual-floor-shadow" aria-hidden="true"></div>
+
+  <img
+    src={image}
+    alt={alt}
+    class="door-visual-image"
+    loading={loading}
+    fetchpriority={fetchPriority}
+  />
+
+  <img
+    src={image}
+    alt=""
+    aria-hidden="true"
+    class="door-visual-reflection"
+    loading="lazy"
+  />
 </div>

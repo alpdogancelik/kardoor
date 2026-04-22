@@ -1,9 +1,9 @@
 ﻿---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { collections, type Collection } from "../../data/collections";
-import { getProductsByCollectionSlug } from "../../data/catalog";
 import DoorVisual from "../../components/DoorVisual.astro";
 import TechnicalCallouts from "../../components/TechnicalCallouts.astro";
+import { collections, type Collection } from "../../data/collections";
+import { getProductsByCollectionSlug } from "../../data/catalog";
 
 interface Props {
   collection: Collection;
@@ -24,41 +24,65 @@ const products = getProductsByCollectionSlug(collection.slug);
   <section class="subpage-wrap">
     <div class="subpage-head" data-reveal>
       <a href="/koleksiyonlar" class="back-link">← Tüm koleksiyonlar</a>
-      <p class="kardoor-kicker">Koleksiyon {collection.number}</p>
-      <h1 class="kardoor-display">{collection.title}</h1>
-      <p>{collection.description}</p>
+
+      <p class="kardoor-kicker">KOLEKSİYON {collection.number}</p>
+
+      <h1 class="kardoor-display" data-split>
+        {collection.title}
+      </h1>
+
+      <p>{collection.longDescription}</p>
     </div>
 
     <div class="collection-hero" style={`--room-accent:${collection.accentColor};`} data-reveal>
       <div>
-        <ul class="collection-model-codes">
+        <p class="subpage-meta">{collection.shortTitle}</p>
+
+        <ul class="collection-model-codes" aria-label={`${collection.title} model kodları`}>
           {collection.modelCodes.map((code) => <li>{code}</li>)}
         </ul>
+
         <div class="subpage-actions">
-          <a href="/teklif" class="btn btn-primary">Teklif Al</a>
-          <a href="/iletisim" class="btn btn-secondary">İletişim</a>
+          <a href="/teklif" class="btn btn-primary">
+            Teklif Al
+          </a>
+
+          <a href="/iletisim" class="btn btn-secondary">
+            İletişim
+          </a>
         </div>
       </div>
 
       <div class="collection-room-visual">
+        <div class="collection-room-light" aria-hidden="true"></div>
+        <div class="collection-room-frame" aria-hidden="true"></div>
+
         <DoorVisual image={collection.image} alt={collection.title} size="room" />
+
         <TechnicalCallouts labels={collection.materials} />
       </div>
     </div>
 
     <div class="subpage-list subpage-list--grid">
-      {
-        products.map((product) => (
-          <article class="subpage-card" data-reveal>
-            <p class="subpage-number">{product.code}</p>
-            <h3>{product.title}</h3>
-            <p>{product.shortDescription}</p>
-            <div class="subpage-actions">
-              <a href={`/urunler/${product.slug}`} class="btn btn-secondary">Detayları Gör</a>
-            </div>
-          </article>
-        ))
-      }
+      {products.map((product) => (
+        <article class="subpage-card" data-reveal>
+          <p class="subpage-number">{product.code}</p>
+
+          <h3>{product.title}</h3>
+
+          <p>{product.shortDescription}</p>
+
+          <div class="subpage-actions">
+            <a href={`/urunler/${product.slug}`} class="btn btn-secondary">
+              Detayları Gör
+            </a>
+
+            <a href="/teklif" class="btn btn-primary">
+              Teklif Al
+            </a>
+          </div>
+        </article>
+      ))}
     </div>
   </section>
 </BaseLayout>
