@@ -1,0 +1,64 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { collections, type Collection } from "../../data/collections";
+import { getProductsByCollectionSlug } from "../../data/catalog";
+import DoorVisual from "../../components/DoorVisual.astro";
+import TechnicalCallouts from "../../components/TechnicalCallouts.astro";
+
+interface Props {
+  collection: Collection;
+}
+
+export function getStaticPaths() {
+  return collections.map((collection) => ({
+    params: { slug: collection.slug },
+    props: { collection }
+  }));
+}
+
+const { collection } = Astro.props;
+const products = getProductsByCollectionSlug(collection.slug);
+---
+
+<BaseLayout title={`${collection.title} | Kardoor`} description={collection.description}>
+  <section class="subpage-wrap">
+    <div class="subpage-head" data-reveal>
+      <a href="/koleksiyonlar" class="back-link">← Tüm koleksiyonlar</a>
+      <p class="kardoor-kicker">Koleksiyon {collection.number}</p>
+      <h1 class="kardoor-display">{collection.title}</h1>
+      <p>{collection.description}</p>
+    </div>
+
+    <div class="collection-hero" style={`--room-accent:${collection.accentColor};`} data-reveal>
+      <div>
+        <ul class="collection-model-codes">
+          {collection.modelCodes.map((code) => <li>{code}</li>)}
+        </ul>
+        <div class="subpage-actions">
+          <a href="/teklif" class="btn btn-primary">Teklif Al</a>
+          <a href="/iletisim" class="btn btn-secondary">İletişim</a>
+        </div>
+      </div>
+
+      <div class="collection-room-visual">
+        <DoorVisual image={collection.image} alt={collection.title} size="room" />
+        <TechnicalCallouts labels={collection.materials} />
+      </div>
+    </div>
+
+    <div class="subpage-list subpage-list--grid">
+      {
+        products.map((product) => (
+          <article class="subpage-card" data-reveal>
+            <p class="subpage-number">{product.code}</p>
+            <h3>{product.title}</h3>
+            <p>{product.shortDescription}</p>
+            <div class="subpage-actions">
+              <a href={`/urunler/${product.slug}`} class="btn btn-secondary">Detayları Gör</a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,11 @@
+﻿---
+interface Props {
+  labels: string[];
+}
+
+const { labels } = Astro.props;
+---
+
+<div class="technical-callouts">
+  {labels.slice(0, 6).map((label) => <span data-callout>{label}</span>)}
+</div>

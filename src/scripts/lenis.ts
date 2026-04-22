@@ -1,4 +1,5 @@
 ﻿import Lenis from "lenis";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 let initialized = false;
 
@@ -16,10 +17,14 @@ export function initLenis() {
 
   const lenis = new Lenis({
     smoothWheel: true,
-    duration: 1.05,
-    wheelMultiplier: 0.9,
-    touchMultiplier: 1.1,
-    infinite: false
+    duration: 1.1,
+    wheelMultiplier: 0.95,
+    touchMultiplier: 1.05,
+    lerp: 0.1
+  });
+
+  lenis.on("scroll", () => {
+    ScrollTrigger.update();
   });
 
   const raf = (time: number) => {

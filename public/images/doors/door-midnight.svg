@@ -1,0 +1,20 @@
+﻿<svg width="500" height="980" viewBox="0 0 500 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="panel" x1="60" y1="0" x2="440" y2="980" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1C2938"/>
+      <stop offset="1" stop-color="#0E1724"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="250" y1="40" x2="250" y2="940" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#47EAFF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#47EAFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="60" y="20" width="380" height="940" rx="14" fill="url(#panel)"/>
+  <rect x="80" y="40" width="340" height="900" rx="10" stroke="rgba(255,255,255,0.22)"/>
+  <rect x="112" y="130" width="16" height="690" rx="8" fill="url(#glow)"/>
+  <rect x="352" y="250" width="18" height="420" rx="9" fill="#C9D6DF" fill-opacity="0.9"/>
+  <rect x="172" y="110" width="170" height="760" rx="6" stroke="rgba(255,255,255,0.12)"/>
+  <rect x="204" y="170" width="12" height="640" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="238" y="170" width="12" height="640" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="272" y="170" width="12" height="640" rx="6" fill="rgba(255,255,255,0.08)"/>
+</svg>

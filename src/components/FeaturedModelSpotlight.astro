@@ -1,0 +1,43 @@
+﻿---
+import DoorVisual from "./DoorVisual.astro";
+import { products } from "../data/products";
+
+const featuredCodes = ["K1001", "K1051", "K1101"];
+const featured = featuredCodes
+  .map((code) => products.find((item) => item.code === code))
+  .filter((item): item is NonNullable<typeof item> => Boolean(item));
+---
+
+<section class="featured-spotlight" data-featured-spotlight>
+  <div class="section-intro" data-reveal>
+    <p class="kardoor-kicker">Featured Model Spotlight</p>
+    <h2 class="kardoor-display" data-split>Öne Çıkan Model Sahnesi</h2>
+  </div>
+
+  <div class="featured-stage-list">
+    {
+      featured.map((product, index) => (
+        <article class="featured-stage" data-product-stage>
+          <div class:list={["featured-stage-door", index % 2 === 1 && "featured-stage-door--right"]}>
+            <DoorVisual image={product.image} alt={product.title} size="spotlight" />
+          </div>
+
+          <div class:list={["featured-stage-content", index % 2 === 1 && "featured-stage-content--left"]}>
+            <p class="featured-collection">{product.collection}</p>
+            <h3 class="kardoor-display featured-code">{product.code}</h3>
+            <p>{product.shortDescription}</p>
+
+            <ul class="featured-specs">
+              {product.specs.slice(0, 3).map((spec) => <li>{spec}</li>)}
+            </ul>
+
+            <div class="featured-actions">
+              <a href={`/urunler/${product.slug}`} class="btn btn-secondary">Detayları Gör</a>
+              <a href="/teklif" class="btn btn-primary">Teklif Al</a>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

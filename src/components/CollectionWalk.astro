@@ -1,0 +1,10 @@
+﻿---
+import { collections } from "../data/collections";
+import CollectionRoom from "./CollectionRoom.astro";
+---
+
+<section class="collection-walk" data-collection-walk>
+  <div class="collection-track" data-collection-track>
+    {collections.map((collection) => <CollectionRoom collection={collection} />)}
+  </div>
+</section>

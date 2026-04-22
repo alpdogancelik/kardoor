@@ -1,0 +1,21 @@
+﻿---
+interface Props {
+  image?: string;
+  alt: string;
+  size?: "portal" | "room" | "spotlight";
+  className?: string;
+}
+
+const {
+  image = "/images/doors/door-midnight.svg",
+  alt,
+  size = "room",
+  className = ""
+} = Astro.props;
+---
+
+<div class:list={["door-visual-wrap", `door-visual--${size}`, className]}>
+  <div class="door-visual-floor-shadow"></div>
+  <img src={image} alt={alt} class="door-visual-image" loading="lazy" />
+  <img src={image} alt="" aria-hidden="true" class="door-visual-reflection" loading="lazy" />
+</div>

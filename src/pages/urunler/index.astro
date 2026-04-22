@@ -1,23 +1,29 @@
 ﻿---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ProductCard from "../../components/ProductCard.astro";
 import { products } from "../../data/products";
 ---
 
-<BaseLayout title="Ürünler | Kardoor" description="Kardoor koleksiyonlarından premium çelik kapı modellerini inceleyin.">
-  <section class="section-shell">
-    <div class="site-container space-y-8">
-      <div class="space-y-3" data-reveal>
-        <p class="kardoor-kicker">Koleksiyonlar</p>
-        <h1 class="kardoor-display text-5xl text-white sm:text-6xl">Tüm Ürünler</h1>
-        <p class="max-w-2xl text-slate-300">
-          Kardoor ürün ailesini model bazında inceleyin, teknik detaylara inin ve projeniz için doğru çözümü seçin.
-        </p>
-      </div>
+<BaseLayout title="Ürünler | Kardoor" description="Kardoor model kodlarına göre ürün detaylarını inceleyin.">
+  <section class="subpage-wrap">
+    <div class="subpage-head" data-reveal>
+      <p class="kardoor-kicker">Ürünler</p>
+      <h1 class="kardoor-display">Model Arşivi</h1>
+      <p>Koleksiyonlardan öne çıkan model kodlarını seçerek teknik detay sayfalarına geçebilirsiniz.</p>
+    </div>
 
-      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {products.map((product) => <ProductCard product={product} />)}
-      </div>
+    <div class="subpage-list subpage-list--grid">
+      {
+        products.map((product) => (
+          <article class="subpage-card" data-reveal>
+            <p class="subpage-number">{product.code}</p>
+            <h2>{product.collection}</h2>
+            <p>{product.shortDescription}</p>
+            <div class="subpage-actions">
+              <a href={`/urunler/${product.slug}`} class="btn btn-secondary">Detayları Gör</a>
+            </div>
+          </article>
+        ))
+      }
     </div>
   </section>
 </BaseLayout>

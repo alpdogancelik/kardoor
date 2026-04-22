@@ -1,27 +1,27 @@
 ﻿---
-const navLinks = [
+const navItems = [
   { href: "/", label: "Ana Sayfa" },
-  { href: "/urunler", label: "Urunler" },
-  { href: "/iletisim", label: "Iletisim" }
+  { href: "/koleksiyonlar", label: "Koleksiyonlar" },
+  { href: "/urunler", label: "Ürünler" },
+  { href: "/teklif", label: "Teklif Al" },
+  { href: "/iletisim", label: "İletişim" }
 ];
 ---
 
-<header class="sticky top-0 z-50 border-b border-white/10 bg-showroom-950/90 backdrop-blur-md">
-  <div class="site-container flex items-center justify-between py-4">
-    <a href="/" class="kardoor-display text-4xl tracking-wide text-white">Kardoor</a>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="/" class="site-logo">KARDOOR</a>
 
-    <nav class="hidden items-center gap-7 text-sm text-slate-300 md:flex">
+    <nav class="site-nav" aria-label="Ana navigasyon">
       {
-        navLinks.map((item) => (
-          <a href={item.href} class="transition hover:text-white">
+        navItems.map((item) => (
+          <a href={item.href} class="site-nav-link">
             {item.label}
           </a>
         ))
       }
     </nav>
 
-    <a href="/iletisim" class="btn btn-primary hidden md:inline-flex">Teklif Al</a>
-
-    <a href="/iletisim" class="btn btn-secondary md:hidden">Iletisim</a>
+    <a href="/teklif" class="btn btn-primary site-header-cta">Teklif Al</a>
   </div>
 </header>

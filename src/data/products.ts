@@ -1,135 +1,135 @@
 ﻿export type Product = {
   slug: string;
-  name: string;
+  code: string;
   collection: string;
-  description: string;
-  image: string;
-  gallery: string[];
-  specs: {
-    panelThickness: string;
-    lockSystem: string;
-    insulation: string;
-    hinge: string;
-    coating: string;
-  };
-  surfaces: string[];
+  collectionSlug: string;
+  title: string;
+  shortDescription: string;
+  specs: string[];
+  materials: string[];
   usageAreas: string[];
+  image: string;
 };
 
 export const products: Product[] = [
   {
-    slug: "laminoks-1001",
-    name: "Laminoks 1001",
-    collection: "Laminoks",
-    description:
-      "Ahşap dokusunu modern çelik güvenliğiyle birleştiren, villa girişleri için geliştirilmiş premium model.",
-    image:
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1400&q=80",
-    gallery: [
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&w=1400&q=80"
-    ],
-    specs: {
-      panelThickness: "95 mm",
-      lockSystem: "3 noktalı merkezi kilit + akıllı silindir",
-      insulation: "Yuksek yogunluklu poliuretan dolgu",
-      hinge: "3D ayarlanabilir gizli menteşe",
-      coating: "UV dayanimli laminoks kaplama"
-    },
-    surfaces: ["Antrasit Mat", "Koyu Ceviz", "Bronz Metalik"],
-    usageAreas: ["Villa girisleri", "Müstakil konutlar", "Premium site girisleri"]
+    slug: "k1001",
+    code: "K1001",
+    collection: "Alüminyum Kasa Seri",
+    collectionSlug: "aluminyum-kasa-seri",
+    title: "K1001 Premium Giriş Kapısı",
+    shortDescription: "Keskin yüzey oranı ve güçlü kasa formu ile modern mimariye premium giriş etkisi kazandırır.",
+    specs: ["95 mm panel", "3 noktalı kilit", "Termal yalıtım"],
+    materials: ["Alüminyum kasa", "Çelik kanat", "Satin metal kol"],
+    usageAreas: ["Villa", "Premium konut", "Residence"],
+    image: "/images/doors/door-midnight.svg"
   },
   {
-    slug: "alm-1001",
-    name: "ALM 1001",
-    collection: "Aluminyum Seri",
-    description:
-      "Keskin hatlara sahip minimal tasarim, dis cephe mimarisiyle uyumlu aluminyum detaylarla tamamlandi.",
-    image:
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1400&q=80",
-    gallery: [
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1604014237744-f9f4972f3326?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1400&q=80"
-    ],
-    specs: {
-      panelThickness: "90 mm",
-      lockSystem: "Celik guclendirmeli multipoint kilit",
-      insulation: "Termal kopru destekli cift yalitim",
-      hinge: "Tasiyici rulmanli premium menteşe",
-      coating: "Elektrostatik toz boya"
-    },
-    surfaces: ["Titanyum Gri", "Siyah Saten", "Champagne"],
-    usageAreas: ["Residence girisleri", "Modern konut projeleri", "Ofis girisleri"]
+    slug: "k1002",
+    code: "K1002",
+    collection: "Alüminyum Kasa Seri",
+    collectionSlug: "aluminyum-kasa-seri",
+    title: "K1002 Minimal Seri",
+    shortDescription: "Yalın çizgilerle güvenlik katmanını birleştiren, mimari cephelerle uyumlu model.",
+    specs: ["92 mm panel", "Multipoint sistem", "Akustik kesim"],
+    materials: ["Alüminyum profil", "Kompozit destek", "Titanyum kol"],
+    usageAreas: ["Villa", "Apartman", "Proje"],
+    image: "/images/doors/door-graphite.svg"
   },
   {
-    slug: "alm-1002",
-    name: "ALM 1002",
-    collection: "Aluminyum Seri",
-    description:
-      "Dikey cam detayli, prestij projeleri icin guvenlik ve estetik dengesini one cikaran ust segment model.",
-    image:
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1400&q=80",
-    gallery: [
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1604014237744-f9f4972f3326?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1400&q=80"
-    ],
-    specs: {
-      panelThickness: "92 mm",
-      lockSystem: "4 nokta emniyet kilit sistemi",
-      insulation: "Cift katmanli isi + ses bariyeri",
-      hinge: "Gizli pivot sistem",
-      coating: "Nano seramik yuzey koruma"
-    },
-    surfaces: ["Gece Siyahi", "Metalik Antrasit", "Acilik Alu"],
-    usageAreas: ["Villa kapilari", "Ikiz villa projeleri", "Mimari vitrin cephesi"]
+    slug: "k1004",
+    code: "K1004",
+    collection: "Alüminyum Kasa Seri",
+    collectionSlug: "aluminyum-kasa-seri",
+    title: "K1004 Cam Detaylı",
+    shortDescription: "Dikey cam yarığı ile girişte prestij etkisini artıran güçlü kasa mimarisi.",
+    specs: ["90 mm panel", "4 noktalı kilit", "Temperli cam opsiyonu"],
+    materials: ["Alüminyum kasa", "Temperli cam", "Paslanmaz kol"],
+    usageAreas: ["Villa", "Mimari konut", "Giriş holü"],
+    image: "/images/doors/door-metal.svg"
   },
   {
-    slug: "komp-3001",
-    name: "KOMP 3001",
+    slug: "k1051",
+    code: "K1051",
+    collection: "Alüminyum Kasa ve Kanat Seri",
+    collectionSlug: "aluminyum-kasa-ve-kanat-seri",
+    title: "K1051 Çift Stabilite",
+    shortDescription: "Kasa ve kanatta alüminyum karakteriyle uzun ömürlü dış ortam dayanımı sunar.",
+    specs: ["98 mm panel", "Akıllı kilit uyumu", "Dış iklim direnci"],
+    materials: ["Alüminyum kasa", "Alüminyum kanat", "Mat siyah kol"],
+    usageAreas: ["Villa", "Sahil bölgesi", "Açık iklim"],
+    image: "/images/doors/door-graphite.svg"
+  },
+  {
+    slug: "k1054",
+    code: "K1054",
+    collection: "Alüminyum Kasa ve Kanat Seri",
+    collectionSlug: "aluminyum-kasa-ve-kanat-seri",
+    title: "K1054 Residence Giriş",
+    shortDescription: "Şehir projelerinde rafine görünüm ve yüksek güvenlik dengesini öne çıkarır.",
+    specs: ["96 mm panel", "Çift conta", "Gizli menteşe"],
+    materials: ["Alüminyum kanat", "Termal panel", "Inox kol"],
+    usageAreas: ["Apartman", "Residence", "Ticari giriş"],
+    image: "/images/doors/door-midnight.svg"
+  },
+  {
+    slug: "k1101",
+    code: "K1101",
+    collection: "Termo Wood Seri",
+    collectionSlug: "termo-wood-seri",
+    title: "K1101 Termo Wood Signature",
+    shortDescription: "Ahşap dokulu yüzeyle sıcak karşılama sunarken çelik güvenlik omurgasını korur.",
+    specs: ["100 mm termo panel", "3 noktalı kilit", "Yüksek ısı yalıtımı"],
+    materials: ["Termo wood yüzey", "Çelik gövde", "Bronz kol"],
+    usageAreas: ["Villa", "Müstakil konut", "Yazlık"],
+    image: "/images/doors/door-wood.svg"
+  },
+  {
+    slug: "k1104",
+    code: "K1104",
+    collection: "Termo Wood Seri",
+    collectionSlug: "termo-wood-seri",
+    title: "K1104 Elite Wood",
+    shortDescription: "Termal performans ve doğal malzeme etkisini üst segment mimariyle buluşturur.",
+    specs: ["102 mm panel", "Ses bariyeri", "4 noktali kilit"],
+    materials: ["Termo wood", "Kompozit çekirdek", "Premium tutamak"],
+    usageAreas: ["Villa", "Dağ evi", "Lüks konut"],
+    image: "/images/doors/door-wood.svg"
+  },
+  {
+    slug: "k1201",
+    code: "K1201",
+    collection: "Doğal Taş Seri",
+    collectionSlug: "dogal-tas-seri",
+    title: "K1201 Stone Signature",
+    shortDescription: "Doğal taş dokusunu modern güvenlik standartlarıyla birleştiren prestijli model.",
+    specs: ["95 mm panel", "Taş efekt katman", "Takviyeli kilit"],
+    materials: ["Taş efekt yüzey", "Çelik taşıyıcı", "Titanyum kol"],
+    usageAreas: ["Villa", "Prestij proje", "Showroom"],
+    image: "/images/doors/door-stone.svg"
+  },
+  {
+    slug: "k1401",
+    code: "K1401",
     collection: "Kompozit Seri",
-    description:
-      "Yuksek dayanimli kompozit panel ile iklim kosullarina direncli, uzun omurlu giris kapisi cozumudur.",
-    image:
-      "https://images.unsplash.com/photo-1600047509782-20d39509f26d?auto=format&fit=crop&w=1400&q=80",
-    gallery: [
-      "https://images.unsplash.com/photo-1600047509782-20d39509f26d?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1613977257592-487ecd136cc3?auto=format&fit=crop&w=1400&q=80"
-    ],
-    specs: {
-      panelThickness: "100 mm",
-      lockSystem: "Takviyeli merkezi kilit + gece mandali",
-      insulation: "Kompozit cekirdek + elastomer fitil",
-      hinge: "Yuksek tasima kapasiteli 3 eksen menteşe",
-      coating: "Su itici kompozit yuzey"
-    },
-    surfaces: ["Grafit", "Duman Mesesi", "Stone Grey"],
-    usageAreas: ["Sahil bolgesi konutlari", "Sert iklim kosullari", "Yuksek kullanimli girisler"]
+    collectionSlug: "kompozit-seri",
+    title: "K1401 Climate Guard",
+    shortDescription: "Zorlu iklim koşullarında dayanım için geliştirilen kompozit altyapılı premium giriş çözümü.",
+    specs: ["104 mm panel", "Su itici katman", "Çok noktalı kilit"],
+    materials: ["Kompozit panel", "Çelik altyapı", "Satin kol"],
+    usageAreas: ["Dış iklim", "Sahil", "Apartman"],
+    image: "/images/doors/door-midnight.svg"
   },
   {
     slug: "mtl-1001",
-    name: "MTL 1001",
-    collection: "Proje Kapilari",
-    description:
-      "Toplu konut ve ticari projeler icin standartlastirilmis guvenlik, hizli uretim ve kurulum avantaji.",
-    image:
-      "https://images.unsplash.com/photo-1600566752227-8f3b5f7f2f4d?auto=format&fit=crop&w=1400&q=80",
-    gallery: [
-      "https://images.unsplash.com/photo-1600566752227-8f3b5f7f2f4d?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1400&q=80"
-    ],
-    specs: {
-      panelThickness: "88 mm",
-      lockSystem: "EN normlarina uyumlu merkezi sistem",
-      insulation: "Tas yunu + kompozit dolgu",
-      hinge: "Endustriyel guclendirmeli menteşe",
-      coating: "Cizilmeye dayanikli endustriyel boya"
-    },
-    surfaces: ["Acik Gri", "Mat Siyah", "Beyaz"],
-    usageAreas: ["Toplu konut", "Kamu projeleri", "Ticari bina girisleri"]
+    code: "MTL 1001",
+    collection: "Komple Metal Seri",
+    collectionSlug: "komple-metal-seri",
+    title: "MTL 1001 Project Edition",
+    shortDescription: "Yüksek trafik alanları için geliştirilen tam metal karakterli proje kapısı.",
+    specs: ["88 mm panel", "Endüstriyel kilit", "Darbe dayanımı"],
+    materials: ["Metal kasa", "Metal kanat", "Endüstriyel kol"],
+    usageAreas: ["Proje", "Kamu yapısı", "Ticari alan"],
+    image: "/images/doors/door-metal.svg"
   }
 ];
