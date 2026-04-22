@@ -1238,3 +1238,60 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =========================================================
+   Door portal void fix
+   Kapı açılınca görünen iç koridor/oda çizimini kapatır.
+   GSAP timeline'a dokunmaz; sadece kapının arkasını siyah boşluk yapar.
+   ========================================================= */
+
+[data-door-depth] {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.035), transparent 16%),
+    radial-gradient(circle at 50% 58%, rgba(44, 227, 255, 0.075), transparent 42%),
+    linear-gradient(180deg, #000 0%, #02060b 52%, #000 100%) !important;
+  box-shadow:
+    inset 0 0 180px rgba(0, 0, 0, 1),
+    inset 0 0 42px rgba(44, 227, 255, 0.06) !important;
+}
+
+/* Kapının arkasındaki çizilmiş oda/koridor parçaları */
+[data-door-depth] > *,
+[data-door-depth] [class*="corridor"],
+[data-door-depth] [class*="room"],
+[data-door-depth] [class*="floor"],
+[data-door-depth] [class*="ceiling"],
+[data-door-depth] [class*="wall"],
+[data-door-depth] [class*="axis"],
+[data-door-depth] [class*="lamp"],
+[data-door-depth] [class*="light"],
+[data-door-depth] [class*="glow"],
+[data-door-depth] [class*="route"],
+[data-door-depth] [class*="panel"] {
+  display: none !important;
+}
+
+/* Pseudo-element ile çizilmiş perspektif/ışık varsa */
+[data-door-depth]::before,
+[data-door-depth]::after,
+[data-door-depth] *::before,
+[data-door-depth] *::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Kapıdan geçiş anında altta/arkada kalan showroom koridoru görünmesin */
+[data-door-portal].is-entering [data-door-depth],
+[data-door-portal][data-state="entering"] [data-door-depth],
+[data-door-portal][data-state="inside"] [data-door-depth] {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.028), transparent 15%),
+    radial-gradient(circle at 50% 58%, rgba(44, 227, 255, 0.055), transparent 38%),
+    #000 !important;
+}
+
