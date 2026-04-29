@@ -5,6 +5,12 @@
 @tailwind utilities;
 
 :root {
+  --brand-ege-blue: #0066ff;
+  --brand-deep-sea: #00309b;
+  --brand-night-steel: #0f172a;
+  --brand-graphite: #6b7280;
+  --brand-paper: #f7f9fc;
+
   --bg-main: #050b10;
   --bg-deep: #02060b;
   --bg-panel: #08111b;
@@ -17,11 +23,12 @@
   --border-main: rgba(138, 166, 190, 0.26);
   --border-soft: rgba(138, 166, 190, 0.16);
 
-  --accent: #2ce3ff;
-  --accent-strong: #10badc;
-  --warm: #ffb86b;
+  --accent: var(--brand-ege-blue);
+  --accent-strong: var(--brand-deep-sea);
+  --warm: #8aa6be;
 
-  --header-height: 78px;
+  --header-height: 116px;
+  --radius-brand: 8px;
 }
 
 *,
@@ -44,8 +51,7 @@ body {
   font-family: "Space Grotesk", sans-serif;
   color: var(--text-main);
   background:
-    radial-gradient(circle at 90% 0%, rgba(44, 227, 255, 0.1), transparent 30%),
-    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.055), transparent 26%),
+    linear-gradient(180deg, rgba(247, 249, 252, 0.035), transparent 420px),
     var(--bg-main);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -73,7 +79,7 @@ img {
 
 .kardoor-display {
   font-family: "Bebas Neue", sans-serif;
-  letter-spacing: 0.018em;
+  letter-spacing: 0.02em;
 }
 
 .kardoor-kicker {
@@ -96,7 +102,7 @@ img {
   align-items: center;
   justify-content: center;
   min-height: 46px;
-  border-radius: 999px;
+  border-radius: var(--radius-brand);
   border: 1px solid transparent;
   padding: 0.85rem 1.35rem;
   font-size: 0.92rem;
@@ -115,31 +121,31 @@ img {
 }
 
 .btn-primary {
-  color: #031018;
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  box-shadow: 0 0 32px rgba(44, 227, 255, 0.26);
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-ege-blue), var(--brand-deep-sea));
+  box-shadow: 0 16px 34px rgba(0, 48, 155, 0.24);
 }
 
 .btn-secondary {
   color: var(--text-main);
-  border-color: rgba(44, 227, 255, 0.48);
+  border-color: rgba(0, 102, 255, 0.48);
   background: rgba(8, 15, 24, 0.72);
 }
 
 .btn-secondary:hover {
-  border-color: rgba(44, 227, 255, 0.82);
+  border-color: rgba(0, 102, 255, 0.82);
 }
 
 /* Header */
 
 .site-header {
-  position: fixed;
-  inset-inline: 0;
+  position: sticky;
+  inset-inline: auto;
   top: 0;
   z-index: 90;
   height: var(--header-height);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-  background: rgba(2, 6, 12, 0.78);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(247, 249, 252, 0.92);
   backdrop-filter: blur(18px);
 }
 
@@ -154,11 +160,10 @@ img {
 }
 
 .site-logo {
-  font-family: "Bebas Neue", sans-serif;
-  color: white;
-  font-size: 2rem;
+  color: var(--brand-night-steel);
+  font-size: 1rem;
   line-height: 1;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.16em;
 }
 
 .site-nav {
@@ -172,12 +177,12 @@ img {
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #d6e2ee;
+  color: var(--brand-graphite);
   transition: color 180ms ease;
 }
 
 .site-nav-link:hover {
-  color: var(--accent);
+  color: var(--brand-deep-sea);
 }
 
 .site-header-cta {
@@ -360,7 +365,7 @@ img {
   overflow: hidden;
   background:
     radial-gradient(circle at 70% 45%, rgba(44, 227, 255, 0.14), transparent 34%),
-    radial-gradient(circle at 50% 100%, rgba(255, 184, 107, 0.14), transparent 38%),
+    linear-gradient(180deg, rgba(107, 114, 128, 0.08), transparent 42%),
     linear-gradient(180deg, #050b10 0%, #07111a 58%, #050b10 100%);
 }
 
@@ -417,7 +422,7 @@ img {
   width: min(560px, 72vw);
   height: min(560px, 72vw);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 184, 107, 0.34), transparent 65%);
+  background: radial-gradient(circle, rgba(0, 102, 255, 0.18), transparent 65%);
   filter: blur(28px);
   transform: translateX(8%);
 }
@@ -1146,7 +1151,7 @@ img {
 
 @media (max-width: 760px) {
   :root {
-    --header-height: 72px;
+    --header-height: 110px;
   }
 
   .site-header-inner {

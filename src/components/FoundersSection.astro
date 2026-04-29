@@ -104,8 +104,12 @@
     .kd-founders-section {
       width: 100%;
       overflow: hidden;
-      background: #dbe5f1;
-      color: #061b3a;
+      background:
+        linear-gradient(90deg, rgba(15, 23, 42, 0.045) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        #f7f9fc;
+      background-size: 96px 96px;
+      color: #0f172a;
       padding: 90px 70px 120px;
     }
 
@@ -125,9 +129,10 @@
     .kd-founders-title {
       margin: 0;
       font-size: clamp(86px, 7.2vw, 118px);
-      line-height: 0.82;
-      letter-spacing: -0.045em;
+      line-height: 0.86;
+      letter-spacing: 0;
       font-weight: 400;
+      text-transform: uppercase;
     }
 
     .kd-founders-title span {
@@ -143,8 +148,8 @@
       width: 24px;
       height: 24px;
       margin-left: 18px;
-      border-radius: 50%;
-      background: #5f7fc0;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #0066ff, #00309b);
       transform: translateY(-4px);
     }
 
@@ -153,8 +158,9 @@
       padding-top: 18px;
       max-width: 560px;
       font-size: 17.5px;
-      line-height: 1.42;
-      letter-spacing: -0.02em;
+      line-height: 1.52;
+      letter-spacing: 0;
+      color: rgba(15, 23, 42, 0.74);
     }
 
     .kd-founders-cards {
@@ -166,10 +172,11 @@
     }
 
     .kd-founder-card {
-      background: rgba(239, 246, 253, 0.88);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(15, 23, 42, 0.08);
       border-radius: 8px;
       padding: 10px;
-      box-shadow: 0 24px 80px rgba(27, 44, 77, 0.08);
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
       transition:
         transform 0.4s ease,
         box-shadow 0.4s ease,
@@ -178,8 +185,8 @@
 
     .kd-founder-card:hover {
       transform: translateY(-4px);
-      background: rgba(247, 251, 255, 0.96);
-      box-shadow: 0 30px 90px rgba(27, 44, 77, 0.16);
+      background: #ffffff;
+      box-shadow: 0 30px 90px rgba(15, 23, 42, 0.14);
     }
 
     .kd-founder-image {
@@ -187,8 +194,8 @@
       width: 100%;
       aspect-ratio: 1 / 1;
       overflow: hidden;
-      border-radius: 5px;
-      background: #c8d4e2;
+      border-radius: 6px;
+      background: #d7dee8;
     }
 
     .kd-founder-image img {
@@ -237,7 +244,7 @@
       display: flex;
       align-items: flex-end;
       padding: 22px 20px 20px;
-      background: rgba(2, 21, 52, 0.9);
+      background: rgba(15, 23, 42, 0.92);
       color: white;
       opacity: 0;
       transform: translateY(10px);
@@ -277,18 +284,19 @@
       margin: 0;
       font-size: 27px;
       line-height: 0.95;
-      letter-spacing: -0.05em;
+      letter-spacing: 0;
       font-weight: 400;
+      text-transform: uppercase;
     }
 
     .kd-founder-info p {
       margin: 8px 0 0;
       font-size: 13px;
-      color: rgba(6, 27, 58, 0.68);
+      color: rgba(15, 23, 42, 0.62);
     }
 
     .kd-founder-info a {
-      color: #061b3a;
+      color: #00309b;
       text-decoration: none;
       font-size: 29px;
       line-height: 1;

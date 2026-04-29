@@ -3,8 +3,12 @@
     <div class="site-footer-top">
       <div class="site-footer-brand">
         <a href="/" class="site-footer-logo" aria-label="Kardoor ana sayfa">
-          <span class="site-footer-logo-mark"></span>
-          <span class="site-footer-logo-text">KARDOOR</span>
+          <span class="site-footer-logo-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="site-footer-logo-text"><strong>EGE</strong> KARDOOR</span>
         </a>
 
         <p class="site-footer-copy">
@@ -62,7 +66,7 @@
     margin: 0 auto;
     padding: 28px 24px 18px;
     border: 1px solid rgba(96, 154, 255, 0.12);
-    border-radius: 24px;
+    border-radius: 8px;
     background:
       linear-gradient(
         180deg,
@@ -93,11 +97,42 @@
   }
 
   .site-footer-logo-mark {
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: linear-gradient(180deg, #33d6ff 0%, #138dff 100%);
-    box-shadow: 0 0 18px rgba(51, 214, 255, 0.45);
+    position: relative;
+    width: 30px;
+    height: 36px;
+    flex: 0 0 auto;
+  }
+
+  .site-footer-logo-mark span {
+    position: absolute;
+    display: block;
+  }
+
+  .site-footer-logo-mark span:nth-child(1) {
+    left: 0;
+    top: 3px;
+    width: 15px;
+    height: 30px;
+    background: linear-gradient(180deg, #0066ff 0%, #0985ff 100%);
+    clip-path: polygon(0 18%, 100% 0, 100% 32%, 55% 46%, 55% 100%, 0 72%);
+  }
+
+  .site-footer-logo-mark span:nth-child(2) {
+    right: 0;
+    top: 3px;
+    width: 15px;
+    height: 30px;
+    background: linear-gradient(180deg, #00309b 0%, #07172a 100%);
+    clip-path: polygon(0 0, 100% 18%, 100% 72%, 45% 100%, 45% 46%, 0 32%);
+  }
+
+  .site-footer-logo-mark span:nth-child(3) {
+    left: 12px;
+    bottom: 0;
+    width: 8px;
+    height: 23px;
+    background: linear-gradient(180deg, #0044cb 0%, #061c56 100%);
+    clip-path: polygon(0 37%, 100% 20%, 100% 100%, 0 78%);
   }
 
   .site-footer-logo-text {
@@ -106,6 +141,10 @@
     font-weight: 900;
     letter-spacing: 0.18em;
     line-height: 1;
+  }
+
+  .site-footer-logo-text strong {
+    color: #0066ff;
   }
 
   .site-footer-copy {
@@ -252,7 +291,7 @@
 
     .site-footer-shell {
       padding: 22px 16px 16px;
-      border-radius: 20px;
+      border-radius: 8px;
     }
 
     .site-footer-top {
