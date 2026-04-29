@@ -1,0 +1,362 @@
+<section class="kd-founders-section" aria-labelledby="founders-title">
+  <div class="kd-founders-inner">
+    <div class="kd-founders-top" data-reveal>
+      <h2 id="founders-title" class="kd-founders-title">
+        <span>Kurucu</span>
+        <span>Kadro <i aria-hidden="true"></i></span>
+      </h2>
+
+      <p class="kd-founders-desc">
+        Kardoor; kaliteyi üretimin her aşamasında standart haline getiren,
+        müşteri beklentilerini doğru okuyan ve yenilikçi bakış açısıyla sektörde
+        güçlü bir konum oluşturan bir marka anlayışını temsil eder. Güvenilir
+        hizmet yapısı, hızlı karar mekanizması ve sürdürülebilir büyüme
+        vizyonuyla bugünün ihtiyaçlarına cevap verirken geleceğin hedeflerini de
+        şekillendirir.
+      </p>
+    </div>
+
+    <div class="kd-founders-cards">
+      <article class="kd-founder-card" data-reveal>
+        <div class="kd-founder-image">
+          <img
+            src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop"
+            alt="Kurucu Kadro"
+            loading="lazy"
+          />
+
+          <div class="kd-founder-overlay">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Kardoor'un
+              üretim vizyonunu, kalite anlayışını ve büyüme hedeflerini ileri
+              taşıyan liderlik yaklaşımını temsil eder.
+            </p>
+          </div>
+        </div>
+
+        <div class="kd-founder-info">
+          <div>
+            <h3>Ad Soyad</h3>
+            <p>Kurucu Ortak</p>
+          </div>
+
+          <a href="#" aria-label="Kurucu ortak detayları">↗</a>
+        </div>
+      </article>
+
+      <article class="kd-founder-card" data-reveal>
+        <div class="kd-founder-image">
+          <img
+            src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop"
+            alt="Kurucu Kadro"
+            loading="lazy"
+          />
+
+          <div class="kd-founder-overlay">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Marka
+              değerlerini, müşteri beklentilerini ve sektörel gelişmeleri
+              bütüncül bir bakış açısıyla yöneten güçlü bir vizyon sunar.
+            </p>
+          </div>
+        </div>
+
+        <div class="kd-founder-info">
+          <div>
+            <h3>Ad Soyad</h3>
+            <p>Yönetim Liderliği</p>
+          </div>
+
+          <a href="#" aria-label="Yönetim liderliği detayları">↗</a>
+        </div>
+      </article>
+
+      <article class="kd-founder-card" data-reveal>
+        <div class="kd-founder-image">
+          <img
+            src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=1200&auto=format&fit=crop"
+            alt="Kurucu Kadro"
+            loading="lazy"
+          />
+
+          <div class="kd-founder-overlay">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Üretim
+              gücü, verimlilik anlayışı ve sürdürülebilir büyüme hedefleriyle
+              Kardoor'un gelecekteki konumunu şekillendirir.
+            </p>
+          </div>
+        </div>
+
+        <div class="kd-founder-info">
+          <div>
+            <h3>Ad Soyad</h3>
+            <p>Üretim ve Büyüme</p>
+          </div>
+
+          <a href="#" aria-label="Üretim ve büyüme detayları">↗</a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <style>
+    .kd-founders-section {
+      width: 100%;
+      overflow: hidden;
+      background: #dbe5f1;
+      color: #061b3a;
+      padding: 90px 70px 120px;
+    }
+
+    .kd-founders-inner {
+      width: 100%;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    .kd-founders-top {
+      display: grid;
+      grid-template-columns: 1fr 560px;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .kd-founders-title {
+      margin: 0;
+      font-size: clamp(86px, 7.2vw, 118px);
+      line-height: 0.82;
+      letter-spacing: -0.045em;
+      font-weight: 400;
+    }
+
+    .kd-founders-title span {
+      display: block;
+    }
+
+    .kd-founders-title span:nth-child(2) {
+      margin-top: 16px;
+    }
+
+    .kd-founders-title i {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      margin-left: 18px;
+      border-radius: 50%;
+      background: #5f7fc0;
+      transform: translateY(-4px);
+    }
+
+    .kd-founders-desc {
+      margin: 0;
+      padding-top: 18px;
+      max-width: 560px;
+      font-size: 17.5px;
+      line-height: 1.42;
+      letter-spacing: -0.02em;
+    }
+
+    .kd-founders-cards {
+      margin-top: 82px;
+      padding-left: 24%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .kd-founder-card {
+      background: rgba(239, 246, 253, 0.88);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 24px 80px rgba(27, 44, 77, 0.08);
+      transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        background 0.4s ease;
+    }
+
+    .kd-founder-card:hover {
+      transform: translateY(-4px);
+      background: rgba(247, 251, 255, 0.96);
+      box-shadow: 0 30px 90px rgba(27, 44, 77, 0.16);
+    }
+
+    .kd-founder-image {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 5px;
+      background: #c8d4e2;
+    }
+
+    .kd-founder-image img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.05);
+      transition:
+        transform 0.8s ease,
+        filter 0.8s ease;
+    }
+
+    .kd-founder-image::after {
+      content: "";
+      position: absolute;
+      inset: -45%;
+      z-index: 4;
+      pointer-events: none;
+      opacity: 0;
+      background: linear-gradient(
+        115deg,
+        transparent 0%,
+        transparent 42%,
+        rgba(255, 255, 255, 0.18) 47%,
+        rgba(255, 255, 255, 0.42) 50%,
+        rgba(150, 178, 232, 0.18) 53%,
+        transparent 60%,
+        transparent 100%
+      );
+      transform: translateX(-35%);
+      transition:
+        opacity 0.35s ease,
+        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .kd-founder-card:hover .kd-founder-image::after {
+      opacity: 1;
+      transform: translateX(35%);
+    }
+
+    .kd-founder-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      align-items: flex-end;
+      padding: 22px 20px 20px;
+      background: rgba(2, 21, 52, 0.9);
+      color: white;
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity 0.42s ease,
+        transform 0.42s ease;
+    }
+
+    .kd-founder-overlay p {
+      margin: 0;
+      max-width: 92%;
+      font-size: clamp(15px, 1.05vw, 19px);
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+    }
+
+    .kd-founder-card:hover .kd-founder-image img {
+      transform: scale(1.045);
+      filter: grayscale(1) contrast(1.05) brightness(0.52);
+    }
+
+    .kd-founder-card:hover .kd-founder-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .kd-founder-info {
+      min-height: 86px;
+      padding: 20px 4px 4px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .kd-founder-info h3 {
+      margin: 0;
+      font-size: 27px;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-weight: 400;
+    }
+
+    .kd-founder-info p {
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: rgba(6, 27, 58, 0.68);
+    }
+
+    .kd-founder-info a {
+      color: #061b3a;
+      text-decoration: none;
+      font-size: 29px;
+      line-height: 1;
+      transition: transform 0.3s ease;
+    }
+
+    .kd-founder-card:hover .kd-founder-info a {
+      transform: translate(4px, -4px);
+    }
+
+    @media (max-width: 1180px) {
+      .kd-founders-section {
+        padding: 80px 36px 100px;
+      }
+
+      .kd-founders-top {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .kd-founders-desc {
+        padding-top: 0;
+        max-width: 680px;
+      }
+
+      .kd-founders-cards {
+        padding-left: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .kd-founders-title {
+        font-size: 82px;
+      }
+
+      .kd-founders-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .kd-founder-overlay p {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .kd-founders-section {
+        padding: 70px 20px 90px;
+      }
+
+      .kd-founders-title {
+        font-size: 64px;
+        line-height: 0.86;
+      }
+
+      .kd-founders-title span:nth-child(2) {
+        margin-top: 12px;
+      }
+
+      .kd-founders-title i {
+        width: 17px;
+        height: 17px;
+        margin-left: 10px;
+      }
+
+      .kd-founders-desc {
+        font-size: 17px;
+        line-height: 1.36;
+      }
+    }
+  </style>
+</section>

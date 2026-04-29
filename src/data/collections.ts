@@ -52,7 +52,7 @@ export const collections: Collection[] = [
     modelCodes: ["K1101", "K1104", "K1108"],
     materials: ["Kasa", "Kanat", "Yüzey", "Kol", "Kilit", "Cam"],
     accentColor: "#7CEBFF",
-    image: "/images/doors/door-wood.svg"
+    image: "/images/doors/1.svg"
   },
   {
     slug: "dogal-tas-seri",

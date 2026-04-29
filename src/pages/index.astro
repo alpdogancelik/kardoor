@@ -1,10 +1,9 @@
 ﻿---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import EntrancePortal from "../components/EntrancePortal.astro";
 import DoorOpeningTransition from "../components/DoorOpeningTransition.astro";
-import ShowroomCorridor from "../components/ShowroomCorridor.astro";
 import CollectionWalk from "../components/CollectionWalk.astro";
 import FeaturedModelSpotlight from "../components/FeaturedModelSpotlight.astro";
+import FoundersSection from "../components/FoundersSection.astro";
 import QuoteConfigurator from "../components/QuoteConfigurator.astro";
 ---
 
@@ -12,10 +11,24 @@ import QuoteConfigurator from "../components/QuoteConfigurator.astro";
   title="Kardoor Showroom | Premium Çelik Kapı Deneyimi"
   description="Kardoor premium çelik kapı koleksiyonlarını kapıdan içeri girilen immersive showroom deneyimiyle keşfedin."
 >
-  <EntrancePortal />
   <DoorOpeningTransition />
-  <ShowroomCorridor />
   <CollectionWalk />
   <FeaturedModelSpotlight />
+  <FoundersSection />
   <QuoteConfigurator />
+
+  <style>
+    :global([data-home-showroom-content]) {
+      opacity: var(--showroom-content-opacity, 0);
+      visibility: var(--showroom-content-visibility, hidden);
+      transition:
+        opacity 320ms ease,
+        visibility 0ms linear 320ms;
+    }
+
+    :global([data-home-showroom-content].is-visible) {
+      transition: opacity 360ms ease;
+    }
+
+  </style>
 </BaseLayout>

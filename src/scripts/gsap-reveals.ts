@@ -136,6 +136,288 @@ function setupHeroParallax() {
   if (callouts.length) timeline.to(callouts, { y: -10, opacity: 0.7, duration: 1 }, 0);
 }
 
+function setupHomeDoorSequence() {
+  const hero = document.querySelector<HTMLElement>("[data-home-door-sequence]");
+  if (!hero) return;
+
+  const zoomLayer = hero.querySelector<HTMLElement>("[data-home-zoom-layer]");
+  const image = hero.querySelector<HTMLImageElement>("[data-home-hero-image]");
+  const stage = hero.querySelector<HTMLElement>("[data-door-sequence-stage]");
+  const frame = hero.querySelector<HTMLCanvasElement>("[data-door-sequence-frame]");
+  const blackout = hero.querySelector<HTMLElement>("[data-home-portal-blackout]");
+  const actions = hero.querySelector<HTMLElement>(".home-photo-actions");
+  const showroomContent = document.querySelector<HTMLElement>("[data-home-showroom-content]");
+
+  if (!zoomLayer || !image || !stage || !frame || !blackout) return;
+
+  const context = frame.getContext("2d");
+  if (!context) return;
+
+  const frames = Array.from({ length: 60 }, (_, index) => index + 1);
+  const doorRect = {
+    x: 608,
+    y: 227,
+    width: 158,
+    height: 346
+  };
+  const renderDoorRect = {
+    x: 846,
+    y: 316,
+    width: 225,
+    height: 493
+  };
+
+  const frameUrl = (frameNumber: number) =>
+    `/images/doorrrender/render${String(frameNumber).padStart(4, "0")}.png`;
+  const sequenceProgressEnd = 0.58;
+  const zoomProgressStart = sequenceProgressEnd;
+  const blackoutProgressStart = 0.86;
+  const contentRevealStart = 0.84;
+
+  const loadedFrames = new Map<number, HTMLImageElement>();
+  const pendingFrames = new Map<number, Promise<HTMLImageElement>>();
+  const playhead = { progress: 0 };
+  let currentFrameIndex = -1;
+  let targetFrameIndex = 0;
+  let portalHandoffComplete = false;
+  let latestScrollEnd = 0;
+  let latestScrollDirection = 1;
+  let playheadTween: gsap.core.Tween | null = null;
+
+  const loadFrame = (frameNumber: number) => {
+    const loadedFrame = loadedFrames.get(frameNumber);
+    if (loadedFrame) return Promise.resolve(loadedFrame);
+
+    const pendingFrame = pendingFrames.get(frameNumber);
+    if (pendingFrame) return pendingFrame;
+
+    const preload = new Image();
+    preload.decoding = "async";
+    preload.src = frameUrl(frameNumber);
+
+    const pending = (preload.decode ? preload.decode() : Promise.resolve(preload))
+      .catch(
+        () =>
+          new Promise<HTMLImageElement>((resolve, reject) => {
+            preload.onload = () => resolve(preload);
+            preload.onerror = () => reject();
+          })
+      )
+      .then(() => {
+        loadedFrames.set(frameNumber, preload);
+        return preload;
+      })
+      .finally(() => {
+        pendingFrames.delete(frameNumber);
+      });
+
+    pendingFrames.set(frameNumber, pending);
+    return pending;
+  };
+
+  const drawFrame = (source: HTMLImageElement) => {
+    const displayWidth = Math.max(1, Math.round(stage.getBoundingClientRect().width));
+    const displayHeight = Math.max(1, Math.round(stage.getBoundingClientRect().height));
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const canvasWidth = Math.max(1, Math.round(displayWidth * pixelRatio));
+    const canvasHeight = Math.max(1, Math.round(displayHeight * pixelRatio));
+
+    if (frame.width !== canvasWidth) frame.width = canvasWidth;
+    if (frame.height !== canvasHeight) frame.height = canvasHeight;
+
+    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    context.clearRect(0, 0, displayWidth, displayHeight);
+    context.drawImage(
+      source,
+      renderDoorRect.x,
+      renderDoorRect.y,
+      renderDoorRect.width,
+      renderDoorRect.height,
+      0,
+      0,
+      displayWidth,
+      displayHeight
+    );
+  };
+
+  const updateStagePosition = () => {
+    const naturalWidth = image.naturalWidth || 1376;
+    const naturalHeight = image.naturalHeight || 768;
+    const bounds = hero.getBoundingClientRect();
+    const style = window.getComputedStyle(image);
+    const [positionX = "50%", positionY = "0%"] = style.objectPosition.split(/\s+/);
+    const xRatio = Number.parseFloat(positionX) / 100;
+    const yRatio = Number.parseFloat(positionY) / 100;
+    const scale = Math.max(bounds.width / naturalWidth, bounds.height / naturalHeight);
+    const renderedWidth = naturalWidth * scale;
+    const renderedHeight = naturalHeight * scale;
+    const offsetX = (bounds.width - renderedWidth) * (Number.isFinite(xRatio) ? xRatio : 0.5);
+    const offsetY = (bounds.height - renderedHeight) * (Number.isFinite(yRatio) ? yRatio : 0);
+
+    const stageWidth = doorRect.width * scale;
+    const stageHeight = doorRect.height * scale;
+
+    stage.style.setProperty("--door-left", `${offsetX + doorRect.x * scale}px`);
+    stage.style.setProperty("--door-top", `${offsetY + doorRect.y * scale}px`);
+    stage.style.setProperty("--door-width", `${stageWidth}px`);
+    stage.style.setProperty("--door-height", `${stageHeight}px`);
+    const zoomOriginX = `${offsetX + (doorRect.x + doorRect.width / 2) * scale}px`;
+    const zoomOriginY = `${offsetY + (doorRect.y + doorRect.height / 2) * scale}px`;
+
+    hero.style.setProperty("--zoom-origin-x", zoomOriginX);
+    hero.style.setProperty("--zoom-origin-y", zoomOriginY);
+    zoomLayer.style.setProperty("--zoom-origin-x", zoomOriginX);
+    zoomLayer.style.setProperty("--zoom-origin-y", zoomOriginY);
+
+    const currentFrameNumber = frames[currentFrameIndex];
+    const currentFrame = loadedFrames.get(currentFrameNumber);
+    if (currentFrame) drawFrame(currentFrame);
+  };
+
+  const easeInOut = (value: number) => value * value * (3 - 2 * value);
+
+  const updateZoom = (progress: number) => {
+    const zoomProgress = easeInOut(Math.min(1, Math.max(0, progress)));
+    const scale = 1 + zoomProgress * 6.4;
+    const brightness = 1 - zoomProgress * 0.5;
+
+    zoomLayer.style.setProperty("--hero-zoom-scale", `${scale}`);
+    zoomLayer.style.setProperty("--hero-zoom-brightness", `${brightness}`);
+    stage.style.opacity = `${1 - Math.max(0, zoomProgress - 0.72) / 0.28}`;
+  };
+
+  const updatePortalHandoff = (progress: number) => {
+    const blackoutProgress = easeInOut(
+      Math.min(1, Math.max(0, (progress - blackoutProgressStart) / (1 - blackoutProgressStart)))
+    );
+    const contentProgress = easeInOut(
+      Math.min(1, Math.max(0, (progress - contentRevealStart) / (1 - contentRevealStart)))
+    );
+
+    hero.style.setProperty("--portal-blackout-opacity", `${blackoutProgress}`);
+    if (actions) actions.style.opacity = `${1 - Math.min(1, progress / 0.2)}`;
+
+    if (!showroomContent) return;
+
+    if (progress >= contentRevealStart) {
+      showroomContent.classList.add("is-visible");
+      showroomContent.style.setProperty("--showroom-content-visibility", "visible");
+      showroomContent.style.setProperty("--showroom-content-opacity", `${contentProgress}`);
+    } else {
+      showroomContent.classList.remove("is-visible");
+      showroomContent.style.setProperty("--showroom-content-visibility", "hidden");
+      showroomContent.style.setProperty("--showroom-content-opacity", "0");
+    }
+  };
+
+  const releaseShowroomContent = () => {
+    if (!showroomContent) return;
+
+    showroomContent.classList.add("is-visible");
+    showroomContent.style.setProperty("--showroom-content-visibility", "visible");
+    showroomContent.style.setProperty("--showroom-content-opacity", "1");
+    ScrollTrigger.refresh();
+  };
+
+  const completePortalHandoff = () => {
+    if (
+      latestScrollDirection > 0 &&
+      playhead.progress >= 0.995 &&
+      currentFrameIndex === frames.length - 1 &&
+      !portalHandoffComplete
+    ) {
+      portalHandoffComplete = true;
+      releaseShowroomContent();
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: latestScrollEnd, behavior: "auto" });
+      });
+    } else if (playhead.progress < contentRevealStart) {
+      portalHandoffComplete = false;
+    }
+  };
+
+  const renderProgress = () => {
+    const progress = Math.min(1, Math.max(0, playhead.progress));
+    const sequenceProgress = Math.min(progress / sequenceProgressEnd, 1);
+    const frameIndex = Math.min(
+      frames.length - 1,
+      Math.max(0, Math.floor(sequenceProgress * frames.length))
+    );
+    const frameNumber = frames[frameIndex];
+    targetFrameIndex = frameIndex;
+
+    if (currentFrameIndex !== frameIndex) {
+      loadFrame(frameNumber).then((loadedFrame) => {
+        if (targetFrameIndex !== frameIndex) return;
+        currentFrameIndex = frameIndex;
+        drawFrame(loadedFrame);
+      });
+    }
+
+    const zoomProgress = Math.max(
+      0,
+      (progress - zoomProgressStart) / (blackoutProgressStart - zoomProgressStart)
+    );
+
+    updateZoom(zoomProgress);
+    updatePortalHandoff(progress);
+    completePortalHandoff();
+  };
+
+  const scrubToProgress = (progress: number) => {
+    const targetProgress = Math.min(1, Math.max(0, progress));
+    const remainingFrameCount = Math.abs(
+      Math.floor(Math.min(targetProgress / sequenceProgressEnd, 1) * frames.length) -
+        Math.floor(Math.min(playhead.progress / sequenceProgressEnd, 1) * frames.length)
+    );
+    const duration = Math.max(0.12, remainingFrameCount / 42, Math.abs(targetProgress - playhead.progress) * 0.85);
+
+    playheadTween?.kill();
+    playheadTween = gsap.to(playhead, {
+      progress: targetProgress,
+      duration,
+      ease: "none",
+      overwrite: true,
+      onUpdate: renderProgress,
+      onComplete: renderProgress
+    });
+  };
+
+  const preloadFrames = () => {
+    for (const frameNumber of frames) {
+      loadFrame(frameNumber);
+    }
+  };
+
+  updateStagePosition();
+  renderProgress();
+  preloadFrames();
+
+  ScrollTrigger.create({
+    trigger: hero,
+    start: "top top",
+    end: "+=210%",
+    scrub: 0.55,
+    pin: true,
+    pinSpacing: true,
+    anticipatePin: 1,
+    invalidateOnRefresh: true,
+    onRefresh: updateStagePosition,
+    onLeave: (self) => {
+      latestScrollDirection = 1;
+      latestScrollEnd = self.end;
+      scrubToProgress(1);
+    },
+    onUpdate: (self) => {
+      latestScrollDirection = self.direction;
+      latestScrollEnd = self.end;
+      scrubToProgress(self.progress);
+    }
+  });
+
+  window.addEventListener("resize", updateStagePosition);
+}
+
 function setupShowroomJourney() {
   const journey = document.querySelector<HTMLElement>("[data-showroom-journey]");
   if (!journey) return;
@@ -144,23 +426,18 @@ function setupShowroomJourney() {
   const copy = journey.querySelector<HTMLElement>("[data-journey-copy]");
   const portal = journey.querySelector<HTMLElement>("[data-journey-portal]");
   const leaf = journey.querySelector<HTMLElement>("[data-door-leaf]");
-  const light = journey.querySelector<HTMLElement>("[data-door-light]");
   const depth = journey.querySelector<HTMLElement>("[data-door-depth]");
   const frame = journey.querySelector<HTMLElement>("[data-door-frame]");
   const blackout = journey.querySelector<HTMLElement>("[data-journey-blackout]");
-  const labels = journey.querySelectorAll<HTMLElement>(".journey-label");
+  const cue = journey.querySelector<HTMLElement>("[data-journey-cue]");
 
-  if (!fixed || !copy || !portal || !leaf || !light || !depth || !frame || !blackout) {
+  if (!fixed || !copy || !portal || !leaf || !depth || !frame || !blackout) {
     return;
   }
 
   const mm = gsap.matchMedia();
 
   mm.add("(min-width: 901px)", () => {
-    const originalHeight = journey.style.height;
-
-    journey.style.height = "100svh";
-
     gsap.set(fixed, { opacity: 1 });
     gsap.set(copy, { opacity: 1, x: 0, y: 0, scale: 1 });
     gsap.set(portal, {
@@ -181,17 +458,16 @@ function setupShowroomJourney() {
       transformPerspective: 1850
     });
     gsap.set(frame, { opacity: 1, scale: 1, x: 0, y: 0 });
-    gsap.set(light, { opacity: 0.42, scale: 0.92 });
-    gsap.set(depth, { opacity: 0, scale: 0.9, x: 0, y: 0 });
+    gsap.set(depth, { opacity: 0, scale: 0.86, x: 0, y: 0 });
     gsap.set(blackout, { opacity: 0 });
-    if (labels.length) gsap.set(labels, { opacity: 1, y: 0 });
+    if (cue) gsap.set(cue, { opacity: 1, y: 0 });
 
     const timeline = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
         trigger: journey,
         start: "top top",
-        end: "+=125%",
+        end: "+=220%",
         scrub: 0.8,
         pin: fixed,
         pinSpacing: true,
@@ -200,59 +476,45 @@ function setupShowroomJourney() {
       }
     });
 
-    timeline.to(copy, { opacity: 0.76, y: -8, duration: 0.1 }, 0);
-    timeline.to(portal, { scale: 1.04, y: -6, duration: 0.12 }, 0);
-    timeline.to(light, { opacity: 0.76, scale: 1.06, duration: 0.12 }, 0.02);
-    timeline.to(depth, { opacity: 0.32, scale: 0.96, duration: 0.12 }, 0.04);
+    timeline.to(cue, { opacity: 0, y: 18, duration: 0.08 }, 0);
+    timeline.to(portal, { scale: 1.08, y: -8, duration: 0.18 }, 0);
+    timeline.to(copy, { opacity: 0.72, y: -10, duration: 0.16 }, 0.04);
+    timeline.to(depth, { opacity: 0.52, scale: 0.98, duration: 0.2 }, 0.12);
 
     timeline.to(
       leaf,
-      { rotateY: -30, x: -8, z: 42, scale: 1.012, duration: 0.16 },
-      0.08
+      { rotateY: -58, x: -56, z: 120, scale: 1.035, duration: 0.32 },
+      0.18
     );
-    timeline.to(frame, { scale: 1.02, opacity: 0.94, duration: 0.16 }, 0.08);
+    timeline.to(frame, { scale: 1.08, opacity: 0.58, duration: 0.28 }, 0.2);
+    timeline.to(copy, { opacity: 0.18, y: -34, scale: 0.98, duration: 0.22 }, 0.28);
+    timeline.to(depth, { opacity: 1, scale: 1.16, duration: 0.28 }, 0.34);
 
-    timeline.to(copy, { opacity: 0.22, y: -32, scale: 0.98, duration: 0.18 }, 0.22);
-    timeline.to(light, { opacity: 1, scale: 1.18, duration: 0.2 }, 0.2);
-    timeline.to(depth, { opacity: 1, scale: 1.05, duration: 0.22 }, 0.22);
-    timeline.to(
-      leaf,
-      { rotateY: -66, x: -44, z: 128, scale: 1.04, duration: 0.24 },
-      0.24
-    );
-    timeline.to(frame, { scale: 1.1, x: 14, opacity: 0.65, duration: 0.22 }, 0.26);
-    timeline.to(portal, { scale: 1.17, y: -10, duration: 0.24 }, 0.28);
-
-    if (labels.length) timeline.to(labels, { opacity: 0, y: -10, duration: 0.1 }, 0.32);
-
-    timeline.to(copy, { opacity: 0, y: -54, duration: 0.16 }, 0.38);
     timeline.to(
       leaf,
       {
-        rotateY: -85,
-        x: -138,
-        z: 260,
-        scale: 1.14,
-        opacity: 0.16,
-        duration: 0.26
+        rotateY: -86,
+        x: -210,
+        z: 340,
+        scale: 1.16,
+        opacity: 0.08,
+        duration: 0.34
       },
-      0.42
+      0.48
     );
-    timeline.to(frame, { opacity: 0.1, scale: 1.22, duration: 0.18 }, 0.46);
-    timeline.to(depth, { scale: 1.3, opacity: 0.78, duration: 0.22 }, 0.46);
-    timeline.to(light, { opacity: 0.78, scale: 1.34, duration: 0.22 }, 0.48);
+    timeline.to(copy, { opacity: 0, y: -56, duration: 0.16 }, 0.5);
+    timeline.to(frame, { opacity: 0.04, scale: 1.26, duration: 0.24 }, 0.52);
     timeline.to(
       portal,
-      { scale: 1.72, x: -92, y: -18, opacity: 0.26, duration: 0.28 },
-      0.54
+      { scale: 1.72, y: -20, opacity: 0.2, duration: 0.3 },
+      0.58
     );
+    timeline.to(depth, { scale: 1.55, opacity: 0.7, duration: 0.3 }, 0.58);
 
-    timeline.to(blackout, { opacity: 0.98, duration: 0.22 }, 0.72);
-    timeline.to(portal, { opacity: 0, scale: 1.9, duration: 0.16 }, 0.78);
-    timeline.to(fixed, { opacity: 1, duration: 0.1 }, 0.9);
+    timeline.to(blackout, { opacity: 0.98, duration: 0.2 }, 0.78);
+    timeline.to(portal, { opacity: 0, scale: 1.95, duration: 0.16 }, 0.82);
 
     return () => {
-      journey.style.height = originalHeight;
       timeline.scrollTrigger?.kill();
       timeline.kill();
     };
@@ -266,22 +528,28 @@ function setupShowroomJourney() {
       transformOrigin: "left center",
       transformPerspective: 1200
     });
-    gsap.set(depth, { opacity: 0.78, scale: 1 });
+    gsap.set(depth, { opacity: 0.42, scale: 0.96 });
 
     const timeline = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
-        trigger: portal,
-        start: "top 70%",
-        end: "bottom 35%",
+        trigger: journey,
+        start: "top top",
+        end: "+=140%",
         scrub: 0.8,
+        pin: fixed,
+        pinSpacing: true,
+        anticipatePin: 1,
         invalidateOnRefresh: true
       }
     });
 
-    timeline.to(leaf, { rotateY: -38, x: -10, scale: 1.015, duration: 1 }, 0);
-    timeline.to(light, { opacity: 0.92, scale: 1.08, duration: 1 }, 0);
-    timeline.to(depth, { opacity: 0.9, scale: 1.02, duration: 1 }, 0.12);
+    timeline.to(cue, { opacity: 0, y: 12, duration: 0.12 }, 0);
+    timeline.to(copy, { opacity: 0.12, y: -28, duration: 0.36 }, 0.08);
+    timeline.to(depth, { opacity: 0.95, scale: 1.12, duration: 0.5 }, 0.12);
+    timeline.to(leaf, { rotateY: -72, x: -76, z: 120, scale: 1.08, opacity: 0.18, duration: 0.58 }, 0.18);
+    timeline.to(portal, { scale: 1.42, opacity: 0.22, duration: 0.45 }, 0.42);
+    timeline.to(blackout, { opacity: 0.96, duration: 0.22 }, 0.72);
 
     return () => {
       timeline.scrollTrigger?.kill();
@@ -601,6 +869,7 @@ export function initGsapReveals() {
   productStageReveals();
 
   setupHeroParallax();
+  setupHomeDoorSequence();
   setupShowroomJourney();
   setupCollectionCarousel();
   setupCorridorMicroAnimations();
