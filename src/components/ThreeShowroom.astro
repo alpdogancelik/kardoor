@@ -1,0 +1,344 @@
+---
+import { collections } from "../data/collections";
+
+const showroomData = collections.map((collection) => ({
+  slug: collection.slug,
+  number: collection.number,
+  title: collection.title,
+  shortTitle: collection.shortTitle,
+  description: collection.description,
+  modelCodes: collection.modelCodes,
+  accentColor: collection.accentColor,
+  image: collection.image
+}));
+---
+
+<section
+  id="koleksiyonlar"
+  class="three-showroom"
+  data-three-showroom
+>
+  <canvas class="three-showroom-canvas" data-three-showroom-canvas></canvas>
+
+  <div class="three-showroom-vignette" aria-hidden="true"></div>
+
+  <div class="three-showroom-topline">
+    <p>KOLEKSİYON SHOWROOM</p>
+    <span data-showroom-active-count>01 / {String(showroomData.length).padStart(2, "0")}</span>
+  </div>
+
+  <aside class="three-showroom-panel" data-showroom-panel>
+    <p class="three-showroom-kicker" data-showroom-number>
+      KOLEKSİYON 01
+    </p>
+
+    <h2 data-showroom-title>
+      {showroomData[0]?.title}
+    </h2>
+
+    <p data-showroom-description>
+      {showroomData[0]?.description}
+    </p>
+
+    <ul data-showroom-codes>
+      {showroomData[0]?.modelCodes.map((code) => <li>{code}</li>)}
+    </ul>
+
+    <div class="three-showroom-actions">
+      <a href={`/koleksiyonlar/${showroomData[0]?.slug}`} data-showroom-link>
+        Seriyi İncele
+      </a>
+      <a href="/teklif">Teklif Al</a>
+    </div>
+  </aside>
+
+  <div class="three-showroom-dock">
+    {
+      showroomData.map((collection, index) => (
+        <button
+          type="button"
+          class:list={["three-showroom-dot", index === 0 && "is-active"]}
+          data-showroom-target={index}
+          aria-label={`${collection.title} koleksiyonuna odaklan`}
+        >
+          <span>{collection.number}</span>
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="three-showroom-mobile-actions">
+    <button type="button" data-showroom-move="backward" aria-label="Geri git">↓</button>
+    <button type="button" data-showroom-move="left" aria-label="Sola git">←</button>
+    <button type="button" data-showroom-move="forward" aria-label="İleri git">↑</button>
+    <button type="button" data-showroom-move="right" aria-label="Sağa git">→</button>
+  </div>
+
+  <script is:inline type="application/json" data-showroom-data set:html={JSON.stringify(showroomData)} />
+
+  <script>
+    import { setupThreeShowroom } from "../scripts/three/showroom";
+
+    const bootShowroom = () => {
+      setupThreeShowroom();
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", bootShowroom, { once: true });
+    } else {
+      bootShowroom();
+    }
+  </script>
+
+  <style>
+    .three-showroom {
+      position: relative;
+      min-height: 100svh;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(44, 227, 255, 0.12), transparent 34%),
+        linear-gradient(180deg, #02060b 0%, #050b10 100%);
+      color: #edf3fa;
+    }
+
+    .three-showroom-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .three-showroom-canvas:active {
+      cursor: grabbing;
+    }
+
+    .three-showroom-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 42%, transparent 0%, transparent 42%, rgba(0, 0, 0, 0.58) 100%),
+        linear-gradient(180deg, rgba(2, 6, 11, 0.12), rgba(2, 6, 11, 0.68));
+    }
+
+    .three-showroom-topline {
+      position: absolute;
+      z-index: 5;
+      top: clamp(1.1rem, 2vw, 2rem);
+      left: clamp(1rem, 3vw, 3rem);
+      right: clamp(1rem, 3vw, 3rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      pointer-events: none;
+    }
+
+    .three-showroom-topline p,
+    .three-showroom-topline span,
+    .three-showroom-kicker {
+      margin: 0;
+      color: #2ce3ff;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .three-showroom-topline span {
+      color: rgba(237, 243, 250, 0.72);
+    }
+
+    .three-showroom-panel {
+      position: absolute;
+      z-index: 6;
+      left: clamp(1rem, 4vw, 4.5rem);
+      bottom: clamp(1rem, 4vw, 4rem);
+      width: min(470px, calc(100% - 2rem));
+      border: 1px solid rgba(138, 166, 190, 0.24);
+      border-radius: 8px;
+      padding: clamp(1rem, 2vw, 1.35rem);
+      background:
+        linear-gradient(135deg, rgba(9, 16, 25, 0.88), rgba(3, 8, 14, 0.76));
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(18px);
+    }
+
+    .three-showroom-panel h2 {
+      margin: 0.42rem 0 0;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: clamp(3.4rem, 6.2vw, 6.4rem);
+      line-height: 0.86;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .three-showroom-panel p:not(.three-showroom-kicker) {
+      margin: 0.85rem 0 0;
+      color: rgba(220, 232, 243, 0.82);
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+
+    .three-showroom-panel ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 1rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .three-showroom-panel li {
+      border: 1px solid rgba(237, 243, 250, 0.22);
+      border-radius: 999px;
+      padding: 0.35rem 0.62rem;
+      background: rgba(3, 8, 14, 0.72);
+      color: #edf3fa;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .three-showroom-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1.1rem;
+    }
+
+    .three-showroom-actions a {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 0.75rem 1.1rem;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background 180ms ease;
+    }
+
+    .three-showroom-actions a:first-child {
+      border: 1px solid rgba(237, 243, 250, 0.44);
+      background: rgba(8, 13, 19, 0.72);
+      color: #edf3fa;
+    }
+
+    .three-showroom-actions a:last-child {
+      border: 1px solid #2ce3ff;
+      background: #2ce3ff;
+      color: #02060b;
+    }
+
+    .three-showroom-actions a:hover {
+      transform: translateY(-1px);
+    }
+
+    .three-showroom-dock {
+      position: absolute;
+      z-index: 7;
+      right: clamp(1rem, 3vw, 3rem);
+      bottom: clamp(1rem, 4vw, 4rem);
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .three-showroom-dot {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(237, 243, 250, 0.2);
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(4, 10, 17, 0.72);
+      color: rgba(237, 243, 250, 0.76);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        color 180ms ease,
+        background 180ms ease;
+    }
+
+    .three-showroom-dot span {
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .three-showroom-dot:hover,
+    .three-showroom-dot.is-active {
+      border-color: rgba(44, 227, 255, 0.8);
+      background: rgba(44, 227, 255, 0.12);
+      color: #edf3fa;
+      transform: translateY(-1px);
+    }
+
+    .three-showroom-mobile-actions {
+      position: absolute;
+      z-index: 8;
+      right: 1rem;
+      bottom: 1rem;
+      display: none;
+      grid-template-columns: repeat(4, 44px);
+      gap: 0.45rem;
+    }
+
+    .three-showroom-mobile-actions button {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(237, 243, 250, 0.22);
+      border-radius: 999px;
+      background: rgba(4, 10, 17, 0.76);
+      color: #edf3fa;
+      font-size: 1.05rem;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+
+    @media (max-width: 860px) {
+      .three-showroom {
+        min-height: 100svh;
+      }
+
+      .three-showroom-panel {
+        right: 1rem;
+        bottom: 5rem;
+      }
+
+      .three-showroom-dock {
+        left: 1rem;
+        right: auto;
+        bottom: 1rem;
+        display: flex;
+        max-width: calc(100% - 7rem);
+        overflow-x: auto;
+        padding-bottom: 0.1rem;
+      }
+
+      .three-showroom-dot {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+      }
+
+      .three-showroom-mobile-actions {
+        display: grid;
+      }
+    }
+  </style>
+</section>
