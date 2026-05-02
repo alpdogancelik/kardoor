@@ -1,29 +1,17 @@
 {
-  "name": "kardoor-showroom",
+  "name": "kardoor",
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "nuxt"
+  ],
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "check": "astro check"
-  },
-  "dependencies": {
-    "astro": "^4.16.18",
-    "gsap": "^3.12.7",
-    "lenis": "^1.3.11",
-    "swiper": "^11.2.6",
-    "three": "^0.184.0"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.8",
-    "@astrojs/tailwind": "^5.1.3",
-    "@types/node": "^22.15.2",
-    "@types/three": "^0.184.0",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3"
+    "dev": "npm --prefix nuxt run dev",
+    "build": "npm --prefix nuxt run build",
+    "generate": "npm --prefix nuxt run generate",
+    "preview": "npm --prefix nuxt run preview",
+    "typecheck": "npm --prefix nuxt run typecheck",
+    "check": "npm --prefix nuxt run typecheck"
   }
 }

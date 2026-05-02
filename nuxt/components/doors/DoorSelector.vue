@@ -1,0 +1,198 @@
+<script setup lang="ts">
+import { onMounted, ref, watch } from "vue";
+
+const {
+  activeIndex,
+  activeProduct,
+  previousProduct,
+  nextProduct,
+  filteredProducts,
+  filterOptions,
+  selectedSeries,
+  selectedUseCases,
+  selectedSurfaces,
+  selectedExportTags,
+  toggle,
+  next,
+  previous,
+  clearFilters
+} = useDoorSelector();
+
+const isFilterOpen = ref(false);
+const stageRef = ref<HTMLElement | null>(null);
+
+onMounted(async () => {
+  const { gsap } = await import("gsap");
+
+  gsap.fromTo(
+    ".door-selector__product",
+    { y: 42, opacity: 0, scale: 0.94 },
+    { y: 0, opacity: 1, scale: 1, duration: 1, ease: "power3.out" }
+  );
+
+  watch(
+    activeProduct,
+    () => {
+      if (!stageRef.value) return;
+
+      gsap.fromTo(
+        stageRef.value.querySelectorAll(".door-selector__product, .door-selector__copy, .spec-card"),
+        { y: 18, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.55, stagger: 0.04, ease: "power2.out" }
+      );
+    },
+    { flush: "post" }
+  );
+});
+</script>
+
+<template>
+  <section ref="stageRef" class="door-selector" :style="{ '--door-accent': activeProduct.accentColor }">
+    <div class="door-selector__grain" aria-hidden="true" />
+    <div class="door-selector__rails" aria-hidden="true" />
+
+    <button class="selector-arrow selector-arrow--left" type="button" aria-label="Previous door" @click="previous">
+      ←
+    </button>
+    <button class="selector-arrow selector-arrow--right" type="button" aria-label="Next door" @click="next">
+      →
+    </button>
+
+    <div class="door-selector__topline">
+      <p>Door selector</p>
+      <span>{{ String(activeIndex + 1).padStart(2, "0") }} / {{ String(filteredProducts.length).padStart(2, "0") }}</span>
+    </div>
+
+    <div class="door-selector__media">
+      <div class="door-selector__ghost door-selector__ghost--left" aria-hidden="true">
+        <NuxtImg :src="previousProduct.image" :alt="previousProduct.name" width="240" height="520" />
+      </div>
+
+      <div class="door-selector__product">
+        <div class="door-selector__halo" aria-hidden="true" />
+        <NuxtImg
+          :key="activeProduct.slug"
+          :src="activeProduct.image"
+          :alt="activeProduct.name"
+          width="460"
+          height="760"
+          sizes="sm:280px md:360px lg:460px"
+          preload
+        />
+      </div>
+
+      <div class="door-selector__ghost door-selector__ghost--right" aria-hidden="true">
+        <NuxtImg :src="nextProduct.image" :alt="nextProduct.name" width="240" height="520" />
+      </div>
+    </div>
+
+    <aside class="spec-card spec-card--capacity">
+      <strong>{{ activeProduct.specs[0] }}</strong>
+      <span>Panel system</span>
+    </aside>
+
+    <aside class="spec-card spec-card--connect">
+      <span>Export-ready</span>
+      <strong>{{ activeProduct.exportTags[0] }}</strong>
+    </aside>
+
+    <aside class="spec-card spec-card--detail">
+      <p>{{ activeProduct.seriesTitle }}</p>
+      <NuxtLink :to="`/doors/${activeProduct.slug}`">Product details</NuxtLink>
+    </aside>
+
+    <div class="door-selector__copy">
+      <p>{{ activeProduct.category }}</p>
+      <h1>{{ activeProduct.code }}</h1>
+      <span>{{ activeProduct.name }}</span>
+    </div>
+
+    <div class="door-selector__summary">
+      <p>{{ activeProduct.description }}</p>
+      <ul>
+        <li v-for="spec in activeProduct.specs" :key="spec">{{ spec }}</li>
+      </ul>
+    </div>
+
+    <button class="filter-trigger" type="button" @click="isFilterOpen = true">
+      Filter doors
+      <span aria-hidden="true">≡</span>
+    </button>
+
+    <div class="product-strip" aria-label="Door model navigation">
+      <button
+        v-for="(product, index) in filteredProducts"
+        :key="product.slug"
+        type="button"
+        :class="{ 'is-active': product.slug === activeProduct.slug }"
+        @click="activeIndex = index"
+      >
+        {{ product.code }}
+      </button>
+    </div>
+
+    <div class="filter-panel" :class="{ 'is-open': isFilterOpen }" aria-label="Door filters">
+      <div class="filter-panel__head">
+        <div>
+          <p>Filter products</p>
+          <span>{{ filteredProducts.length }} models</span>
+        </div>
+        <button type="button" aria-label="Close filters" @click="isFilterOpen = false">×</button>
+      </div>
+
+      <div class="filter-group">
+        <h2>Series</h2>
+        <button
+          v-for="series in filterOptions.series"
+          :key="series.slug"
+          type="button"
+          :class="{ 'is-selected': selectedSeries.includes(series.slug) }"
+          @click="toggle(selectedSeries, series.slug)"
+        >
+          {{ series.shortTitle }}
+        </button>
+      </div>
+
+      <div class="filter-group">
+        <h2>Use case</h2>
+        <button
+          v-for="useCase in filterOptions.useCases"
+          :key="useCase"
+          type="button"
+          :class="{ 'is-selected': selectedUseCases.includes(useCase) }"
+          @click="toggle(selectedUseCases, useCase)"
+        >
+          {{ useCase }}
+        </button>
+      </div>
+
+      <div class="filter-group">
+        <h2>Surface</h2>
+        <button
+          v-for="surface in filterOptions.surfaces"
+          :key="surface"
+          type="button"
+          :class="{ 'is-selected': selectedSurfaces.includes(surface) }"
+          @click="toggle(selectedSurfaces, surface)"
+        >
+          {{ surface }}
+        </button>
+      </div>
+
+      <div class="filter-group">
+        <h2>Export</h2>
+        <button
+          v-for="tag in filterOptions.exportTags"
+          :key="tag"
+          type="button"
+          :class="{ 'is-selected': selectedExportTags.includes(tag) }"
+          @click="toggle(selectedExportTags, tag)"
+        >
+          {{ tag }}
+        </button>
+      </div>
+
+      <button class="filter-panel__clear" type="button" @click="clearFilters">Clear filters</button>
+    </div>
+  </section>
+</template>
