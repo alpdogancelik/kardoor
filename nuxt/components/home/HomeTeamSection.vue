@@ -311,7 +311,7 @@ onBeforeUnmount(() => {
 
     <div class="ada-carousel-wrapper">
       <div class="ada-founders-grid">
-        <article v-for="member in teamMembers" :key="member.name" class="ada-card">
+        <article v-for="member in teamMembers" :key="member.name" class="ada-card" @click="openMember(member)">
           <div class="ada-card-text">
             <span class="ada-role">{{ member.role }}</span>
             <h3 class="ada-name">{{ member.name }}</h3>
@@ -322,7 +322,7 @@ onBeforeUnmount(() => {
 
             <div class="ada-hover-overlay">
               <p class="ada-bio">{{ member.shortBio }}</p>
-              <button class="ada-read-more" type="button" @click="openMember(member)">
+              <button class="ada-read-more" type="button" @click.stop="openMember(member)">
                 Devamını Oku
               </button>
             </div>

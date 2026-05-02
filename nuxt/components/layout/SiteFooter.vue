@@ -679,8 +679,8 @@ const submitQuote = () => {
 }
 
 .kardoor-footer--day {
-  --footer-bg: #f9f6ef;
-  --footer-bg-deep: #ebe4d8;
+  --footer-bg: #f1eee7;
+  --footer-bg-deep: #f1eee7;
   --footer-text: #10151d;
   --footer-muted: rgba(16, 21, 29, 0.5);
   --footer-line: rgba(16, 21, 29, 0.14);
@@ -694,9 +694,7 @@ const submitQuote = () => {
   --footer-social-bg: rgba(255, 255, 255, 0.58);
   --footer-social-bg-hover: rgba(255, 255, 255, 0.82);
 
-  background:
-    radial-gradient(circle at 72% 18%, rgba(44, 227, 255, 0.09), transparent 32%),
-    linear-gradient(180deg, var(--footer-bg) 0%, var(--footer-bg-deep) 100%);
+  background: var(--footer-bg);
 }
 
 .kardoor-footer__bottom {

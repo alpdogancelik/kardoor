@@ -415,6 +415,7 @@
   color: var(--team-card-overlay-text);
   font-size: 1.55rem;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .ada-read-more::after {
