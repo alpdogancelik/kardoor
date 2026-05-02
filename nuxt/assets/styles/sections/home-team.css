@@ -1,0 +1,726 @@
+.ada-team-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #14151d;
+  color: #eae8e8;
+}
+
+.ada-manifesto-spacer {
+  width: 100%;
+  height: 20vh;
+}
+
+.ada-manifesto-container {
+  width: 100%;
+  max-width: 1832px;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(20px, 3vw, 50px);
+  margin: 0 auto;
+  padding: 0 42px;
+}
+
+.ada-scroll-line-wrapper {
+  position: relative;
+  flex: 0 0 auto;
+  width: 3px;
+  height: clamp(660px, 70vh, 860px);
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ada-scroll-line-fill {
+  width: 100%;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: top;
+  background: #eae8e8;
+}
+
+.ada-manifesto-text {
+  max-width: 1400px;
+  margin: 0;
+  color: #eae8e8;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(4.5rem, 6.7vw, 7.8rem);
+  font-weight: 400;
+  line-height: 0.82;
+  text-align: left;
+}
+
+.reveal-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.reveal-space {
+  display: inline-block;
+  width: 0.22em;
+}
+
+.reveal-char {
+  display: inline-block;
+  opacity: 0.18;
+  color: #eae8e8;
+  transition: opacity 80ms linear;
+  will-change: opacity;
+}
+
+.reveal-word.brand-gradient-word .reveal-char {
+  background: linear-gradient(115deg, #8ee7ff 0%, #4fc3f7 18%, #1e9be0 36%, #1477c9 54%, #0b4f9c 72%, #4fc3f7 88%, #8ee7ff 100%);
+  background-size: 260% 100%;
+  background-position: 0% 50%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ada-brand-gradient 6.5s ease-in-out infinite alternate;
+}
+
+@keyframes ada-brand-gradient {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+.ada-subtitle-container,
+.ada-subtitle-container-reverse {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  max-width: none;
+  overflow: hidden;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.ada-subtitle-container {
+  margin-top: 36vh;
+  margin-bottom: clamp(72px, 6vw, 140px);
+}
+
+.ada-subtitle-container-reverse {
+  margin-bottom: 36vh;
+}
+
+.ada-loop-track,
+.ada-loop-track-reverse {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.ada-loop-track {
+  animation: ada-marquee-left 160s linear infinite;
+}
+
+.ada-loop-track-reverse {
+  transform: translateX(-50%);
+  animation: ada-marquee-right 160s linear infinite;
+}
+
+.ada-subtitle-container:hover .ada-loop-track,
+.ada-subtitle-container-reverse:hover .ada-loop-track-reverse {
+  animation-play-state: paused;
+}
+
+.ada-loop-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.ada-loop-item {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  color: rgba(234, 232, 232, 0.96);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: clamp(5rem, 20vw, 15.6rem);
+  font-weight: 300;
+  font-kerning: none;
+  line-height: 0.88;
+  white-space: nowrap;
+}
+
+.ege-gradient {
+  display: inline-block;
+  background: linear-gradient(115deg, #aae7ff 0%, #54cfff 25%, #18a8f1 50%, #54cfff 75%, #aae7ff 100%);
+  background-size: 260% 100%;
+  background-position: 0% 50%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.kardoor-word {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.18em;
+  white-space: nowrap;
+}
+
+.kern-after-k {
+  margin-right: 0.07em;
+}
+
+.reg-mark {
+  position: absolute;
+  top: 0.08em;
+  right: -0.02em;
+  color: rgba(234, 232, 232, 0.96);
+  font-size: 0.16em;
+  font-weight: 300;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.loop-separator {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: clamp(100px, 12vw, 220px);
+  height: clamp(100px, 12vw, 220px);
+  margin: 0 clamp(40px, 5vw, 100px);
+}
+
+.loop-separator dotlottie-player {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 1px rgba(234, 232, 232, 0.9));
+}
+
+@keyframes ada-marquee-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ada-marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.ada-title-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 180px;
+  margin-bottom: 60px;
+}
+
+.ada-giant-title {
+  width: 100%;
+  margin: 0;
+  padding: 20px 0;
+  overflow: hidden;
+  color: #eae8e8;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(4.4rem, 14vw, 20rem);
+  font-weight: 400;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ada-first-letter {
+  display: inline-block;
+  margin-right: -0.02em;
+}
+
+.ada-title-float-word {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ada-title-float-char {
+  display: inline-block;
+  transform-origin: center bottom;
+  backface-visibility: hidden;
+  will-change: transform, opacity, clip-path;
+}
+
+.ada-carousel-wrapper {
+  width: 100%;
+  max-width: 2000px;
+  overflow: visible;
+  margin: 0 auto;
+  padding-bottom: 160px;
+}
+
+.ada-founders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 42px;
+  width: 100%;
+  padding: 0 42px;
+}
+
+.ada-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 940px;
+  overflow: hidden;
+  border-radius: 30px;
+  padding-top: 32px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1), background 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.ada-card:hover {
+  transform: translateY(-8px);
+  background: #000000;
+}
+
+.ada-card-text {
+  position: relative;
+  z-index: 10;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.ada-role {
+  display: block;
+  margin-bottom: 21px;
+  color: rgba(66, 67, 70, 0.42);
+  font-size: 0.9rem;
+  font-weight: 800;
+  transition: color 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.ada-name {
+  margin: 0;
+  color: #424346;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1;
+  transition: color 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.ada-card:hover .ada-name {
+  color: #ffffff;
+}
+
+.ada-card:hover .ada-role {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ada-image-container {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ada-person-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  transform-origin: bottom center;
+  transition: transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.ada-card:hover .ada-person-img {
+  transform: scale(1.06);
+}
+
+.ada-hover-overlay {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 30px 30px;
+  opacity: 0;
+  transform: translateY(20px);
+  background: linear-gradient(to top, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
+  transition: opacity 800ms cubic-bezier(0.165, 0.84, 0.44, 1), transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.ada-card:hover .ada-hover-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ada-bio {
+  max-width: 480px;
+  margin: 0 0 20px;
+  color: #eae8e8;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.ada-read-more {
+  position: relative;
+  border: 0;
+  padding: 0 0 6px;
+  background: transparent;
+  color: #eae8e8;
+  font-size: 1.55rem;
+  cursor: pointer;
+}
+
+.ada-read-more::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: center;
+  background: currentColor;
+  transition: transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.ada-card:hover .ada-read-more::after {
+  transform: scaleX(1);
+}
+
+.ada-modal {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: flex;
+}
+
+.ada-modal-overlay {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.ada-modal-wrapper {
+  position: relative;
+  display: flex;
+  width: 100vw;
+  height: 100svh;
+  transform: translateY(0);
+  background: linear-gradient(145deg, rgb(19, 20, 28) 0%, rgb(35, 38, 52) 100%);
+}
+
+.ada-modal-left {
+  flex: 0 0 45%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ada-modal-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ada-modal-right {
+  display: flex;
+  flex: 0 0 55%;
+  height: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 60px;
+  color: #eae8e8;
+}
+
+.ada-modal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 60px;
+}
+
+.ada-modal-location,
+.ada-modal-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ada-modal-close {
+  border: 0;
+  background: transparent;
+  color: #eae8e8;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.close-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eae8e8;
+}
+
+.close-icon svg {
+  stroke: #14151d;
+}
+
+.ada-modal-name {
+  margin: 0 0 10px;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 5rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.ada-modal-role {
+  margin: 0 0 50px;
+  color: #888;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.ada-modal-content {
+  display: flex;
+  gap: 50px;
+  margin-top: auto;
+}
+
+.ada-modal-bio-section,
+.ada-modal-services-section {
+  flex: 1;
+}
+
+.ada-modal-bio-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ada-modal-social {
+  display: grid;
+  width: 45px;
+  height: 45px;
+  place-items: center;
+  border-radius: 50%;
+  background: #222;
+}
+
+.ada-modal-social svg {
+  stroke: #eae8e8;
+}
+
+.ada-modal-bio-text {
+  margin: 0;
+  color: #aaa;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.services-title {
+  display: block;
+  margin-bottom: 15px;
+  color: #888;
+  font-size: 0.75rem;
+}
+
+.services-list {
+  margin: 0 0 30px;
+  padding: 0;
+  list-style: none;
+}
+
+.services-list li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  color: rgba(234, 232, 232, 0.82);
+  font-size: 0.88rem;
+}
+
+.services-list li::after {
+  content: "->";
+  opacity: 0.5;
+}
+
+.ada-modal-experience {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: auto;
+  line-height: 1.2;
+}
+
+.ada-modal-experience strong {
+  font-size: 1.75rem;
+}
+
+.ada-modal-experience span {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1180px) {
+  .ada-founders-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ada-card {
+    height: min(840px, 88svh);
+  }
+
+  .ada-modal-wrapper {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .ada-modal-left {
+    flex: none;
+    height: 42svh;
+  }
+
+  .ada-modal-right {
+    flex: none;
+    height: auto;
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px 25px;
+  }
+}
+
+@media (max-width: 820px) {
+  .ada-manifesto-spacer {
+    height: 12vh;
+  }
+
+  .ada-manifesto-container {
+    min-height: auto;
+    align-items: flex-start;
+    padding: 6rem 1.25rem 4rem;
+    gap: 1rem;
+  }
+
+  .ada-scroll-line-wrapper {
+    height: 520px;
+  }
+
+  .ada-manifesto-text {
+    font-size: clamp(3rem, 16vw, 5.4rem);
+  }
+
+  .ada-subtitle-container {
+    margin-top: 120px;
+    margin-bottom: 72px;
+  }
+
+  .ada-subtitle-container-reverse {
+    margin-bottom: 120px;
+  }
+
+  .ada-loop-item {
+    font-size: clamp(5rem, 22vw, 8rem);
+  }
+
+  .loop-separator {
+    width: 92px;
+    height: 92px;
+    margin: 0 34px;
+  }
+
+  .ada-title-container {
+    margin-top: 80px;
+    margin-bottom: 42px;
+  }
+
+  .ada-giant-title {
+    font-size: clamp(4rem, 15vw, 6.8rem);
+  }
+
+  .ada-carousel-wrapper {
+    width: 100vw;
+    max-width: none;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-left: calc(50% - 50vw);
+    padding-bottom: 110px;
+  }
+
+  .ada-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ada-founders-grid {
+    display: flex;
+    width: max-content;
+    gap: 5vw;
+    padding-left: 12vw;
+    padding-right: 12vw;
+  }
+
+  .ada-card {
+    flex: 0 0 76vw;
+    width: 76vw;
+    height: 82svh;
+    min-height: 640px;
+    scroll-snap-align: center;
+  }
+
+  .ada-name {
+    font-size: 3.2rem;
+  }
+
+  .ada-hover-overlay {
+    opacity: 1;
+    transform: none;
+    padding: 80px 20px 24px;
+  }
+
+  .ada-bio {
+    font-size: 0.9rem;
+  }
+
+  .ada-modal-name {
+    font-size: 4rem;
+  }
+
+  .ada-modal-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
