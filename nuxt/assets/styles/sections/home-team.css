@@ -1,11 +1,25 @@
 .ada-team-section {
+  --team-section-bg: #14151d;
+  --team-section-text: #eae8e8;
+  --team-card-bg: #f8f8f6;
+  --team-card-hover-bg: var(--team-section-bg);
+  --team-card-line: rgba(248, 248, 246, 0.12);
+  --team-card-name: #424346;
+  --team-card-name-hover: #eae8e8;
+  --team-card-role: rgba(66, 67, 70, 0.42);
+  --team-card-role-hover: rgba(234, 232, 232, 0.58);
+  --team-card-hover-line: rgba(44, 227, 255, 0.18);
+  --team-card-overlay: linear-gradient(to top, rgba(20, 21, 29, 1) 10%, rgba(20, 21, 29, 0.72) 60%, transparent 100%);
+  --team-card-overlay-text: #eae8e8;
+  --team-card-shadow: none;
+
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #14151d;
-  color: #eae8e8;
+  background: var(--team-section-bg);
+  color: var(--team-section-text);
 }
 
 .ada-manifesto-spacer {
@@ -287,16 +301,23 @@
   width: 100%;
   height: 940px;
   overflow: hidden;
+  border: 1px solid var(--team-card-line);
   border-radius: 30px;
   padding-top: 32px;
-  background: #ffffff;
+  background: var(--team-card-bg);
+  box-shadow: var(--team-card-shadow);
   cursor: pointer;
-  transition: transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1), background 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition:
+    transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1),
+    background 800ms cubic-bezier(0.165, 0.84, 0.44, 1),
+    border-color 800ms cubic-bezier(0.165, 0.84, 0.44, 1),
+    box-shadow 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .ada-card:hover {
   transform: translateY(-8px);
-  background: #000000;
+  background: var(--team-card-hover-bg);
+  border-color: var(--team-card-hover-line);
 }
 
 .ada-card-text {
@@ -309,7 +330,7 @@
 .ada-role {
   display: block;
   margin-bottom: 21px;
-  color: rgba(66, 67, 70, 0.42);
+  color: var(--team-card-role);
   font-size: 0.9rem;
   font-weight: 800;
   transition: color 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -317,7 +338,7 @@
 
 .ada-name {
   margin: 0;
-  color: #424346;
+  color: var(--team-card-name);
   font-family: "Instrument Serif", Georgia, serif;
   font-size: clamp(3rem, 6vw, 4.5rem);
   font-weight: 400;
@@ -326,11 +347,11 @@
 }
 
 .ada-card:hover .ada-name {
-  color: #ffffff;
+  color: var(--team-card-name-hover);
 }
 
 .ada-card:hover .ada-role {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--team-card-role-hover);
 }
 
 .ada-image-container {
@@ -368,7 +389,7 @@
   padding: 40px 30px 30px;
   opacity: 0;
   transform: translateY(20px);
-  background: linear-gradient(to top, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
+  background: var(--team-card-overlay);
   transition: opacity 800ms cubic-bezier(0.165, 0.84, 0.44, 1), transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -380,7 +401,7 @@
 .ada-bio {
   max-width: 480px;
   margin: 0 0 20px;
-  color: #eae8e8;
+  color: var(--team-card-overlay-text);
   font-size: 1rem;
   line-height: 1.5;
   text-align: center;
@@ -391,7 +412,7 @@
   border: 0;
   padding: 0 0 6px;
   background: transparent;
-  color: #eae8e8;
+  color: var(--team-card-overlay-text);
   font-size: 1.55rem;
   cursor: pointer;
 }
@@ -592,6 +613,54 @@
 .ada-modal-experience span {
   color: #888;
   font-size: 0.8rem;
+}
+
+.app-shell--day .ada-team-section {
+  --team-section-bg: #f1eee7;
+  --team-section-text: #14151d;
+  --team-card-bg: #14151d;
+  --team-card-hover-bg: var(--team-section-bg);
+  --team-card-line: rgba(20, 21, 29, 0.08);
+  --team-card-name: #eae8e8;
+  --team-card-name-hover: #424346;
+  --team-card-role: rgba(234, 232, 232, 0.5);
+  --team-card-role-hover: rgba(66, 67, 70, 0.42);
+  --team-card-hover-line: rgba(20, 21, 29, 0.08);
+  --team-card-overlay: linear-gradient(to top, rgba(241, 238, 231, 1) 10%, rgba(241, 238, 231, 0.72) 60%, transparent 100%);
+  --team-card-overlay-text: #14151d;
+  --team-card-shadow: none;
+}
+
+.app-shell--day .ada-scroll-line-wrapper {
+  background: rgba(20, 21, 29, 0.14);
+}
+
+.app-shell--day .ada-scroll-line-fill {
+  background: #14151d;
+}
+
+.app-shell--day .ada-manifesto-text,
+.app-shell--day .reveal-char,
+.app-shell--day .ada-giant-title {
+  color: #14151d;
+}
+
+.app-shell--day .ada-loop-item,
+.app-shell--day .reg-mark {
+  color: rgba(20, 21, 29, 0.92);
+}
+
+.app-shell--day .loop-separator dotlottie-player {
+  filter: drop-shadow(0 0 1px rgba(20, 21, 29, 0.72));
+}
+
+.app-shell--day .ada-card {
+  background: var(--team-card-bg);
+  box-shadow: var(--team-card-shadow);
+}
+
+.app-shell--day .ada-card:hover {
+  background: var(--team-card-hover-bg);
 }
 
 @media (max-width: 1180px) {

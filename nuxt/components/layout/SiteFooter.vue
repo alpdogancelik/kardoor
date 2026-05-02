@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
+
+const { isDay } = useShowroomAmbience();
+
+const footerClasses = computed(() => ({
+  "kardoor-footer--day": isDay.value
+}));
 
 const menuLinks = [
   { label: "Ana Sayfa", to: "/" },
@@ -83,7 +89,7 @@ const submitQuote = () => {
 </script>
 
 <template>
-  <footer class="kardoor-footer">
+  <footer class="kardoor-footer" :class="footerClasses">
     <div class="kardoor-footer__inner">
       <section class="kardoor-footer__quote" aria-labelledby="footer-quote-title">
         <div class="kardoor-footer__social" aria-label="Sosyal medya bağlantıları">
@@ -240,6 +246,14 @@ const submitQuote = () => {
   --footer-muted: rgba(244, 242, 239, 0.48);
   --footer-line: rgba(244, 242, 239, 0.14);
   --footer-pill: rgba(255, 255, 255, 0.035);
+  --footer-field-placeholder: rgba(244, 242, 239, 0.38);
+  --footer-field-focus: rgba(244, 242, 239, 0.42);
+  --footer-body-text: rgba(244, 242, 239, 0.9);
+  --footer-button-bg: #f4f2ef;
+  --footer-button-text: #101116;
+  --footer-button-bg-hover: #ffffff;
+  --footer-social-bg: rgba(255, 255, 255, 0.04);
+  --footer-social-bg-hover: rgba(255, 255, 255, 0.08);
 
   position: relative;
   overflow: hidden;
@@ -247,6 +261,9 @@ const submitQuote = () => {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.045), transparent 31%),
     linear-gradient(180deg, var(--footer-bg) 0%, var(--footer-bg-deep) 100%);
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
 
   * {
     box-sizing: border-box;
@@ -283,7 +300,7 @@ const submitQuote = () => {
     place-items: center;
     border-radius: 999px;
     color: var(--footer-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--footer-social-bg);
     text-decoration: none;
     text-transform: uppercase;
     font-size: 22px;
@@ -295,7 +312,7 @@ const submitQuote = () => {
 
     &:hover {
       transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--footer-social-bg-hover);
     }
   }
 }
@@ -420,11 +437,11 @@ const submitQuote = () => {
     background 0.25s ease;
 
   &::placeholder {
-    color: rgba(244, 242, 239, 0.38);
+    color: var(--footer-field-placeholder);
   }
 
   &:focus {
-    border-color: rgba(244, 242, 239, 0.42);
+    border-color: var(--footer-field-focus);
     background: var(--footer-pill);
   }
 }
@@ -436,8 +453,8 @@ const submitQuote = () => {
   place-items: center;
   border: 0;
   border-radius: 999px;
-  color: #101116;
-  background: #f4f2ef;
+  color: var(--footer-button-text);
+  background: var(--footer-button-bg);
   cursor: pointer;
   transition:
     transform 0.35s ease,
@@ -453,7 +470,7 @@ const submitQuote = () => {
 
   &:hover {
     transform: translateX(5px);
-    background: #ffffff;
+    background: var(--footer-button-bg-hover);
   }
 }
 
@@ -542,7 +559,7 @@ const submitQuote = () => {
     max-width: 310px;
     min-height: 72px;
     margin: 0 0 28px;
-    color: rgba(244, 242, 239, 0.9);
+    color: var(--footer-body-text);
     font-size: 16px;
     font-weight: 760;
     line-height: 1.13;
@@ -652,13 +669,34 @@ const submitQuote = () => {
     justify-content: center;
     padding: 0 28px;
     border-radius: 999px;
-    color: #101116;
-    background: #f4f2ef;
+    color: var(--footer-button-text);
+    background: var(--footer-button-bg);
     font-size: 13px;
     font-weight: 950;
     letter-spacing: -0.012em;
     white-space: nowrap;
   }
+}
+
+.kardoor-footer--day {
+  --footer-bg: #f9f6ef;
+  --footer-bg-deep: #ebe4d8;
+  --footer-text: #10151d;
+  --footer-muted: rgba(16, 21, 29, 0.5);
+  --footer-line: rgba(16, 21, 29, 0.14);
+  --footer-pill: rgba(255, 255, 255, 0.72);
+  --footer-field-placeholder: rgba(16, 21, 29, 0.38);
+  --footer-field-focus: rgba(16, 21, 29, 0.34);
+  --footer-body-text: rgba(16, 21, 29, 0.78);
+  --footer-button-bg: #10151d;
+  --footer-button-text: #f6f2ea;
+  --footer-button-bg-hover: #273040;
+  --footer-social-bg: rgba(255, 255, 255, 0.58);
+  --footer-social-bg-hover: rgba(255, 255, 255, 0.82);
+
+  background:
+    radial-gradient(circle at 72% 18%, rgba(44, 227, 255, 0.09), transparent 32%),
+    linear-gradient(180deg, var(--footer-bg) 0%, var(--footer-bg-deep) 100%);
 }
 
 .kardoor-footer__bottom {

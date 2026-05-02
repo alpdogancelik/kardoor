@@ -1,683 +1,445 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute } from "#imports";
 
 const route = useRoute();
+const { isNight, toggleMode } = useShowroomAmbience();
+const isScrolled = ref(false);
 
 const navItems = [
-  {
-    to: "/",
-    label: "Home",
-    eyebrow: "Start"
-  },
-  {
-    to: "/doors",
-    label: "Doors",
-    eyebrow: "Collections",
-    children: [
-      { to: "/doors", label: "All Door Models" },
-      { to: "/catalog", label: "Catalog View" },
-      { to: "/request-quote", label: "Project Quote" }
-    ]
-  },
-  {
-    to: "/series",
-    label: "Series",
-    eyebrow: "Models",
-    children: [
-      { to: "/series/aluminium-frame", label: "Aluminium Frame" },
-      { to: "/series/thermo-wood", label: "Thermo Wood" },
-      { to: "/series/laminox", label: "Laminox" }
-    ]
-  },
-  {
-    to: "/production",
-    label: "Production",
-    eyebrow: "Factory"
-  },
-  {
-    to: "/export",
-    label: "Export",
-    eyebrow: "Global"
-  },
-  {
-    to: "/company",
-    label: "Company",
-    eyebrow: "About"
-  },
-  {
-    to: "/contact",
-    label: "Contact",
-    eyebrow: "Reach us"
-  }
+  { to: "/", label: "Home" },
+  { to: "/doors", label: "Doors" },
+  { to: "/series", label: "Series" },
+  { to: "/production", label: "Production" },
+  { to: "/export", label: "Export" },
+  { to: "/company", label: "Company" },
+  { to: "/contact", label: "Contact" }
 ];
-
-const isScrolled = ref(false);
-const isMenuOpen = ref(false);
-const isEntranceDoorOpen = ref(false);
-const activePanel = ref<string | null>(null);
-
-const activeMegaItem = computed(() =>
-  navItems.find((item) => item.label === activePanel.value && item.children?.length)
-);
 
 const isActive = (to: string) => {
   if (to === "/") return route.path === "/";
   return route.path.startsWith(to);
 };
 
-const openPanel = (label: string, hasChildren?: boolean) => {
-  activePanel.value = hasChildren ? label : null;
-};
+const headerClass = computed(() => ({
+  "site-header--scrolled": isScrolled.value,
+  "site-header--night": isNight.value
+}));
 
-const closePanel = () => {
-  activePanel.value = null;
-};
-
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-  closePanel();
-};
-
-const closeMenu = () => {
-  isMenuOpen.value = false;
-  closePanel();
-};
+const ambienceToggleLabel = computed(() =>
+  isNight.value ? "Switch to light mode" : "Switch to dark mode"
+);
 
 const onScroll = () => {
-  const hasScrolled = window.scrollY > 24;
-
-  isScrolled.value = hasScrolled;
-
-  if (hasScrolled && (isMenuOpen.value || activePanel.value)) {
-    closeMenu();
-  }
+  isScrolled.value = window.scrollY > 24;
 };
-
-const onEntranceDoorState = (event: Event) => {
-  const detail = (event as CustomEvent<{ isOpen?: boolean }>).detail;
-  isEntranceDoorOpen.value = Boolean(detail?.isOpen);
-
-  if (isEntranceDoorOpen.value) {
-    closeMenu();
-  }
-};
-
-watch(
-  () => route.path,
-  () => {
-    isEntranceDoorOpen.value = false;
-    closeMenu();
-  }
-);
 
 onMounted(() => {
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("kardoor:entrance-door-state", onEntranceDoorState);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScroll);
-  window.removeEventListener("kardoor:entrance-door-state", onEntranceDoorState);
 });
 </script>
 
 <template>
-  <header
-    class="site-header"
-    :class="{
-      'site-header--scrolled': isScrolled,
-      'site-header--menu-open': isMenuOpen,
-      'site-header--door-open': isEntranceDoorOpen
-    }"
-    @mouseleave="closePanel"
-  >
+  <header class="site-header" :class="headerClass">
     <div class="site-header__inner">
-      <NuxtLink class="site-header__brand" to="/" aria-label="Ege Kardoor Home">
+      <NuxtLink class="site-header__brand" to="/" aria-label="Kardoor Home">
         <BrandMark />
       </NuxtLink>
 
-      <nav class="site-nav" aria-label="Primary navigation">
+      <nav class="site-header__nav" aria-label="Primary navigation">
         <NuxtLink
           v-for="item in navItems"
           :key="item.to"
-          class="site-nav__link"
-          :class="{ 'site-nav__link--active': isActive(item.to) }"
+          class="site-header__nav-link"
+          :class="{ 'is-active': isActive(item.to) }"
           :to="item.to"
-          @mouseenter="openPanel(item.label, Boolean(item.children?.length))"
-          @focus="openPanel(item.label, Boolean(item.children?.length))"
         >
-          <span>{{ item.label }}</span>
+          {{ item.label }}
         </NuxtLink>
       </nav>
 
-      <div class="site-actions">
-        <NuxtLink class="site-actions__catalog" to="/catalog">
+      <div class="site-header__actions">
+        <button
+          class="site-header__ambience"
+          type="button"
+          :aria-label="ambienceToggleLabel"
+          :aria-pressed="isNight"
+          :title="ambienceToggleLabel"
+          @click="toggleMode"
+        >
+          <span class="site-header__bulb" aria-hidden="true">
+            <span class="site-header__bulb-glass" />
+            <span class="site-header__bulb-base" />
+          </span>
+        </button>
+
+        <NuxtLink class="site-header__catalog" to="/catalog">
           Catalog
         </NuxtLink>
 
-        <NuxtLink class="site-actions__quote" to="/request-quote">
+        <NuxtLink class="site-header__quote" to="/request-quote">
           Request Quote
         </NuxtLink>
-      </div>
 
-      <button
-        class="site-burger"
-        type="button"
-        :aria-expanded="isMenuOpen"
-        aria-controls="mobile-navigation"
-        aria-label="Toggle navigation menu"
-        @click="toggleMenu"
-      >
-        <span />
-        <span />
-      </button>
+        <button class="site-header__menu" type="button" aria-label="Open menu">
+          <span />
+          <span />
+        </button>
+      </div>
     </div>
-
-    <Transition name="header-mega">
-      <div
-        v-if="activeMegaItem"
-        class="site-mega"
-        @mouseenter="openPanel(activeMegaItem.label, true)"
-        @mouseleave="closePanel"
-      >
-        <div class="site-mega__copy">
-          <span>{{ activeMegaItem.eyebrow }}</span>
-          <strong>{{ activeMegaItem.label }}</strong>
-          <p>
-            Explore Kardoor steel door solutions designed for residential,
-            project and export supply.
-          </p>
-        </div>
-
-        <div class="site-mega__links">
-          <NuxtLink
-            v-for="child in activeMegaItem.children"
-            :key="child.to"
-            :to="child.to"
-          >
-            {{ child.label }}
-            <span>›</span>
-          </NuxtLink>
-        </div>
-      </div>
-    </Transition>
-
-    <Transition name="mobile-nav">
-      <nav
-        v-if="isMenuOpen"
-        id="mobile-navigation"
-        class="mobile-nav"
-        aria-label="Mobile navigation"
-      >
-        <NuxtLink
-          v-for="item in navItems"
-          :key="item.to"
-          :to="item.to"
-          :class="{ 'mobile-nav__link--active': isActive(item.to) }"
-          class="mobile-nav__link"
-        >
-          <small>{{ item.eyebrow }}</small>
-          <span>{{ item.label }}</span>
-        </NuxtLink>
-
-        <div class="mobile-nav__actions">
-          <NuxtLink to="/catalog" @click="closeMenu">Catalog</NuxtLink>
-          <NuxtLink to="/request-quote" @click="closeMenu">Request Quote</NuxtLink>
-        </div>
-      </nav>
-    </Transition>
   </header>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .site-header {
-  --header-height: 114px;
-  --header-bg-scrolled: rgba(15, 16, 16, 0.78);
-  --header-text: #f4f2ef;
-  --header-muted: rgba(244, 242, 239, 0.62);
-  --header-cyan: #38dff5;
-  --header-cyan-deep: #1bb8d4;
-
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  z-index: 100;
+  z-index: 80;
   width: 100%;
-  color: var(--header-text);
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  backdrop-filter: none;
-  box-shadow: none;
-  transition:
-    opacity 0.28s ease,
-    transform 0.28s ease,
-    background 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease,
-    backdrop-filter 0.35s ease;
-
-  * {
-    box-sizing: border-box;
-  }
-}
-
-.site-header--scrolled {
-  background: var(--header-bg-scrolled);
-  backdrop-filter: blur(18px);
-  border-color: rgba(244, 242, 239, 0.08);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
-
-  .site-header__inner {
-    min-height: 82px;
-  }
-
-  :deep(.brand-mark) {
-    transform: scale(0.92);
-  }
-}
-
-.site-header--door-open {
-  opacity: 0;
-  transform: translateY(-100%);
+  padding: 28px 40px;
   pointer-events: none;
+  transition:
+    padding 0.35s ease,
+    background 0.35s ease,
+    backdrop-filter 0.35s ease;
 }
 
 .site-header__inner {
-  width: min(100%, 1840px);
-  min-height: var(--header-height);
-  margin: 0 auto;
-  padding: 0 clamp(24px, 2.1vw, 40px);
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(250px, 0.78fr) minmax(520px, 1fr) auto;
+  grid-template-columns: minmax(220px, 280px) minmax(480px, 760px) max-content;
   align-items: center;
-  gap: clamp(28px, 3vw, 58px);
-  transition: min-height 0.35s ease;
+  gap: clamp(18px, 2vw, 28px);
+  width: 100%;
+  margin: 0 auto;
+  pointer-events: auto;
 }
 
 .site-header__brand {
   display: inline-flex;
-  width: fit-content;
-  color: inherit;
-  text-decoration: none;
-
-  :deep(.brand-mark) {
-    transform-origin: left center;
-    transition: transform 0.35s ease;
-  }
-}
-
-.site-nav {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: clamp(20px, 1.75vw, 32px);
+  width: max-content;
+  min-width: 0;
+  color: #fff;
+  text-decoration: none;
+  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.22));
 }
 
-.site-nav__link {
+.site-header__nav {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 58px;
+  padding: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42)),
+    rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 24px 70px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(22px) saturate(1.25);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
+}
+
+.site-header__nav-link {
   position: relative;
   display: inline-flex;
   align-items: center;
-  min-height: 42px;
-  color: rgba(244, 242, 239, 0.78);
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: clamp(0.82rem, 0.86vw, 1rem);
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.018em;
-  transition: color 0.25s ease;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 100%;
-    bottom: 0;
-    height: 3px;
-    border-radius: 999px;
-    background: var(--header-cyan);
-    transition: right 0.28s ease;
-  }
-
-  &:hover,
-  &:focus-visible,
-  &--active {
-    color: var(--header-text);
-  }
-
-  &:hover::after,
-  &:focus-visible::after,
-  &--active::after {
-    right: 0;
-  }
-}
-
-.site-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 14px;
-
-  a {
-    min-height: 58px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9px;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 0.92rem;
-    font-weight: 950;
-    letter-spacing: -0.018em;
-    white-space: nowrap;
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      background 0.25s ease,
-      color 0.25s ease;
-  }
-}
-
-.site-actions__catalog {
-  padding: 0 28px;
-  color: var(--header-text);
-  background: rgba(255, 255, 255, 0.075);
-  border: 1px solid rgba(244, 242, 239, 0.16);
-
-  &:hover {
-    transform: translateY(-2px);
-    border-color: rgba(244, 242, 239, 0.32);
-    background: rgba(255, 255, 255, 0.105);
-  }
-}
-
-.site-actions__quote {
-  padding: 0 28px;
-  color: #03080b;
-  background: linear-gradient(135deg, #48e6ff, var(--header-cyan-deep));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  &:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, #71efff, #2bd5ee);
-  }
-}
-
-.site-burger {
-  display: none;
-  width: 52px;
-  height: 52px;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
-  gap: 7px;
-  border: 1px solid rgba(244, 242, 239, 0.16);
-  border-radius: 12px;
-  color: var(--header-text);
-  background: rgba(255, 255, 255, 0.055);
-  cursor: pointer;
-
-  span {
-    width: 22px;
-    height: 2px;
-    border-radius: 999px;
-    background: currentColor;
-    transition:
-      transform 0.28s ease,
-      opacity 0.28s ease;
-  }
-}
-
-.site-header--menu-open {
-  background: rgba(24, 25, 25, 0.94);
-  border-color: rgba(244, 242, 239, 0.08);
-
-  .site-burger span:first-child {
-    transform: translateY(4.5px) rotate(45deg);
-  }
-
-  .site-burger span:last-child {
-    transform: translateY(-4.5px) rotate(-45deg);
-  }
-}
-
-.site-mega {
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 1px);
-  width: min(760px, calc(100vw - 48px));
-  transform: translateX(-50%);
-  display: grid;
-  grid-template-columns: 0.82fr 1fr;
-  gap: 26px;
-  padding: 26px;
-  border: 1px solid rgba(244, 242, 239, 0.12);
-  border-radius: 0 0 24px 24px;
-  background: rgba(25, 26, 27, 0.96);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32);
-}
-
-.site-mega__copy {
-  padding: 4px 10px 4px 0;
-
-  span {
-    display: block;
-    margin-bottom: 10px;
-    color: var(--header-cyan);
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    font-weight: 950;
-    letter-spacing: 0.04em;
-  }
-
-  strong {
-    display: block;
-    margin-bottom: 12px;
-    color: var(--header-text);
-    font-size: 1.55rem;
-    font-weight: 950;
-    line-height: 1;
-    letter-spacing: -0.04em;
-  }
-
-  p {
-    max-width: 270px;
-    margin: 0;
-    color: var(--header-muted);
-    font-size: 0.94rem;
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: -0.012em;
-  }
-}
-
-.site-mega__links {
-  display: grid;
-  gap: 10px;
-
-  a {
-    min-height: 54px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 0 18px;
-    border: 1px solid rgba(244, 242, 239, 0.1);
-    border-radius: 14px;
-    color: var(--header-text);
-    background: rgba(255, 255, 255, 0.04);
-    text-decoration: none;
-    font-size: 0.98rem;
-    font-weight: 900;
-    letter-spacing: -0.018em;
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      background 0.25s ease;
-
-    span {
-      color: var(--header-cyan);
-      font-size: 1.4rem;
-      line-height: 1;
-    }
-
-    &:hover {
-      transform: translateX(4px);
-      border-color: rgba(56, 223, 245, 0.34);
-      background: rgba(56, 223, 245, 0.08);
-    }
-  }
-}
-
-.mobile-nav {
-  display: none;
-}
-
-.header-mega-enter-active,
-.header-mega-leave-active,
-.mobile-nav-enter-active,
-.mobile-nav-leave-active {
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  color: rgba(10, 18, 28, 0.76);
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  white-space: nowrap;
   transition:
-    opacity 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease,
     transform 0.25s ease;
 }
 
-.header-mega-enter-from,
-.header-mega-leave-to {
-  opacity: 0;
-  transform: translateX(-50%) translateY(-10px);
+.site-header__nav-link:hover {
+  color: rgba(4, 12, 22, 0.96);
+  background: rgba(255, 255, 255, 0.42);
 }
 
-.mobile-nav-enter-from,
-.mobile-nav-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
+.site-header__nav-link.is-active {
+  color: #04101d;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.52));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-@media (max-width: 1180px) {
-  .site-header__inner {
-    grid-template-columns: 1fr auto auto;
-  }
-
-  .site-nav {
-    display: none;
-  }
-
-  .site-actions {
-    display: none;
-  }
-
-  .site-burger {
-    display: inline-flex;
-  }
-
-  .site-mega {
-    display: none;
-  }
-
-  .mobile-nav {
-    display: grid;
-    width: min(100%, 1840px);
-    margin: 0 auto;
-    padding: 10px 24px 24px;
-    border-top: 1px solid rgba(244, 242, 239, 0.08);
-    background: rgba(24, 25, 25, 0.98);
-  }
-
-  .mobile-nav__link {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    align-items: center;
-    min-height: 58px;
-    border-bottom: 1px solid rgba(244, 242, 239, 0.08);
-    color: var(--header-text);
-    text-decoration: none;
-
-    small {
-      color: var(--header-muted);
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-    }
-
-    span {
-      font-size: 1.5rem;
-      font-weight: 950;
-      line-height: 1;
-      letter-spacing: -0.04em;
-    }
-  }
-
-  .mobile-nav__link--active span {
-    color: var(--header-cyan);
-  }
-
-  .mobile-nav__actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 18px;
-
-    a {
-      min-height: 56px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      text-decoration: none;
-      text-transform: uppercase;
-      font-size: 0.86rem;
-      font-weight: 950;
-      letter-spacing: -0.018em;
-
-      &:first-child {
-        color: var(--header-text);
-        background: rgba(255, 255, 255, 0.075);
-        border: 1px solid rgba(244, 242, 239, 0.14);
-      }
-
-      &:last-child {
-        color: #03080b;
-        background: linear-gradient(135deg, #48e6ff, var(--header-cyan-deep));
-      }
-    }
-  }
+.site-header__actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  white-space: nowrap;
 }
 
-@media (max-width: 620px) {
+.site-header__ambience {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 18px;
+  color: #10151d;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)),
+    rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    0 18px 42px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.site-header__ambience:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.46);
+}
+
+.site-header__bulb {
+  position: relative;
+  display: block;
+  width: 23px;
+  height: 28px;
+}
+
+.site-header__bulb-glass {
+  position: absolute;
+  left: 50%;
+  top: 1px;
+  width: 19px;
+  height: 19px;
+  transform: translateX(-50%);
+  border: 2px solid currentColor;
+  border-radius: 50% 50% 45% 45%;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 rgba(44, 227, 255, 0);
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.site-header__bulb-glass::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 8px;
+  height: 7px;
+  transform: translateX(-50%);
+  border-left: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.site-header__bulb-base {
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 13px;
+  height: 7px;
+  transform: translateX(-50%);
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  border-radius: 2px;
+}
+
+.site-header--night .site-header__ambience {
+  color: #eafaff;
+  background:
+    linear-gradient(135deg, rgba(44, 227, 255, 0.3), rgba(255, 255, 255, 0.08)),
+    rgba(8, 12, 18, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 18px 44px rgba(44, 227, 255, 0.18);
+}
+
+.site-header--night .site-header__bulb-glass {
+  background: rgba(44, 227, 255, 0.22);
+  box-shadow:
+    0 0 18px rgba(44, 227, 255, 0.5),
+    0 0 34px rgba(44, 227, 255, 0.22);
+}
+
+.site-header__catalog {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 18px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 780;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 20px 44px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.site-header__catalog:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.44);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.site-header__quote {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 26px;
+  border-radius: 18px;
+  color: #00111a;
+  font-size: 13px;
+  font-weight: 860;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  background:
+    linear-gradient(135deg, #5fe7ff 0%, #19c9e6 48%, #0bb1d0 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.44),
+    0 18px 42px rgba(18, 201, 230, 0.28);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.site-header__quote:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 24px 54px rgba(18, 201, 230, 0.34);
+}
+
+.site-header__menu {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 20px 44px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  cursor: pointer;
+}
+
+.site-header__menu span {
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.site-header--scrolled {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.site-header--scrolled .site-header__nav {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.58)),
+    rgba(255, 255, 255, 0.44);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 18px 54px rgba(0, 0, 0, 0.16);
+}
+
+@media (max-width: 1240px) {
   .site-header {
-    --header-height: 86px;
+    padding-inline: 24px;
   }
 
   .site-header__inner {
-    min-height: var(--header-height);
-    padding: 0 18px;
+    grid-template-columns: 240px 1fr auto;
+    gap: 18px;
   }
 
-  .site-burger {
-    width: 48px;
-    height: 48px;
+  .site-header__nav-link {
+    padding-inline: 13px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 980px) {
+  .site-header {
+    padding: 18px;
   }
 
-  .mobile-nav {
-    padding: 8px 18px 22px;
+  .site-header__inner {
+    display: flex;
+    justify-content: space-between;
   }
 
-  .mobile-nav__link {
-    grid-template-columns: 84px 1fr;
-
-    span {
-      font-size: 1.28rem;
-    }
+  .site-header__nav {
+    display: none;
   }
 
-  .mobile-nav__actions {
-    grid-template-columns: 1fr;
+  .site-header__catalog {
+    display: none;
+  }
+
+  .site-header__quote {
+    min-height: 46px;
+    padding-inline: 18px;
+    border-radius: 16px;
+    font-size: 12px;
+  }
+
+  .site-header__ambience,
+  .site-header__menu {
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header__quote {
+    display: none;
   }
 }
 </style>

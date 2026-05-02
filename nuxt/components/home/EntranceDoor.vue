@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+
+const nuxtApp = useNuxtApp();
 
 const heroRef = ref<HTMLElement | null>(null);
 const zoomLayerRef = ref<HTMLElement | null>(null);
@@ -9,6 +11,21 @@ const canvasRef = ref<HTMLCanvasElement | null>(null);
 const blackoutRef = ref<HTMLElement | null>(null);
 
 let cleanup: (() => void) | undefined;
+let startPortalFromCta: (() => void) | undefined;
+
+const enterShowroomFromCta = (event: MouseEvent) => {
+  event.preventDefault();
+
+  if (startPortalFromCta) {
+    startPortalFromCta();
+    return;
+  }
+
+  document.getElementById("showroom-dive")?.scrollIntoView({
+    block: "start",
+    behavior: "auto"
+  });
+};
 
 onMounted(async () => {
   const hero = heroRef.value;
@@ -22,6 +39,7 @@ onMounted(async () => {
 
   const { gsap } = await import("gsap");
   const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+
   gsap.registerPlugin(ScrollTrigger);
 
   const context = canvas.getContext("2d");
@@ -30,9 +48,12 @@ onMounted(async () => {
   const frames = Array.from({ length: 60 }, (_, index) => index + 1);
   const loadedFrames = new Map<number, HTMLImageElement>();
   const pendingFrames = new Map<number, Promise<HTMLImageElement>>();
+
   const playhead = { progress: 0 };
+
   const doorRect = { x: 608, y: 227, width: 158, height: 346 };
   const renderDoorRect = { x: 0, y: 0, width: 225, height: 493 };
+
   const sequenceProgressEnd = 0.8;
   const zoomProgressStart = 0.84;
   const blackoutProgressStart = 0.93;
@@ -40,11 +61,18 @@ onMounted(async () => {
   let currentFrameIndex = -1;
   let targetFrameIndex = 0;
   let playheadTween: ReturnType<typeof gsap.to> | null = null;
+  let trigger: ReturnType<typeof ScrollTrigger.create> | null = null;
+
   let isDoorOpen = false;
+  let hasEnteredShowroom = false;
+  let isEnteringShowroom = false;
+  let scrollDirection = 1;
 
   const setDoorOpen = (nextState: boolean) => {
     if (isDoorOpen === nextState) return;
+
     isDoorOpen = nextState;
+
     window.dispatchEvent(
       new CustomEvent("kardoor:entrance-door-state", {
         detail: { isOpen: nextState }
@@ -88,6 +116,7 @@ onMounted(async () => {
     const displayWidth = Math.max(1, Math.round(stage.getBoundingClientRect().width));
     const displayHeight = Math.max(1, Math.round(stage.getBoundingClientRect().height));
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
     const canvasWidth = Math.max(1, Math.round(displayWidth * pixelRatio));
     const canvasHeight = Math.max(1, Math.round(displayHeight * pixelRatio));
 
@@ -96,6 +125,7 @@ onMounted(async () => {
 
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     context.clearRect(0, 0, displayWidth, displayHeight);
+
     context.drawImage(
       source,
       renderDoorRect.x,
@@ -113,18 +143,27 @@ onMounted(async () => {
     const naturalWidth = image.naturalWidth || 1376;
     const naturalHeight = image.naturalHeight || 768;
     const bounds = hero.getBoundingClientRect();
+
     const [positionX = "50%", positionY = "0%"] = window
       .getComputedStyle(image)
       .objectPosition.split(/\s+/);
+
     const xRatio = Number.parseFloat(positionX) / 100;
     const yRatio = Number.parseFloat(positionY) / 100;
+
     const scale = Math.max(bounds.width / naturalWidth, bounds.height / naturalHeight);
     const renderedWidth = naturalWidth * scale;
     const renderedHeight = naturalHeight * scale;
-    const offsetX = (bounds.width - renderedWidth) * (Number.isFinite(xRatio) ? xRatio : 0.5);
-    const offsetY = (bounds.height - renderedHeight) * (Number.isFinite(yRatio) ? yRatio : 0);
+
+    const offsetX =
+      (bounds.width - renderedWidth) * (Number.isFinite(xRatio) ? xRatio : 0.5);
+
+    const offsetY =
+      (bounds.height - renderedHeight) * (Number.isFinite(yRatio) ? yRatio : 0);
+
     const stageWidth = doorRect.width * scale;
     const stageHeight = doorRect.height * scale;
+
     const zoomOriginX = `${offsetX + (doorRect.x + doorRect.width * 0.72) * scale}px`;
     const zoomOriginY = `${offsetY + (doorRect.y + doorRect.height * 0.54) * scale}px`;
 
@@ -132,8 +171,10 @@ onMounted(async () => {
     stage.style.setProperty("--door-top", `${offsetY + doorRect.y * scale}px`);
     stage.style.setProperty("--door-width", `${stageWidth}px`);
     stage.style.setProperty("--door-height", `${stageHeight}px`);
+
     zoomLayer.style.setProperty("--zoom-origin-x", zoomOriginX);
     zoomLayer.style.setProperty("--zoom-origin-y", zoomOriginY);
+
     hero.style.setProperty("--zoom-origin-x", zoomOriginX);
     hero.style.setProperty("--zoom-origin-y", zoomOriginY);
 
@@ -145,82 +186,259 @@ onMounted(async () => {
 
   const updateZoom = (progress: number) => {
     const eased = easeInOut(Math.min(1, Math.max(0, progress)));
+
     zoomLayer.style.setProperty("--hero-zoom-scale", `${1 + eased * 6.4}`);
     zoomLayer.style.setProperty("--hero-zoom-brightness", `${1 - eased * 0.5}`);
+
     stage.style.opacity = `${1 - Math.max(0, eased - 0.72) / 0.28}`;
   };
 
-  const renderProgress = () => {
+  const getLenis = () =>
+    (
+      nuxtApp as unknown as {
+        $lenis?: {
+          scrollTo?: (
+            target: Element | number,
+            options?: Record<string, unknown>
+          ) => void;
+        };
+      }
+    ).$lenis;
+
+  const moveToShowroom = () => {
+    const showroom = document.getElementById("showroom-dive");
+    if (!showroom) return;
+
+    const targetY = Math.max(
+      0,
+      Math.round(showroom.getBoundingClientRect().top + window.scrollY)
+    );
+
+    const lenis = getLenis();
+
+    lenis?.scrollTo?.(targetY, {
+      immediate: true,
+      force: true,
+      duration: 0,
+      lock: false
+    });
+
+    window.scrollTo({
+      top: targetY,
+      left: 0,
+      behavior: "auto"
+    });
+  };
+
+  const resetPortalVisuals = () => {
+    playheadTween?.kill();
+    playheadTween = null;
+
+    playhead.progress = 0;
+    targetFrameIndex = 0;
+    currentFrameIndex = -1;
+
+    updateZoom(0);
+
+    hero.style.setProperty("--portal-blackout-opacity", "0");
+    stage.style.opacity = "1";
+
+    setDoorOpen(false);
+
+    loadFrame(1).then((loadedFrame) => {
+      targetFrameIndex = 0;
+      currentFrameIndex = 0;
+      drawFrame(loadedFrame);
+    });
+  };
+
+  const renderProgress = (allowEnter = true, direction = scrollDirection) => {
     const progress = Math.min(1, Math.max(0, playhead.progress));
+
     const sequenceProgress = Math.min(progress / sequenceProgressEnd, 1);
-    const frameIndex = Math.min(frames.length - 1, Math.max(0, Math.floor(sequenceProgress * frames.length)));
+
+    const frameIndex = Math.min(
+      frames.length - 1,
+      Math.max(0, Math.floor(sequenceProgress * frames.length))
+    );
+
     const frameNumber = frames[frameIndex] ?? 1;
     targetFrameIndex = frameIndex;
 
     if (currentFrameIndex !== frameIndex) {
       loadFrame(frameNumber).then((loadedFrame) => {
         if (targetFrameIndex !== frameIndex) return;
+
         currentFrameIndex = frameIndex;
         drawFrame(loadedFrame);
       });
     }
 
-    const zoomProgress = Math.max(0, (progress - zoomProgressStart) / (blackoutProgressStart - zoomProgressStart));
+    const zoomProgress = Math.max(
+      0,
+      (progress - zoomProgressStart) / (blackoutProgressStart - zoomProgressStart)
+    );
+
     const blackoutProgress = easeInOut(
-      Math.min(1, Math.max(0, (progress - blackoutProgressStart) / (1 - blackoutProgressStart)))
+      Math.min(
+        1,
+        Math.max(0, (progress - blackoutProgressStart) / (1 - blackoutProgressStart))
+      )
     );
 
     updateZoom(zoomProgress);
+
     hero.style.setProperty("--portal-blackout-opacity", `${blackoutProgress}`);
+
     setDoorOpen(progress >= sequenceProgressEnd);
+
+    if (direction < 0 || progress < 0.985) {
+      hasEnteredShowroom = false;
+      isEnteringShowroom = false;
+    }
+
+    if (allowEnter && direction > 0 && progress >= 0.995) {
+      window.requestAnimationFrame(() => enterShowroom(true));
+    }
   };
 
-  const scrubToProgress = (progress: number) => {
+  const scrubToProgress = (progress: number, direction = scrollDirection) => {
     const targetProgress = Math.min(1, Math.max(0, progress));
-    const duration = Math.max(0.1, Math.abs(targetProgress - playhead.progress) * 0.7);
+    const duration = Math.max(0.08, Math.abs(targetProgress - playhead.progress) * 0.55);
 
     playheadTween?.kill();
+
     playheadTween = gsap.to(playhead, {
       progress: targetProgress,
       duration,
       ease: "none",
       overwrite: true,
-      onUpdate: renderProgress,
-      onComplete: renderProgress
+      onUpdate: () => renderProgress(true, direction),
+      onComplete: () => renderProgress(true, direction)
     });
   };
 
-  const trigger = ScrollTrigger.create({
-    trigger: hero,
-    start: "top top",
-    end: "+=210%",
-    scrub: 0.55,
-    pin: true,
-    pinSpacing: true,
-    anticipatePin: 1,
-    invalidateOnRefresh: true,
-    onRefresh: updateStagePosition,
-    onUpdate: (self) => scrubToProgress(self.progress),
-    onLeave: () => scrubToProgress(1)
-  });
+  const enterShowroom = async (shouldJump = true) => {
+    if (isEnteringShowroom || hasEnteredShowroom) return;
+
+    isEnteringShowroom = true;
+    hasEnteredShowroom = true;
+
+    playheadTween?.kill();
+    playheadTween = null;
+
+    playhead.progress = 1;
+    renderProgress(false, 1);
+
+    await nextTick();
+
+    if (shouldJump) {
+      moveToShowroom();
+
+      window.requestAnimationFrame(() => {
+        moveToShowroom();
+        isEnteringShowroom = false;
+      });
+
+      return;
+    }
+
+    isEnteringShowroom = false;
+  };
+
+  const createEntranceTrigger = () => {
+    if (trigger) return;
+
+    trigger = ScrollTrigger.create({
+      trigger: hero,
+      start: "top top",
+      end: "+=165%",
+      scrub: 0.45,
+      pin: true,
+      pinSpacing: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+
+      onRefresh: updateStagePosition,
+
+      onUpdate: (self) => {
+        scrollDirection = self.direction;
+
+        if (self.direction < 0) {
+          hasEnteredShowroom = false;
+          isEnteringShowroom = false;
+        }
+
+        scrubToProgress(self.progress, self.direction);
+      },
+
+      onLeave: () => {
+        enterShowroom(true);
+      },
+
+      onEnterBack: () => {
+        scrollDirection = -1;
+        hasEnteredShowroom = false;
+        isEnteringShowroom = false;
+
+        playhead.progress = 1;
+        renderProgress(false, -1);
+      },
+
+      onLeaveBack: () => {
+        scrollDirection = -1;
+        hasEnteredShowroom = false;
+        isEnteringShowroom = false;
+
+        resetPortalVisuals();
+      }
+    });
+  };
+
+  startPortalFromCta = () => {
+    scrollDirection = 1;
+
+    playheadTween?.kill();
+
+    playheadTween = gsap.to(playhead, {
+      progress: 1,
+      duration: 1.1,
+      ease: "power2.inOut",
+      overwrite: true,
+      onUpdate: () => renderProgress(false, 1),
+      onComplete: () => enterShowroom(true)
+    });
+  };
 
   const onResize = () => updateStagePosition();
 
-  for (const frameNumber of frames) loadFrame(frameNumber);
+  for (const frameNumber of frames) {
+    loadFrame(frameNumber);
+  }
+
   if (image.complete) updateStagePosition();
   else image.addEventListener("load", updateStagePosition, { once: true });
-  renderProgress();
+
+  resetPortalVisuals();
+  createEntranceTrigger();
+
   window.addEventListener("resize", onResize);
 
   cleanup = () => {
+    startPortalFromCta = undefined;
+
     playheadTween?.kill();
-    trigger.kill();
+    trigger?.kill(true);
+
     setDoorOpen(false);
+
     window.removeEventListener("resize", onResize);
   };
 });
 
-onBeforeUnmount(() => cleanup?.());
+onBeforeUnmount(() => {
+  cleanup?.();
+});
 </script>
 
 <template>
@@ -228,9 +446,18 @@ onBeforeUnmount(() => cleanup?.());
     <div ref="zoomLayerRef" class="entrance-door__zoom-layer">
       <img
         ref="imageRef"
-        src="/images/Gemini_Generated_Image_k7lt3wk7lt3wk7lt.png"
+        src="/images/homelight.png"
         alt="Modern villa entrance with Kardoor steel door"
-        class="entrance-door__image"
+        class="entrance-door__image entrance-door__image--day"
+        decoding="async"
+        loading="eager"
+      />
+
+      <img
+        src="/images/homenight.jpeg"
+        alt=""
+        class="entrance-door__image entrance-door__image--night"
+        aria-hidden="true"
         decoding="async"
         loading="eager"
       />
@@ -247,7 +474,7 @@ onBeforeUnmount(() => cleanup?.());
     </div>
 
     <div class="entrance-door__actions" aria-label="Entrance actions">
-      <a href="#showroom-dive">Enter Showroom</a>
+      <a href="#showroom-dive" @click="enterShowroomFromCta">Enter Showroom</a>
       <NuxtLink to="/request-quote">Request Quote</NuxtLink>
     </div>
 

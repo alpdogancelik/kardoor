@@ -1,3 +1,5 @@
+import process from "node:process";
+
 export default defineNuxtConfig({
   compatibilityDate: "2026-05-02",
   devtools: { enabled: process.env.NODE_ENV !== "production" },
@@ -54,7 +56,7 @@ export default defineNuxtConfig({
   },
   vue: {
     compilerOptions: {
-      isCustomElement: (tag) => tag === "dotlottie-player"
+      isCustomElement: (tag: string) => tag === "dotlottie-player"
     }
   }
 });

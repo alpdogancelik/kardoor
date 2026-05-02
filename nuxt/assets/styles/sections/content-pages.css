@@ -287,6 +287,38 @@
   grid-column: 1 / -1;
 }
 
+.app-shell--day .home-hero,
+.app-shell--day .listing-page,
+.app-shell--day .detail-page,
+.app-shell--day .content-page {
+  background:
+    radial-gradient(circle at 72% 26%, rgba(44, 227, 255, 0.12), transparent 32%),
+    linear-gradient(180deg, #f8f5ee, #ede8dd 56%, #f7f3eb);
+  color: var(--text);
+}
+
+.app-shell--day .home-hero__frame,
+.app-shell--day .series-card,
+.app-shell--day .detail-page__visual,
+.app-shell--day .related-row a,
+.app-shell--day .content-grid article {
+  border-color: rgba(7, 16, 24, 0.12);
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: 0 24px 70px rgba(7, 16, 24, 0.08);
+}
+
+.app-shell--day .home-hero__stage img,
+.app-shell--day .series-card img,
+.app-shell--day .detail-page__visual img {
+  filter: drop-shadow(0 34px 42px rgba(7, 16, 24, 0.22));
+}
+
+.app-shell--day .quote-form input,
+.app-shell--day .quote-form textarea {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+}
+
 @media (max-width: 1180px) {
   .home-hero,
   .detail-page__grid {
