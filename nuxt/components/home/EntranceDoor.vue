@@ -68,6 +68,10 @@ onMounted(async () => {
   let isEnteringShowroom = false;
   let scrollDirection = 1;
 
+  const setEntranceExited = (nextState: boolean) => {
+    hero.classList.toggle("entrance-door--exited", nextState);
+  };
+
   const setDoorOpen = (nextState: boolean) => {
     if (isDoorOpen === nextState) return;
 
@@ -193,6 +197,15 @@ onMounted(async () => {
     stage.style.opacity = `${1 - Math.max(0, eased - 0.72) / 0.28}`;
   };
 
+  const updateContentState = (progress: number) => {
+    const copyFade = easeInOut(Math.min(1, Math.max(0, (progress - 0.08) / 0.28)));
+    const cueFade = easeInOut(Math.min(1, Math.max(0, progress / 0.22)));
+
+    hero.style.setProperty("--entrance-copy-opacity", `${1 - copyFade}`);
+    hero.style.setProperty("--entrance-copy-y", `${copyFade * -24}px`);
+    hero.style.setProperty("--entrance-cue-opacity", `${1 - cueFade}`);
+  };
+
   const getLenis = () =>
     (
       nuxtApp as unknown as {
@@ -239,10 +252,12 @@ onMounted(async () => {
     currentFrameIndex = -1;
 
     updateZoom(0);
+    updateContentState(0);
 
     hero.style.setProperty("--portal-blackout-opacity", "0");
     stage.style.opacity = "1";
 
+    setEntranceExited(false);
     setDoorOpen(false);
 
     loadFrame(1).then((loadedFrame) => {
@@ -287,6 +302,7 @@ onMounted(async () => {
     );
 
     updateZoom(zoomProgress);
+    updateContentState(progress);
 
     hero.style.setProperty("--portal-blackout-opacity", `${blackoutProgress}`);
 
@@ -295,6 +311,7 @@ onMounted(async () => {
     if (direction < 0 || progress < 0.985) {
       hasEnteredShowroom = false;
       isEnteringShowroom = false;
+      setEntranceExited(false);
     }
 
     if (allowEnter && direction > 0 && progress >= 0.995) {
@@ -337,12 +354,14 @@ onMounted(async () => {
 
       window.requestAnimationFrame(() => {
         moveToShowroom();
+        setEntranceExited(true);
         isEnteringShowroom = false;
       });
 
       return;
     }
 
+    setEntranceExited(true);
     isEnteringShowroom = false;
   };
 
@@ -367,6 +386,7 @@ onMounted(async () => {
         if (self.direction < 0) {
           hasEnteredShowroom = false;
           isEnteringShowroom = false;
+          setEntranceExited(false);
         }
 
         scrubToProgress(self.progress, self.direction);
@@ -380,6 +400,7 @@ onMounted(async () => {
         scrollDirection = -1;
         hasEnteredShowroom = false;
         isEnteringShowroom = false;
+        setEntranceExited(false);
 
         playhead.progress = 1;
         renderProgress(false, -1);
@@ -410,7 +431,10 @@ onMounted(async () => {
     });
   };
 
-  const onResize = () => updateStagePosition();
+  const onResize = () => {
+    updateStagePosition();
+    ScrollTrigger.refresh();
+  };
 
   for (const frameNumber of frames) {
     loadFrame(frameNumber);
@@ -430,6 +454,7 @@ onMounted(async () => {
     playheadTween?.kill();
     trigger?.kill(true);
 
+    setEntranceExited(false);
     setDoorOpen(false);
 
     window.removeEventListener("resize", onResize);
@@ -451,7 +476,7 @@ onBeforeUnmount(() => {
         class="entrance-door__image entrance-door__image--day"
         decoding="async"
         loading="eager"
-      />
+      >
 
       <img
         src="/images/homenight.jpeg"
@@ -460,7 +485,7 @@ onBeforeUnmount(() => {
         aria-hidden="true"
         decoding="async"
         loading="eager"
-      />
+      >
 
       <div ref="stageRef" class="entrance-door__sequence" aria-hidden="true">
         <canvas ref="canvasRef" class="entrance-door__frame" />
@@ -468,14 +493,44 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="entrance-door__copy">
-      <p class="eyebrow">Manufactured in Turkiye · Supplied globally</p>
-      <h1>Enter the Kardoor showroom.</h1>
-      <p>Step through the door into a product-led steel door experience for global buyers.</p>
+      <p class="entrance-door__eyebrow">
+        Manufactured in Türkiye · Supplied Globally
+      </p>
+
+      <h1>
+        <span>Steel doors</span>
+        <span>with architectural</span>
+        <span>presence.</span>
+      </h1>
+
+      <div class="entrance-door__copy-bottom">
+        <p>
+          Premium steel entrance doors for villas, residential projects, dealers
+          and global supply partners.
+        </p>
+
+        <div class="entrance-door__actions" aria-label="Entrance actions">
+          <a href="#showroom-dive" @click="enterShowroomFromCta">
+            Explore Doors
+          </a>
+
+          <NuxtLink to="/request-quote">
+            Request Project Quote
+          </NuxtLink>
+        </div>
+      </div>
     </div>
 
-    <div class="entrance-door__actions" aria-label="Entrance actions">
-      <a href="#showroom-dive" @click="enterShowroomFromCta">Enter Showroom</a>
-      <NuxtLink to="/request-quote">Request Quote</NuxtLink>
+    <div class="entrance-door__specs" aria-label="Kardoor highlights">
+      <span>01 / Steel Security Doors</span>
+      <span>02 / Villa & Project Supply</span>
+      <span>03 / Export-Ready Production</span>
+    </div>
+
+    <div class="entrance-door__scroll-cue" aria-hidden="true">
+      <span>Scroll</span>
+      <i />
+      <strong>to open</strong>
     </div>
 
     <div ref="blackoutRef" class="entrance-door__blackout" aria-hidden="true" />

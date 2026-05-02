@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import type { CSSProperties } from "vue";
 
 type DoorItem = {
   id: string;
@@ -61,6 +62,8 @@ const doors: DoorItem[] = [
 
 const activeIndex = ref(0);
 const direction = ref<"next" | "prev">("next");
+const isDetailVisible = ref(false);
+const isShowroomPaused = ref(false);
 
 const fallbackDoor = doors[0] as DoorItem;
 
@@ -73,13 +76,6 @@ const previousIndex = computed(() =>
 const nextIndex = computed(() =>
   activeIndex.value === doors.length - 1 ? 0 : activeIndex.value + 1
 );
-
-const getDoorState = (index: number) => {
-  if (index === activeIndex.value) return "active";
-  if (index === previousIndex.value) return "previous";
-  if (index === nextIndex.value) return "next";
-  return "hidden";
-};
 
 const goToDoor = (index: number) => {
   if (index === activeIndex.value) return;
@@ -96,6 +92,41 @@ const nextDoor = () => {
 const previousDoor = () => {
   direction.value = "prev";
   activeIndex.value = previousIndex.value;
+};
+
+const getOrbitStyle = (index: number): CSSProperties =>
+  ({
+    "--orbit-delay": `${index * -8.4}s`
+  }) as CSSProperties;
+
+const pauseShowcase = () => {
+  isShowroomPaused.value = true;
+  isDetailVisible.value = true;
+};
+
+const resumeShowcase = () => {
+  isShowroomPaused.value = false;
+  isDetailVisible.value = false;
+};
+
+const previewDoor = (index: number) => {
+  pauseShowcase();
+  goToDoor(index);
+};
+
+const selectDoor = (index: number) => {
+  pauseShowcase();
+  goToDoor(index);
+};
+
+const selectNextDoor = () => {
+  pauseShowcase();
+  nextDoor();
+};
+
+const selectPreviousDoor = () => {
+  pauseShowcase();
+  previousDoor();
 };
 
 let touchStartX = 0;
@@ -117,15 +148,15 @@ const onTouchEnd = (event: TouchEvent) => {
   if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY)) return;
 
   if (deltaX < 0) {
-    nextDoor();
+    selectNextDoor();
   } else {
-    previousDoor();
+    selectPreviousDoor();
   }
 };
 
 const onKeydown = (event: KeyboardEvent) => {
-  if (event.key === "ArrowRight") nextDoor();
-  if (event.key === "ArrowLeft") previousDoor();
+  if (event.key === "ArrowRight") selectNextDoor();
+  if (event.key === "ArrowLeft") selectPreviousDoor();
 };
 
 onMounted(() => {
@@ -140,9 +171,14 @@ onBeforeUnmount(() => {
 <template>
   <section
     class="showroom-dive"
+    :class="{
+      'showroom-dive--details': isDetailVisible,
+      'showroom-dive--paused': isShowroomPaused
+    }"
     :data-direction="direction"
     @touchstart.passive="onTouchStart"
     @touchend.passive="onTouchEnd"
+    @mouseleave="resumeShowcase"
   >
     <div class="showroom-dive__wall" aria-hidden="true" />
     <div class="showroom-dive__light" aria-hidden="true" />
@@ -178,8 +214,11 @@ onBeforeUnmount(() => {
         v-for="(door, index) in doors"
         :key="door.id"
         class="showroom-dive__door-card"
-        :class="`showroom-dive__door-card--${getDoorState(index)}`"
-        :aria-hidden="getDoorState(index) !== 'active'"
+        :class="{ 'showroom-dive__door-card--selected': index === activeIndex }"
+        :style="getOrbitStyle(index)"
+        tabindex="0"
+        @mouseenter="previewDoor(index)"
+        @focus="previewDoor(index)"
       >
         <img
           class="showroom-dive__door-image"
@@ -190,7 +229,7 @@ onBeforeUnmount(() => {
       </article>
     </div>
 
-    <div class="showroom-dive__product">
+    <div v-if="activeDoor" class="showroom-dive__product">
       <p class="showroom-dive__series">
         {{ activeDoor.series }}
       </p>
@@ -223,7 +262,7 @@ onBeforeUnmount(() => {
         class="showroom-dive__arrow"
         type="button"
         aria-label="Previous door"
-        @click="previousDoor"
+        @click="selectPreviousDoor"
       >
         ←
       </button>
@@ -236,7 +275,7 @@ onBeforeUnmount(() => {
           :class="{ 'showroom-dive__dot--active': index === activeIndex }"
           type="button"
           :aria-label="`Show ${door.name}`"
-          @click="goToDoor(index)"
+          @click="selectDoor(index)"
         />
       </div>
 
@@ -244,7 +283,7 @@ onBeforeUnmount(() => {
         class="showroom-dive__arrow"
         type="button"
         aria-label="Next door"
-        @click="nextDoor"
+        @click="selectNextDoor"
       >
         →
       </button>
