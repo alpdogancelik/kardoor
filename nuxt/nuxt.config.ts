@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" }
   },
   image: {
+    domains: ["i.hizliresim.com"],
     quality: 82,
     format: ["webp", "avif"],
     screens: {

@@ -9,17 +9,17 @@ const footerClasses = computed(() => ({
 
 const menuLinks = [
   { label: "Ana Sayfa", to: "/" },
-  { label: "Hakkımızda", to: "/hakkimizda" },
-  { label: "Ürünler", to: "/urunler" },
-  { label: "Kaynaklar", to: "/kaynaklar" },
-  { label: "İletişim", to: "/iletisim" }
+  { label: "Hakkımızda", to: "/company" },
+  { label: "Ürünler", to: "/doors" },
+  { label: "Kaynaklar", to: "/export" },
+  { label: "İletişim", to: "/contact" }
 ];
 
 const quickLinks = [
-  { label: "Teklif Al", to: "/iletisim" },
-  { label: "Kapıları Keşfet", to: "/urunler" },
-  { label: "Katalog", to: "/katalog" },
-  { label: "Üretim", to: "/uretim" }
+  { label: "Teklif Al", to: "/request-quote" },
+  { label: "Kapıları Keşfet", to: "/doors" },
+  { label: "Katalog", to: "/catalog" },
+  { label: "Üretim", to: "/production" }
 ];
 
 const buyerTypes = ["Bayi", "Proje", "Son Kullanıcı"];
@@ -240,8 +240,8 @@ const submitQuote = () => {
 
 <style scoped lang="scss">
 .kardoor-footer {
-  --footer-bg: #24262d;
-  --footer-bg-deep: #1f2128;
+  --footer-bg: #14151d;
+  --footer-bg-deep: #14151d;
   --footer-text: #f4f2ef;
   --footer-muted: rgba(244, 242, 239, 0.48);
   --footer-line: rgba(244, 242, 239, 0.14);
@@ -258,9 +258,7 @@ const submitQuote = () => {
   position: relative;
   overflow: hidden;
   color: var(--footer-text);
-  background:
-    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.045), transparent 31%),
-    linear-gradient(180deg, var(--footer-bg) 0%, var(--footer-bg-deep) 100%);
+  background: var(--footer-bg);
   transition:
     background 0.35s ease,
     color 0.35s ease;
@@ -679,8 +677,8 @@ const submitQuote = () => {
 }
 
 .kardoor-footer--day {
-  --footer-bg: #f1eee7;
-  --footer-bg-deep: #f1eee7;
+  --footer-bg: var(--ambience-bg, #f8f6ef);
+  --footer-bg-deep: var(--ambience-bg, #f8f6ef);
   --footer-text: #10151d;
   --footer-muted: rgba(16, 21, 29, 0.5);
   --footer-line: rgba(16, 21, 29, 0.14);

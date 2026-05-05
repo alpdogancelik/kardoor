@@ -19,9 +19,9 @@
 }
 
 .app-shell--day .showroom-dive {
-  --showroom-bg-start: #f8f6ef;
-  --showroom-bg-mid: #f5f2ea;
-  --showroom-bg-end: #f1eee7;
+  --showroom-bg-start: var(--ambience-bg, #f8f6ef);
+  --showroom-bg-mid: var(--ambience-bg, #f8f6ef);
+  --showroom-bg-end: var(--ambience-bg, #f8f6ef);
   color: #071018;
   background:
     linear-gradient(

@@ -289,11 +289,15 @@
 
 .app-shell--day .home-hero,
 .app-shell--day .listing-page,
-.app-shell--day .detail-page,
-.app-shell--day .content-page {
+.app-shell--day .detail-page {
   background:
     radial-gradient(circle at 72% 26%, rgba(44, 227, 255, 0.12), transparent 32%),
     linear-gradient(180deg, #f8f5ee, #ede8dd 56%, #f7f3eb);
+  color: var(--text);
+}
+
+.app-shell--day .content-page {
+  background: linear-gradient(180deg, #f8f5ee, #ede8dd 56%, #f7f3eb);
   color: var(--text);
 }
 

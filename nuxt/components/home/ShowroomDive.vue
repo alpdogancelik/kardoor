@@ -199,7 +199,7 @@ onBeforeUnmount(() => {
       </p>
 
       <div class="showroom-dive__actions">
-        <NuxtLink class="showroom-dive__button showroom-dive__button--primary" to="/products">
+        <NuxtLink class="showroom-dive__button showroom-dive__button--primary" to="/series">
           View Series
         </NuxtLink>
 
@@ -220,12 +220,19 @@ onBeforeUnmount(() => {
         @mouseenter="previewDoor(index)"
         @focus="previewDoor(index)"
       >
-        <img
+        <NuxtImg
           class="showroom-dive__door-image"
           :src="door.image"
           :alt="door.name"
+          width="520"
+          height="820"
+          sizes="sm:220px md:320px lg:420px xl:520px"
+          densities="1x 2x"
+          format="webp"
+          :loading="index === activeIndex ? 'eager' : 'lazy'"
+          decoding="async"
           draggable="false"
-        >
+        />
       </article>
     </div>
 
