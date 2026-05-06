@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, watch } from "vue";
+import { useKardoorLocale } from "~/composables/useKardoorLocale";
 
 const { isDay } = useShowroomAmbience();
 const { locale } = useKardoorLocale();

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute } from "#imports";
+import { useKardoorLocale } from "~/composables/useKardoorLocale";
 
 const route = useRoute();
 const { isNight, toggleMode } = useShowroomAmbience();

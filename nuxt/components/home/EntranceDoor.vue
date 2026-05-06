@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { useKardoorLocale } from "~/composables/useKardoorLocale";
 
 const nuxtApp = useNuxtApp();
 const { locale } = useKardoorLocale();

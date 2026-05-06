@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useKardoorLocale } from "~/composables/useKardoorLocale";
 
 const { locale } = useKardoorLocale();
 

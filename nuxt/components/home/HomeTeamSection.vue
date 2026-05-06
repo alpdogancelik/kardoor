@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useKardoorLocale } from "~/composables/useKardoorLocale";
 
 type TeamMember = {
   id: string;

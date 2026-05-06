@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import type { CSSProperties } from "vue";
+import { useKardoorLocale } from "~/composables/useKardoorLocale";
 
 type DoorItem = {
   id: string;

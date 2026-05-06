@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import { useKardoorLocale } from "~/composables/useKardoorLocale";
 
 const {
   activeIndex,
