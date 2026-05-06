@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, reactive } from "vue";
+import { computed, reactive, watch } from "vue";
 
 const { isDay } = useShowroomAmbience();
+const { locale } = useKardoorLocale();
 
 const footerClasses = computed(() => ({
   "kardoor-footer--day": isDay.value
@@ -29,31 +30,19 @@ const contactCards = [
     title: "Telefon",
     description: "Satış ve teklif talepleri için doğrudan iletişim.",
     contactLines: ["+90 552 325", "35 49"],
-    href: "tel:+905523253549",
-    schedule: [
-      { day: "WhatsApp", hour: "Aktif" },
-      { day: "Teklif", hour: "Hızlı dönüş" }
-    ]
+    href: "tel:+905523253549"
   },
   {
     title: "E-posta",
     description: "Katalog, ürün bilgisi ve proje dosyaları için yazın.",
     contactLines: ["info@kardoor", "celikkapi.com.tr"],
-    href: "mailto:info@kardoorcelikkapi.com.tr",
-    schedule: [
-      { day: "Katalog", hour: "Talep ile" },
-      { day: "Dosya", hour: "Paylaşılır" }
-    ]
+    href: "mailto:info@kardoorcelikkapi.com.tr"
   },
   {
     title: "Adres",
     description: "Turgut Özal Cad. Zafer Mah. No:96, Kaynaklar / Buca / İzmir",
     contactLines: ["Kaynaklar / Buca", "İzmir"],
-    href: "https://maps.google.com/?q=Turgut%20%C3%96zal%20Cad.%20Zafer%20Mah.%20No%3A96%20Kaynaklar%20Buca%20%C4%B0zmir",
-    schedule: [
-      { day: "Konum", hour: "İzmir" },
-      { day: "Randevu", hour: "Uygun" }
-    ]
+    href: "https://maps.google.com/?q=Turgut%20%C3%96zal%20Cad.%20Zafer%20Mah.%20No%3A96%20Kaynaklar%20Buca%20%C4%B0zmir"
   }
 ];
 
@@ -67,6 +56,164 @@ const workingHours = [
   { day: "Pazar", hour: "08:00 - 18:30" }
 ];
 
+const footerCopy = computed(() => {
+  if (locale.value === "tr") {
+    return {
+      socialLabel: "Sosyal medya bağlantıları",
+      quoteTitle: "Premium Çelik Kapı",
+      quoteLine: "Çözümleri.",
+      quoteEmphasis: "Teklif alın.",
+      buyerLegend: "Müşteri profilinizi seçin:",
+      buyerTypes: ["Bayi", "Proje", "Son Kullanıcı"],
+      placeholders: {
+        name: "Ad Soyad",
+        phone: "Telefon numarası",
+        message: "Mesajınız"
+      },
+      submitLabel: "Teklif talebi gönder",
+      directoryLabel: "Footer menüsü",
+      menuTitle: "Menü",
+      quickTitle: "Hızlı Erişim",
+      contactTitle: "İletişim Bilgileri",
+      hoursTitle: "Çalışma Saatleri",
+      hoursLabel: "Çalışma saatleri",
+      mapTitle: "Kardoor konum haritası",
+      addressType: "address",
+      rights: "Tüm hakları saklıdır",
+      legalLabel: "Yasal bağlantılar",
+      legal: ["Gizlilik Politikası", "Erişilebilirlik", "Kullanım Koşulları"],
+      credit: "Üç Üç Sıfır©",
+      whatsappIntro: "Merhaba Kardoor, teklif almak istiyorum.",
+      whatsappBuyer: "Müşteri profili",
+      whatsappName: "Ad Soyad",
+      whatsappPhone: "Telefon",
+      whatsappMessage: "Mesaj",
+      menuLinks: [
+        { label: "Ana Sayfa", to: "/" },
+        { label: "Hakkımızda", to: "/company" },
+        { label: "Ürünler", to: "/doors" },
+        { label: "Kaynaklar", to: "/export" },
+        { label: "İletişim", to: "/contact" }
+      ],
+      quickLinks: [
+        { label: "Teklif Al", to: "/request-quote" },
+        { label: "Kapıları Keşfet", to: "/doors" },
+        { label: "Katalog", to: "/catalog" },
+        { label: "Üretim", to: "/production" }
+      ],
+      contactCards: [
+        {
+          title: "Telefon",
+          description: "Satış ve teklif talepleri için doğrudan iletişim.",
+          contactLines: ["+90 552 325", "35 49"],
+          href: "tel:+905523253549",
+          type: "phone"
+        },
+        {
+          title: "E-posta",
+          description: "Katalog, ürün bilgisi ve proje dosyaları için yazın.",
+          contactLines: ["info@kardoor", "celikkapi.com.tr"],
+          href: "mailto:info@kardoorcelikkapi.com.tr",
+          type: "email"
+        },
+        {
+          title: "Adres",
+          description: "Turgut Özal Cad. Zafer Mah. No:96, Kaynaklar / Buca / İzmir",
+          contactLines: ["Kaynaklar / Buca", "İzmir"],
+          href: "https://maps.google.com/?q=Turgut%20%C3%96zal%20Cad.%20Zafer%20Mah.%20No%3A96%20Kaynaklar%20Buca%20%C4%B0zmir",
+          type: "address"
+        }
+      ],
+      workingHours: [
+        "Pazartesi",
+        "Salı",
+        "Çarşamba",
+        "Perşembe",
+        "Cuma",
+        "Cumartesi",
+        "Pazar"
+      ].map((day) => ({ day, hour: "08:00 - 18:30" }))
+    };
+  }
+
+  return {
+    socialLabel: "Social media links",
+    quoteTitle: "Premium Steel Door",
+    quoteLine: "Solutions.",
+    quoteEmphasis: "Request a quote.",
+    buyerLegend: "Select your buyer profile:",
+    buyerTypes: ["Dealer", "Project", "End user"],
+    placeholders: {
+      name: "Full name",
+      phone: "Phone number",
+      message: "Your message"
+    },
+    submitLabel: "Send quote request",
+    directoryLabel: "Footer menu",
+    menuTitle: "Menu",
+    quickTitle: "Quick Access",
+    contactTitle: "Contact Information",
+    hoursTitle: "Working Hours",
+    hoursLabel: "Working hours",
+    mapTitle: "Kardoor location map",
+    addressType: "address",
+    rights: "All rights reserved",
+    legalLabel: "Legal links",
+    legal: ["Privacy Policy", "Accessibility", "Terms of Use"],
+    credit: "Uc Uc Sifir©",
+    whatsappIntro: "Hello Kardoor, I would like to request a quote.",
+    whatsappBuyer: "Buyer profile",
+    whatsappName: "Full name",
+    whatsappPhone: "Phone",
+    whatsappMessage: "Message",
+    menuLinks: [
+      { label: "Home", to: "/" },
+      { label: "Company", to: "/company" },
+      { label: "Products", to: "/doors" },
+      { label: "Resources", to: "/export" },
+      { label: "Contact", to: "/contact" }
+    ],
+    quickLinks: [
+      { label: "Request Quote", to: "/request-quote" },
+      { label: "Explore Doors", to: "/doors" },
+      { label: "Catalogue", to: "/catalog" },
+      { label: "Production", to: "/production" }
+    ],
+    contactCards: [
+      {
+        title: "Phone",
+        description: "Direct contact for sales and quote requests.",
+        contactLines: ["+90 552 325", "35 49"],
+        href: "tel:+905523253549",
+        type: "phone"
+      },
+      {
+        title: "Email",
+        description: "Write for catalog, product information and project files.",
+        contactLines: ["info@kardoor", "celikkapi.com.tr"],
+        href: "mailto:info@kardoorcelikkapi.com.tr",
+        type: "email"
+      },
+      {
+        title: "Address",
+        description: "Turgut Ozal Cad. Zafer Mah. No:96, Kaynaklar / Buca / Izmir",
+        contactLines: ["Kaynaklar / Buca", "Izmir"],
+        href: "https://maps.google.com/?q=Turgut%20%C3%96zal%20Cad.%20Zafer%20Mah.%20No%3A96%20Kaynaklar%20Buca%20%C4%B0zmir",
+        type: "address"
+      }
+    ],
+    workingHours: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ].map((day) => ({ day, hour: "08:00 - 18:30" }))
+  };
+});
+
 const quote = reactive({
   buyerType: "Bayi",
   name: "",
@@ -74,14 +221,23 @@ const quote = reactive({
   message: ""
 });
 
+watch(
+  () => footerCopy.value.buyerTypes,
+  (buyerTypes) => {
+    quote.buyerType = buyerTypes[0] ?? "";
+  },
+  { immediate: true }
+);
+
 const submitQuote = () => {
+  const copy = footerCopy.value;
   const text = [
-    "Merhaba Kardoor, teklif almak istiyorum.",
+    copy.whatsappIntro,
     "",
-    `Müşteri profili: ${quote.buyerType}`,
-    `Ad Soyad: ${quote.name || "-"}`,
-    `Telefon: ${quote.phone || "-"}`,
-    `Mesaj: ${quote.message || "-"}`
+    `${copy.whatsappBuyer}: ${quote.buyerType}`,
+    `${copy.whatsappName}: ${quote.name || "-"}`,
+    `${copy.whatsappPhone}: ${quote.phone || "-"}`,
+    `${copy.whatsappMessage}: ${quote.message || "-"}`
   ].join("\n");
 
   window.open(`https://wa.me/905523253549?text=${encodeURIComponent(text)}`, "_blank");
@@ -92,25 +248,41 @@ const submitQuote = () => {
   <footer class="kardoor-footer" :class="footerClasses">
     <div class="kardoor-footer__inner">
       <section class="kardoor-footer__quote" aria-labelledby="footer-quote-title">
-        <div class="kardoor-footer__social" aria-label="Sosyal medya bağlantıları">
-          <a href="#" aria-label="Facebook">FB</a>
-          <a href="#" aria-label="X">X</a>
-          <a href="#" aria-label="Instagram">IG</a>
-          <a href="#" aria-label="LinkedIn">IN</a>
+        <div class="kardoor-footer__social" :aria-label="footerCopy.socialLabel">
+          <a href="#" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.03 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07Z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="X">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18.9 1.15h3.68L14.54 10.3 24 22.85h-7.41l-5.8-7.6-6.64 7.6H.47l8.6-9.86L0 1.15h7.6l5.24 6.94 6.06-6.94Zm-1.29 19.49h2.04L6.5 3.25H4.31l13.3 17.39Z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.3-2.8a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.45 20.45h-3.56v-5.58c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.95v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.38 4.27 5.46v6.28ZM5.32 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.1 20.45H3.53V9H7.1v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0Z" />
+            </svg>
+          </a>
         </div>
 
         <div class="kardoor-footer__quote-panel">
           <h2 id="footer-quote-title">
-            Premium Çelik Kapı<br />
-            Çözümleri. <em>Teklif alın.</em>
+            {{ footerCopy.quoteTitle }}<br />
+            {{ footerCopy.quoteLine }} <em>{{ footerCopy.quoteEmphasis }}</em>
           </h2>
 
           <form class="footer-quote-form" @submit.prevent="submitQuote">
             <fieldset>
-              <legend>Müşteri profilinizi seçin:</legend>
+              <legend>{{ footerCopy.buyerLegend }}</legend>
 
               <div class="footer-quote-form__choices">
-                <label v-for="type in buyerTypes" :key="type">
+                <label v-for="type in footerCopy.buyerTypes" :key="type">
                   <input
                     v-model="quote.buyerType"
                     type="radio"
@@ -127,16 +299,16 @@ const submitQuote = () => {
                 v-model="quote.name"
                 type="text"
                 name="name"
-                placeholder="Ad Soyad"
-                aria-label="Ad Soyad"
+                :placeholder="footerCopy.placeholders.name"
+                :aria-label="footerCopy.placeholders.name"
               />
 
               <input
                 v-model="quote.phone"
                 type="tel"
                 name="phone"
-                placeholder="Telefon numarası"
-                aria-label="Telefon numarası"
+                :placeholder="footerCopy.placeholders.phone"
+                :aria-label="footerCopy.placeholders.phone"
               />
             </div>
 
@@ -145,11 +317,11 @@ const submitQuote = () => {
                 v-model="quote.message"
                 type="text"
                 name="message"
-                placeholder="Mesajınız"
-                aria-label="Mesajınız"
+                :placeholder="footerCopy.placeholders.message"
+                :aria-label="footerCopy.placeholders.message"
               />
 
-              <button type="submit" aria-label="Teklif talebi gönder">
+              <button type="submit" :aria-label="footerCopy.submitLabel">
                 <span>›</span>
               </button>
             </div>
@@ -157,28 +329,28 @@ const submitQuote = () => {
         </div>
       </section>
 
-      <section class="kardoor-footer__directory" aria-label="Footer menüsü">
+      <section class="kardoor-footer__directory" :aria-label="footerCopy.directoryLabel">
         <div class="footer-link-group">
-          <p>Menü</p>
+          <p>{{ footerCopy.menuTitle }}</p>
 
-          <NuxtLink v-for="item in menuLinks" :key="item.label" :to="item.to">
+          <NuxtLink v-for="item in footerCopy.menuLinks" :key="item.label" :to="item.to">
             {{ item.label }}
           </NuxtLink>
         </div>
 
         <div class="footer-link-group">
-          <p>Hızlı Erişim</p>
+          <p>{{ footerCopy.quickTitle }}</p>
 
-          <NuxtLink v-for="item in quickLinks" :key="item.label" :to="item.to">
+          <NuxtLink v-for="item in footerCopy.quickLinks" :key="item.label" :to="item.to">
             {{ item.label }}
           </NuxtLink>
         </div>
 
         <div class="footer-contact-area">
-          <p>İletişim Bilgileri</p>
+          <p>{{ footerCopy.contactTitle }}</p>
 
           <div class="footer-contact-grid">
-            <article v-for="card in contactCards" :key="card.title">
+            <article v-for="card in footerCopy.contactCards" :key="card.title">
               <h3>{{ card.title }}</h3>
 
               <p>{{ card.description }}</p>
@@ -194,45 +366,46 @@ const submitQuote = () => {
                 </span>
               </a>
 
-              <dl>
-                <div v-for="row in card.schedule" :key="row.day">
-                  <dt>{{ row.day }}</dt>
-                  <dd>{{ row.hour }}</dd>
-                </div>
-              </dl>
+              <iframe
+                v-if="card.type === footerCopy.addressType"
+                class="footer-contact-grid__map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1315.4510751595906!2d27.22665818355117!3d38.35621307980868!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14bbdfce121e182f%3A0x5127d09132566881!2zS2FyZG9vciDDh2VsaWsgS2FwxLEgfCDEsFpNxLBSIERJxZ4gxLBLTMSwTSBLQVBJTEFSSSB8IENBTSBLQVBJIHwgQsSwTkEgR8SwUsSwxZ4gS0FQSUxBUkk!5e0!3m2!1str!2str!4v1778027775096!5m2!1str!2str"
+                :title="footerCopy.mapTitle"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+              />
+
             </article>
           </div>
         </div>
       </section>
 
-      <section class="kardoor-footer__hours" aria-label="Çalışma saatleri">
+      <section class="kardoor-footer__hours" :aria-label="footerCopy.hoursLabel">
         <div>
-          <p>Çalışma Saatleri</p>
+          <p>{{ footerCopy.hoursTitle }}</p>
 
           <dl>
-            <div v-for="item in workingHours" :key="item.day">
+            <div v-for="item in footerCopy.workingHours" :key="item.day">
               <dt>{{ item.day }}</dt>
               <dd>{{ item.hour }}</dd>
             </div>
           </dl>
         </div>
 
-        <span>Mesai sonrası randevu ile hizmet</span>
       </section>
 
       <div class="kardoor-footer__bottom">
         <p>
-          Tüm hakları saklıdır © 2026<br />
+          {{ footerCopy.rights }} © 2026<br />
           <strong>Ege Kardoor</strong>
         </p>
 
-        <nav aria-label="Yasal bağlantılar">
-          <a href="#">Gizlilik Politikası</a>
-          <a href="#">Erişilebilirlik</a>
-          <a href="#">Kullanım Koşulları</a>
+        <nav :aria-label="footerCopy.legalLabel">
+          <a v-for="item in footerCopy.legal" :key="item" href="#">{{ item }}</a>
         </nav>
 
-        <p class="kardoor-footer__credit">Üç Üç Sıfır©</p>
+        <p class="kardoor-footer__credit">{{ footerCopy.credit }}</p>
       </div>
     </div>
   </footer>
@@ -297,20 +470,54 @@ const submitQuote = () => {
     display: grid;
     place-items: center;
     border-radius: 999px;
-    color: var(--footer-text);
-    background: var(--footer-social-bg);
+    color: var(--social-color, var(--footer-text));
+    background:
+      radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.62) 72%),
+      var(--footer-social-bg);
     text-decoration: none;
     text-transform: uppercase;
     font-size: 22px;
     font-weight: 900;
     letter-spacing: -0.015em;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.86),
+      0 20px 44px rgba(16, 21, 29, 0.06);
     transition:
       transform 0.35s ease,
-      background 0.35s ease;
+      background 0.35s ease,
+      color 0.35s ease,
+      box-shadow 0.35s ease;
+
+    &:nth-child(1) {
+      --social-color: #1877f2;
+    }
+
+    &:nth-child(2) {
+      --social-color: #10151d;
+    }
+
+    &:nth-child(3) {
+      --social-color: #e4405f;
+    }
+
+    &:nth-child(4) {
+      --social-color: #0a66c2;
+    }
+
+    svg {
+      width: clamp(34px, 2.4vw, 44px);
+      height: clamp(34px, 2.4vw, 44px);
+      display: block;
+      fill: currentColor;
+    }
 
     &:hover {
       transform: translateY(-5px);
-      background: var(--footer-social-bg-hover);
+      color: #ffffff;
+      background: var(--social-color);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        0 24px 54px color-mix(in srgb, var(--social-color), transparent 70%);
     }
   }
 }
@@ -585,43 +792,20 @@ const submitQuote = () => {
   }
 }
 
-.footer-contact-grid dl {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-
-  div {
-    display: grid;
-    grid-template-columns: minmax(74px, 0.72fr) minmax(0, 1fr);
-    gap: 14px;
-    align-items: baseline;
-  }
-
-  dt,
-  dd {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 850;
-    line-height: 1.08;
-    letter-spacing: -0.012em;
-  }
-
-  dt {
-    color: var(--footer-muted);
-  }
-
-  dd {
-    color: var(--footer-text);
-  }
+.footer-contact-grid__map {
+  display: block;
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+  border: 1px solid var(--footer-line);
+  border-radius: 18px;
+  margin-top: 28px;
+  background: var(--footer-pill);
 }
 
 .kardoor-footer__hours {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 30px;
-  align-items: end;
   margin-bottom: 54px;
   padding: 40px 0;
   border-top: 1px solid var(--footer-line);
@@ -658,21 +842,6 @@ const submitQuote = () => {
   dd {
     margin-top: 6px;
     color: var(--footer-text);
-  }
-
-  > span {
-    display: inline-flex;
-    min-height: 48px;
-    align-items: center;
-    justify-content: center;
-    padding: 0 28px;
-    border-radius: 999px;
-    color: var(--footer-button-text);
-    background: var(--footer-button-bg);
-    font-size: 13px;
-    font-weight: 950;
-    letter-spacing: -0.012em;
-    white-space: nowrap;
   }
 }
 
@@ -769,7 +938,7 @@ const submitQuote = () => {
   }
 
   .kardoor-footer__quote-panel {
-    justify-self: start;
+    justify-self: center;
   }
 
   .kardoor-footer__directory {
@@ -783,16 +952,28 @@ const submitQuote = () => {
 
 @media (max-width: 980px) {
   .kardoor-footer__inner {
-    padding: 0 22px 26px;
+    padding: 0 20px 26px;
   }
 
   .kardoor-footer__quote {
-    padding: 92px 0 86px;
+    padding: 98px 0 70px;
+  }
+
+  .kardoor-footer__quote-panel,
+  .footer-link-group,
+  .footer-contact-area,
+  .kardoor-footer__hours,
+  .kardoor-footer__bottom {
+    text-align: center;
   }
 
   .kardoor-footer__quote-panel h2 {
-    margin-bottom: 56px;
-    font-size: clamp(3.7rem, 15vw, 6.4rem);
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 46px;
+    font-size: clamp(2.85rem, 11.8vw, 4.8rem);
+    line-height: 0.94;
+    letter-spacing: -0.035em;
 
     em {
       white-space: normal;
@@ -800,12 +981,30 @@ const submitQuote = () => {
   }
 
   .footer-quote-form__choices {
-    gap: 18px 24px;
+    justify-content: center;
+    gap: 14px 22px;
+
+    label {
+      font-size: 18px;
+    }
+
+    input {
+      width: 28px;
+      height: 28px;
+      flex-basis: 28px;
+    }
   }
 
   .footer-quote-form__row,
   .footer-quote-form__send {
     grid-template-columns: 1fr;
+  }
+
+  .footer-quote-form input[type="text"],
+  .footer-quote-form input[type="tel"] {
+    height: 68px;
+    padding-inline: 24px;
+    font-size: 16px;
   }
 
   .footer-quote-form button {
@@ -818,12 +1017,19 @@ const submitQuote = () => {
   }
 
   .kardoor-footer__social {
+    display: flex;
+    justify-content: center;
     gap: 12px;
 
     a {
       width: 76px;
       height: 76px;
       font-size: 18px;
+
+      svg {
+        width: 30px;
+        height: 30px;
+      }
     }
   }
 
@@ -838,31 +1044,42 @@ const submitQuote = () => {
     margin-bottom: 30px;
   }
 
+  .footer-link-group a {
+    margin-inline: auto;
+    font-size: clamp(1.8rem, 8vw, 2.55rem);
+  }
+
   .footer-contact-grid {
     grid-template-columns: 1fr;
-    gap: 34px;
+    gap: 30px;
 
     article {
       min-height: 0;
-      padding: 0 0 0 22px;
+      padding: 0;
+      border-left: 0;
     }
 
     article > p {
       min-height: 0;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    h3 {
+      margin-right: auto;
+      margin-left: auto;
     }
   }
 
-  .kardoor-footer__hours {
-    grid-template-columns: 1fr;
-    align-items: start;
+  .footer-contact-grid__map {
+    width: min(100%, 360px);
+    height: 240px;
+    margin-right: auto;
+    margin-left: auto;
+  }
 
-    dl {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    > span {
-      width: fit-content;
-    }
+  .kardoor-footer__hours dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .kardoor-footer__bottom {
@@ -870,12 +1087,48 @@ const submitQuote = () => {
     align-items: start;
 
     nav {
-      justify-content: flex-start;
+      justify-content: center;
     }
   }
 
   .kardoor-footer__credit {
-    justify-self: start;
+    justify-self: center;
   }
+
+  .kardoor-footer__bottom > p:first-child {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .kardoor-footer__inner {
+    padding-inline: 14px;
+  }
+
+  .kardoor-footer__quote {
+    padding-top: 104px;
+  }
+
+  .kardoor-footer__quote-panel h2 {
+    max-width: 11ch;
+    font-size: clamp(2.55rem, 10.8vw, 3.65rem);
+  }
+
+  .footer-quote-form fieldset {
+    margin-bottom: 28px;
+  }
+
+  .footer-contact-grid h3 {
+    font-size: clamp(1.85rem, 8.6vw, 2.35rem);
+  }
+
+  .footer-contact-grid__main {
+    overflow-wrap: anywhere;
+  }
+
+  .kardoor-footer__hours dl {
+    gap: 18px 24px;
+  }
+
 }
 </style>

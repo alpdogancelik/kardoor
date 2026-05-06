@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 
 const nuxtApp = useNuxtApp();
+const { locale } = useKardoorLocale();
 
 const heroRef = ref<HTMLElement | null>(null);
 const zoomLayerRef = ref<HTMLElement | null>(null);
@@ -11,21 +12,26 @@ const canvasRef = ref<HTMLCanvasElement | null>(null);
 const blackoutRef = ref<HTMLElement | null>(null);
 
 let cleanup: (() => void) | undefined;
-let startPortalFromCta: (() => void) | undefined;
 
-const enterShowroomFromCta = (event: MouseEvent) => {
-  event.preventDefault();
-
-  if (startPortalFromCta) {
-    startPortalFromCta();
-    return;
-  }
-
-  document.getElementById("showroom-dive")?.scrollIntoView({
-    block: "start",
-    behavior: "auto"
-  });
-};
+const copy = computed(() =>
+  locale.value === "tr"
+    ? {
+        sectionLabel: "Kardoor giriş animasyonu",
+        imageAlt: "Kardoor çelik kapılı modern villa girişi",
+        title: ["Evinizin", "Güvenliği Bize", "Emanet"],
+        accent: "Güvenliği",
+        suffix: "Bize",
+        scroll: "Kaydır"
+      }
+    : {
+        sectionLabel: "Kardoor entrance sequence",
+        imageAlt: "Modern villa entrance with Kardoor steel door",
+        title: ["Your Home's", "Security Is in", "Our Hands"],
+        accent: "Security",
+        suffix: "Is in",
+        scroll: "Scroll"
+      }
+);
 
 onMounted(async () => {
   const hero = heroRef.value;
@@ -51,7 +57,7 @@ onMounted(async () => {
 
   const playhead = { progress: 0 };
 
-  const doorRect = { x: 608, y: 227, width: 158, height: 346 };
+  const doorRect = { x: 729, y: 270, width: 195, height: 426 };
   const renderDoorRect = { x: 0, y: 0, width: 225, height: 493 };
 
   const sequenceProgressEnd = 0.8;
@@ -416,21 +422,6 @@ onMounted(async () => {
     });
   };
 
-  startPortalFromCta = () => {
-    scrollDirection = 1;
-
-    playheadTween?.kill();
-
-    playheadTween = gsap.to(playhead, {
-      progress: 1,
-      duration: 1.1,
-      ease: "power2.inOut",
-      overwrite: true,
-      onUpdate: () => renderProgress(false, 1),
-      onComplete: () => enterShowroom(true)
-    });
-  };
-
   const onResize = () => {
     updateStagePosition();
     ScrollTrigger.refresh();
@@ -449,8 +440,6 @@ onMounted(async () => {
   window.addEventListener("resize", onResize);
 
   cleanup = () => {
-    startPortalFromCta = undefined;
-
     playheadTween?.kill();
     trigger?.kill(true);
 
@@ -467,19 +456,19 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section ref="heroRef" class="entrance-door" aria-label="Kardoor entrance sequence">
+  <section ref="heroRef" class="entrance-door" :aria-label="copy.sectionLabel">
     <div ref="zoomLayerRef" class="entrance-door__zoom-layer">
       <img
         ref="imageRef"
         src="/images/homelight.png"
-        alt="Modern villa entrance with Kardoor steel door"
+        :alt="copy.imageAlt"
         class="entrance-door__image entrance-door__image--day"
         decoding="async"
         loading="eager"
       >
 
       <img
-        src="/images/homenight.jpeg"
+        src="/images/homenight.png"
         alt=""
         class="entrance-door__image entrance-door__image--night"
         aria-hidden="true"
@@ -493,44 +482,18 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="entrance-door__copy">
-      <p class="entrance-door__eyebrow">
-        Manufactured in Türkiye · Supplied Globally
-      </p>
 
       <h1>
-        <span>Steel doors</span>
-        <span>with architectural</span>
-        <span>presence.</span>
+        <span>{{ copy.title[0] }}</span>
+        <span><span class="entrance-door__title-accent">{{ copy.accent }}</span> {{ copy.suffix }}</span>
+        <span>{{ copy.title[2] }}</span>
       </h1>
 
-      <div class="entrance-door__copy-bottom">
-        <p>
-          Premium steel entrance doors for villas, residential projects, dealers
-          and global supply partners.
-        </p>
-
-        <div class="entrance-door__actions" aria-label="Entrance actions">
-          <a href="#showroom-dive" @click="enterShowroomFromCta">
-            Explore Doors
-          </a>
-
-          <NuxtLink to="/request-quote">
-            Request Project Quote
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
-
-    <div class="entrance-door__specs" aria-label="Kardoor highlights">
-      <span>01 / Steel Security Doors</span>
-      <span>02 / Villa & Project Supply</span>
-      <span>03 / Export-Ready Production</span>
     </div>
 
     <div class="entrance-door__scroll-cue" aria-hidden="true">
-      <span>Scroll</span>
+      <span>{{ copy.scroll }}</span>
       <i />
-      <strong>to open</strong>
     </div>
 
     <div ref="blackoutRef" class="entrance-door__blackout" aria-hidden="true" />

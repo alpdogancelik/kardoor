@@ -33,11 +33,8 @@
     );
 }
 
-.showroom-dive::before {
-  content: none;
-}
-
-.app-shell--day .showroom-dive::before {
+.showroom-dive::before,
+.showroom-dive::after {
   content: none;
 }
 
@@ -161,6 +158,8 @@
   place-items: center;
   height: var(--showroom-scene-height);
   pointer-events: auto;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
 .showroom-dive__door-card {
@@ -172,7 +171,7 @@
   width: min(30vw, 420px);
   height: min(62vh, 650px);
   transform-origin: center bottom;
-  animation: showroom-door-orbit 42s linear infinite;
+  animation: showroom-door-orbit 34s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   animation-delay: var(--orbit-delay, 0s);
   cursor: pointer;
   outline: none;
@@ -199,13 +198,13 @@
   object-fit: contain;
   user-select: none;
   animation: showroom-door-float 5.6s ease-in-out infinite;
-  filter:
-    drop-shadow(0 42px 42px rgba(0, 0, 0, 0.62))
-    drop-shadow(0 0 48px rgba(255, 244, 220, 0.08));
+  filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.22));
+  transition:
+    filter 420ms ease,
+    transform 420ms ease;
 }
 
 .showroom-dive--paused .showroom-dive__door-image,
-.showroom-dive--details .showroom-dive__door-image,
 .showroom-dive__door-card:hover .showroom-dive__door-image,
 .showroom-dive__door-card:focus-visible .showroom-dive__door-image {
   animation-play-state: paused;
@@ -224,11 +223,44 @@
   width: min(380px, calc(100vw - 48px));
   text-align: right;
   opacity: 0;
-  transform: translateY(calc(-50% + 16px));
+  transform: translateY(calc(-50% + 20px));
   pointer-events: none;
   transition:
-    opacity 360ms ease,
-    transform 480ms cubic-bezier(0.19, 1, 0.22, 1);
+    opacity 480ms cubic-bezier(0.19, 1, 0.22, 1),
+    transform 600ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.showroom-dive__product-close {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin: 0 0 18px auto;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: currentColor;
+  background: rgba(255, 255, 255, 0.1);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(16px);
+  transition:
+    border-color 220ms ease,
+    background 220ms ease,
+    transform 220ms ease;
+}
+
+.showroom-dive__product-close:hover {
+  border-color: rgba(37, 216, 255, 0.54);
+  background: rgba(37, 216, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.app-shell--day .showroom-dive__product-close {
+  border-color: rgba(7, 16, 24, 0.14);
+  background: rgba(255, 255, 255, 0.58);
 }
 
 .showroom-dive--details .showroom-dive__product {
@@ -311,16 +343,7 @@
 }
 
 .showroom-dive__controls {
-  position: absolute;
-  left: 50%;
-  top: clamp(620px, 78svh, 760px);
-  bottom: auto;
-  z-index: 8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  transform: translateX(-50%);
+  display: none !important;
 }
 
 .showroom-dive__arrow {
@@ -379,52 +402,52 @@
 
 @keyframes showroom-door-orbit {
   0% {
-    z-index: 5;
+    z-index: 6;
     opacity: 1;
-    filter: blur(0) brightness(1.06) saturate(1.03);
-    transform: translateX(-50%) translateY(0) scale(1);
+    filter: blur(0) brightness(1.08) saturate(1.04);
+    transform: translateX(-50%) translateY(-8px) translateZ(110px) rotateY(0deg) scale(1);
   }
 
-  18% {
+  14% {
     z-index: 4;
-    opacity: 0.5;
-    filter: blur(1px) brightness(0.72) saturate(0.92);
-    transform: translateX(calc(-50% + 30vw)) translateY(18px) scale(0.78);
+    opacity: 0.72;
+    filter: blur(0.8px) brightness(0.82) saturate(0.96);
+    transform: translateX(calc(-50% + 28vw)) translateY(14px) translateZ(20px) rotateY(-13deg) scale(0.82);
   }
 
-  36% {
-    z-index: 1;
-    opacity: 0.1;
-    filter: blur(4px) brightness(0.42) saturate(0.76);
-    transform: translateX(calc(-50% + 14vw)) translateY(42px) scale(0.54);
+  31% {
+    z-index: 2;
+    opacity: 0.28;
+    filter: blur(3px) brightness(0.54) saturate(0.78);
+    transform: translateX(calc(-50% + 18vw)) translateY(48px) translateZ(-180px) rotateY(-26deg) scale(0.58);
   }
 
   50% {
     z-index: 0;
-    opacity: 0;
-    filter: blur(6px) brightness(0.3) saturate(0.7);
-    transform: translateX(-50%) translateY(52px) scale(0.48);
+    opacity: 0.08;
+    filter: blur(6px) brightness(0.34) saturate(0.68);
+    transform: translateX(-50%) translateY(62px) translateZ(-260px) rotateY(0deg) scale(0.46);
   }
 
-  64% {
-    z-index: 1;
-    opacity: 0.1;
-    filter: blur(4px) brightness(0.42) saturate(0.76);
-    transform: translateX(calc(-50% - 14vw)) translateY(42px) scale(0.54);
+  69% {
+    z-index: 2;
+    opacity: 0.28;
+    filter: blur(3px) brightness(0.54) saturate(0.78);
+    transform: translateX(calc(-50% - 18vw)) translateY(48px) translateZ(-180px) rotateY(26deg) scale(0.58);
   }
 
-  82% {
+  86% {
     z-index: 4;
-    opacity: 0.5;
-    filter: blur(1px) brightness(0.72) saturate(0.92);
-    transform: translateX(calc(-50% - 30vw)) translateY(18px) scale(0.78);
+    opacity: 0.72;
+    filter: blur(0.8px) brightness(0.82) saturate(0.96);
+    transform: translateX(calc(-50% - 28vw)) translateY(14px) translateZ(20px) rotateY(13deg) scale(0.82);
   }
 
   100% {
-    z-index: 5;
+    z-index: 6;
     opacity: 1;
-    filter: blur(0) brightness(1.06) saturate(1.03);
-    transform: translateX(-50%) translateY(0) scale(1);
+    filter: blur(0) brightness(1.08) saturate(1.04);
+    transform: translateX(-50%) translateY(-8px) translateZ(110px) rotateY(0deg) scale(1);
   }
 }
 
@@ -481,7 +504,8 @@
 @media (max-width: 900px) {
   .showroom-dive {
     --showroom-scene-height: clamp(700px, 94svh, 820px);
-    min-height: clamp(1040px, 132svh, 1240px);
+    min-height: unset;
+    height: var(--showroom-scene-height);
   }
 
   .showroom-dive__content {
@@ -537,14 +561,27 @@
     left: 20px;
     right: 20px;
     top: auto;
-    bottom: 104px;
+    bottom: 32px;
     width: auto;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     text-align: left;
-    transform: translateY(12px);
+    transform: translateY(16px);
+  }
+
+  .app-shell--day .showroom-dive__product {
+    border: none;
+    background: transparent;
+    box-shadow: none;
   }
 
   .showroom-dive--details .showroom-dive__product {
-    transform: none;
+    transform: translateY(0);
   }
 
   .showroom-dive__product-name {
@@ -553,7 +590,10 @@
 
   .showroom-dive__material,
   .showroom-dive__tone {
-    display: none;
+    display: block;
+    margin-top: 8px;
+    font-size: 0.86rem;
+    line-height: 1.38;
   }
 
   .showroom-dive__tags {
@@ -567,27 +607,13 @@
     font-size: 0.66rem;
   }
 
-  .showroom-dive__controls {
-    top: auto;
-    bottom: 30px;
-    gap: 10px;
-  }
-
-  .showroom-dive__arrow {
-    width: 46px;
-    height: 46px;
-  }
-
-  .showroom-dive__progress {
-    min-height: 40px;
-    padding: 0 12px;
-  }
 }
 
 @media (max-width: 560px) {
   .showroom-dive {
-    --showroom-scene-height: clamp(660px, 94svh, 760px);
-    min-height: clamp(980px, 126svh, 1120px);
+    --showroom-scene-height: min(100svh, 760px);
+    min-height: unset;
+    height: var(--showroom-scene-height);
   }
 
   .showroom-dive__content {
@@ -600,7 +626,9 @@
   }
 
   .showroom-dive__title {
-    font-size: clamp(2.35rem, 12.5vw, 3.5rem);
+    max-width: 9.5ch;
+    font-size: clamp(2.1rem, 11.4vw, 3rem);
+    line-height: 0.9;
   }
 
   .showroom-dive__text {
@@ -608,13 +636,17 @@
   }
 
   .showroom-dive__stage {
-    transform: translateY(18px);
+    transform: translateY(44px);
+  }
+
+  .showroom-dive--details .showroom-dive__stage {
+    transform: translateY(-18px);
   }
 
   .showroom-dive__door-card {
-    bottom: 172px;
-    width: min(66vw, 300px);
-    height: min(46vh, 450px);
+    bottom: 120px;
+    width: min(58vw, 250px);
+    height: min(38vh, 360px);
   }
 
   .showroom-dive__door-card--previous {
@@ -626,7 +658,13 @@
   }
 
   .showroom-dive__product {
-    bottom: 96px;
+    bottom: 24px;
+  }
+
+  .showroom-dive__product-close {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 8px;
   }
 
   .showroom-dive__series {
@@ -634,12 +672,22 @@
   }
 
   .showroom-dive__product-name {
-    font-size: clamp(1.9rem, 11vw, 2.9rem);
+    font-size: clamp(1.45rem, 8.4vw, 2.3rem);
+    line-height: 0.98;
   }
 
   .showroom-dive__tags {
-    display: none;
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
   }
+
+  .showroom-dive__tag {
+    min-height: 28px;
+    padding: 0 9px;
+    font-size: 0.58rem;
+  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

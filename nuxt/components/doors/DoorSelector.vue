@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 const {
   activeIndex,
@@ -20,6 +20,49 @@ const {
 
 const isFilterOpen = ref(false);
 const stageRef = ref<HTMLElement | null>(null);
+const { locale } = useKardoorLocale();
+
+const copy = computed(() =>
+  locale.value === "tr"
+    ? {
+        previousDoor: "Önceki kapı",
+        nextDoor: "Sonraki kapı",
+        selector: "Kapı seçici",
+        panelSystem: "Panel sistemi",
+        exportReady: "İhracata hazır",
+        productDetails: "Ürün detayları",
+        filterDoors: "Kapıları filtrele",
+        productNavigation: "Kapı modeli navigasyonu",
+        filters: "Kapı filtreleri",
+        filterProducts: "Ürünleri filtrele",
+        modelLabel: "model",
+        closeFilters: "Filtreleri kapat",
+        series: "Seri",
+        useCase: "Kullanım alanı",
+        surface: "Yüzey",
+        export: "İhracat",
+        clearFilters: "Filtreleri temizle"
+      }
+    : {
+        previousDoor: "Previous door",
+        nextDoor: "Next door",
+        selector: "Door selector",
+        panelSystem: "Panel system",
+        exportReady: "Export-ready",
+        productDetails: "Product details",
+        filterDoors: "Filter doors",
+        productNavigation: "Door model navigation",
+        filters: "Door filters",
+        filterProducts: "Filter products",
+        modelLabel: "models",
+        closeFilters: "Close filters",
+        series: "Series",
+        useCase: "Use case",
+        surface: "Surface",
+        export: "Export",
+        clearFilters: "Clear filters"
+      }
+);
 
 onMounted(async () => {
   const { gsap } = await import("gsap");
@@ -51,15 +94,15 @@ onMounted(async () => {
     <div class="door-selector__grain" aria-hidden="true" />
     <div class="door-selector__rails" aria-hidden="true" />
 
-    <button class="selector-arrow selector-arrow--left" type="button" aria-label="Previous door" @click="previous">
+    <button class="selector-arrow selector-arrow--left" type="button" :aria-label="copy.previousDoor" @click="previous">
       ←
     </button>
-    <button class="selector-arrow selector-arrow--right" type="button" aria-label="Next door" @click="next">
+    <button class="selector-arrow selector-arrow--right" type="button" :aria-label="copy.nextDoor" @click="next">
       →
     </button>
 
     <div class="door-selector__topline">
-      <p>Door selector</p>
+      <p>{{ copy.selector }}</p>
       <span>{{ String(activeIndex + 1).padStart(2, "0") }} / {{ String(filteredProducts.length).padStart(2, "0") }}</span>
     </div>
 
@@ -88,17 +131,17 @@ onMounted(async () => {
 
     <aside class="spec-card spec-card--capacity">
       <strong>{{ activeProduct.specs[0] }}</strong>
-      <span>Panel system</span>
+      <span>{{ copy.panelSystem }}</span>
     </aside>
 
     <aside class="spec-card spec-card--connect">
-      <span>Export-ready</span>
+      <span>{{ copy.exportReady }}</span>
       <strong>{{ activeProduct.exportTags[0] }}</strong>
     </aside>
 
     <aside class="spec-card spec-card--detail">
       <p>{{ activeProduct.seriesTitle }}</p>
-      <NuxtLink :to="`/doors/${activeProduct.slug}`">Product details</NuxtLink>
+      <NuxtLink :to="`/doors/${activeProduct.slug}`">{{ copy.productDetails }}</NuxtLink>
     </aside>
 
     <div class="door-selector__copy">
@@ -115,11 +158,11 @@ onMounted(async () => {
     </div>
 
     <button class="filter-trigger" type="button" @click="isFilterOpen = true">
-      Filter doors
+      {{ copy.filterDoors }}
       <span aria-hidden="true">≡</span>
     </button>
 
-    <div class="product-strip" aria-label="Door model navigation">
+    <div class="product-strip" :aria-label="copy.productNavigation">
       <button
         v-for="(product, index) in filteredProducts"
         :key="product.slug"
@@ -131,17 +174,17 @@ onMounted(async () => {
       </button>
     </div>
 
-    <div class="filter-panel" :class="{ 'is-open': isFilterOpen }" aria-label="Door filters">
+    <div class="filter-panel" :class="{ 'is-open': isFilterOpen }" :aria-label="copy.filters">
       <div class="filter-panel__head">
         <div>
-          <p>Filter products</p>
-          <span>{{ filteredProducts.length }} models</span>
+          <p>{{ copy.filterProducts }}</p>
+          <span>{{ filteredProducts.length }} {{ copy.modelLabel }}</span>
         </div>
-        <button type="button" aria-label="Close filters" @click="isFilterOpen = false">×</button>
+        <button type="button" :aria-label="copy.closeFilters" @click="isFilterOpen = false">×</button>
       </div>
 
       <div class="filter-group">
-        <h2>Series</h2>
+        <h2>{{ copy.series }}</h2>
         <button
           v-for="series in filterOptions.series"
           :key="series.slug"
@@ -154,7 +197,7 @@ onMounted(async () => {
       </div>
 
       <div class="filter-group">
-        <h2>Use case</h2>
+        <h2>{{ copy.useCase }}</h2>
         <button
           v-for="useCase in filterOptions.useCases"
           :key="useCase"
@@ -167,7 +210,7 @@ onMounted(async () => {
       </div>
 
       <div class="filter-group">
-        <h2>Surface</h2>
+        <h2>{{ copy.surface }}</h2>
         <button
           v-for="surface in filterOptions.surfaces"
           :key="surface"
@@ -180,7 +223,7 @@ onMounted(async () => {
       </div>
 
       <div class="filter-group">
-        <h2>Export</h2>
+        <h2>{{ copy.export }}</h2>
         <button
           v-for="tag in filterOptions.exportTags"
           :key="tag"
@@ -192,7 +235,7 @@ onMounted(async () => {
         </button>
       </div>
 
-      <button class="filter-panel__clear" type="button" @click="clearFilters">Clear filters</button>
+      <button class="filter-panel__clear" type="button" @click="clearFilters">{{ copy.clearFilters }}</button>
     </div>
   </section>
 </template>

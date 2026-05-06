@@ -12,69 +12,146 @@ type DoorItem = {
   tags: string[];
 };
 
-const doors: DoorItem[] = [
+const { locale } = useKardoorLocale();
+
+const doorRecords = [
   {
     id: "emerald-line",
-    name: "Emerald Line",
-    series: "Atelier Series",
     image: "/images/doors/atelier-emerald.png",
-    material: "Laminated steel / gold accent",
-    tone: "Emerald green · champagne",
-    tags: ["Laminoks", "Villa", "Custom size"]
+    i18n: {
+      tr: {
+        name: "Emerald Line",
+        series: "Atelier Serisi",
+        material: "Lamine çelik / altın vurgu",
+        tone: "Zümrüt yeşili · şampanya",
+        tags: ["Laminoks", "Villa", "Özel ölçü"]
+      },
+      en: {
+        name: "Emerald Line",
+        series: "Atelier Series",
+        material: "Laminated steel / gold accent",
+        tone: "Emerald green · champagne",
+        tags: ["Laminox", "Villa", "Custom size"]
+      }
+    }
   },
   {
     id: "mono-graphite",
-    name: "Mono Graphite",
-    series: "Atelier Series",
     image: "/images/doors/atelier-mono-graphite.png",
-    material: "Minimal steel surface",
-    tone: "Graphite black",
-    tags: ["Modern", "Export-ready", "Secure"]
+    i18n: {
+      tr: {
+        name: "Mono Graphite",
+        series: "Atelier Serisi",
+        material: "Minimal çelik yüzey",
+        tone: "Grafit siyah",
+        tags: ["Modern", "İhracata hazır", "Güvenli"]
+      },
+      en: {
+        name: "Mono Graphite",
+        series: "Atelier Series",
+        material: "Minimal steel surface",
+        tone: "Graphite black",
+        tags: ["Modern", "Export-ready", "Secure"]
+      }
+    }
   },
   {
     id: "ivory-line",
-    name: "Ivory Line",
-    series: "Atelier Series",
     image: "/images/doors/atelier-ivory-line.png",
-    material: "Interior premium panel",
-    tone: "Warm ivory · brass",
-    tags: ["Interior", "Minimal", "Soft tone"]
+    i18n: {
+      tr: {
+        name: "Ivory Line",
+        series: "Atelier Serisi",
+        material: "İç mekan premium panel",
+        tone: "Sıcak fildişi · pirinç",
+        tags: ["İç mekan", "Minimal", "Yumuşak ton"]
+      },
+      en: {
+        name: "Ivory Line",
+        series: "Atelier Series",
+        material: "Interior premium panel",
+        tone: "Warm ivory · brass",
+        tags: ["Interior", "Minimal", "Soft tone"]
+      }
+    }
   },
   {
     id: "graphite-oak",
-    name: "Graphite Oak",
-    series: "Atelier Series",
     image: "/images/doors/atelier-graphite-oak.png",
-    material: "Natural oak / graphite steel",
-    tone: "Graphite · light oak",
-    tags: ["Architectural", "Wood texture", "Premium"]
+    i18n: {
+      tr: {
+        name: "Graphite Oak",
+        series: "Atelier Serisi",
+        material: "Doğal meşe / grafit çelik",
+        tone: "Grafit · açık meşe",
+        tags: ["Mimari", "Ahşap doku", "Premium"]
+      },
+      en: {
+        name: "Graphite Oak",
+        series: "Atelier Series",
+        material: "Natural oak / graphite steel",
+        tone: "Graphite · light oak",
+        tags: ["Architectural", "Wood texture", "Premium"]
+      }
+    }
   },
   {
     id: "classic-sand",
-    name: "Classic Sand",
-    series: "Atelier Series",
     image: "/images/doors/atelier-classic-sand.png",
-    material: "Classic embossed steel",
-    tone: "Sand beige",
-    tags: ["Classic", "Metal", "Villa"]
+    i18n: {
+      tr: {
+        name: "Classic Sand",
+        series: "Atelier Serisi",
+        material: "Klasik kabartmalı çelik",
+        tone: "Kum beji",
+        tags: ["Klasik", "Metal", "Villa"]
+      },
+      en: {
+        name: "Classic Sand",
+        series: "Atelier Series",
+        material: "Classic embossed steel",
+        tone: "Sand beige",
+        tags: ["Classic", "Metal", "Villa"]
+      }
+    }
   }
 ];
+
+const doors = computed<DoorItem[]>(() =>
+  doorRecords.map((door) => ({
+    id: door.id,
+    image: door.image,
+    ...door.i18n[locale.value]
+  }))
+);
+
+const copy = computed(() =>
+  locale.value === "tr"
+    ? {
+        showDetails: "bilgilerini göster",
+        closeDetails: "Bilgileri kapat"
+      }
+    : {
+        showDetails: "show details",
+        closeDetails: "Close details"
+      }
+);
 
 const activeIndex = ref(0);
 const direction = ref<"next" | "prev">("next");
 const isDetailVisible = ref(false);
 const isShowroomPaused = ref(false);
 
-const fallbackDoor = doors[0] as DoorItem;
+const fallbackDoor = computed(() => doors.value[0] as DoorItem);
 
-const activeDoor = computed<DoorItem>(() => doors[activeIndex.value] ?? fallbackDoor);
+const activeDoor = computed<DoorItem>(() => doors.value[activeIndex.value] ?? fallbackDoor.value);
 
 const previousIndex = computed(() =>
-  activeIndex.value === 0 ? doors.length - 1 : activeIndex.value - 1
+  activeIndex.value === 0 ? doors.value.length - 1 : activeIndex.value - 1
 );
 
 const nextIndex = computed(() =>
-  activeIndex.value === doors.length - 1 ? 0 : activeIndex.value + 1
+  activeIndex.value === doors.value.length - 1 ? 0 : activeIndex.value + 1
 );
 
 const goToDoor = (index: number) => {
@@ -99,8 +176,7 @@ const getOrbitStyle = (index: number): CSSProperties =>
     "--orbit-delay": `${index * -8.4}s`
   }) as CSSProperties;
 
-const pauseShowcase = () => {
-  isShowroomPaused.value = true;
+const revealDoor = () => {
   isDetailVisible.value = true;
 };
 
@@ -109,24 +185,19 @@ const resumeShowcase = () => {
   isDetailVisible.value = false;
 };
 
-const previewDoor = (index: number) => {
-  pauseShowcase();
-  goToDoor(index);
-};
-
 const selectDoor = (index: number) => {
-  pauseShowcase();
   goToDoor(index);
+  revealDoor();
 };
 
 const selectNextDoor = () => {
-  pauseShowcase();
   nextDoor();
+  revealDoor();
 };
 
 const selectPreviousDoor = () => {
-  pauseShowcase();
   previousDoor();
+  revealDoor();
 };
 
 let touchStartX = 0;
@@ -178,36 +249,10 @@ onBeforeUnmount(() => {
     :data-direction="direction"
     @touchstart.passive="onTouchStart"
     @touchend.passive="onTouchEnd"
-    @mouseleave="resumeShowcase"
   >
     <div class="showroom-dive__wall" aria-hidden="true" />
     <div class="showroom-dive__light" aria-hidden="true" />
     <div class="showroom-dive__floor" aria-hidden="true" />
-
-    <div class="showroom-dive__content">
-      <div class="showroom-dive__eyebrow">
-        Inside the showroom
-      </div>
-
-      <h1 class="showroom-dive__title">
-        Explore Kardoor models in one cinematic space.
-      </h1>
-
-      <p class="showroom-dive__text">
-        Move between selected steel door designs, compare surfaces and continue
-        into the full product series.
-      </p>
-
-      <div class="showroom-dive__actions">
-        <NuxtLink class="showroom-dive__button showroom-dive__button--primary" to="/series">
-          View Series
-        </NuxtLink>
-
-        <NuxtLink class="showroom-dive__button showroom-dive__button--ghost" to="/request-quote">
-          Request Quote
-        </NuxtLink>
-      </div>
-    </div>
 
     <div class="showroom-dive__stage" aria-live="polite">
       <article
@@ -216,9 +261,13 @@ onBeforeUnmount(() => {
         class="showroom-dive__door-card"
         :class="{ 'showroom-dive__door-card--selected': index === activeIndex }"
         :style="getOrbitStyle(index)"
+        role="button"
         tabindex="0"
-        @mouseenter="previewDoor(index)"
-        @focus="previewDoor(index)"
+        :aria-label="`${door.name} ${copy.showDetails}`"
+        :aria-pressed="index === activeIndex && isDetailVisible"
+        @click="selectDoor(index)"
+        @keydown.enter.prevent="selectDoor(index)"
+        @keydown.space.prevent="selectDoor(index)"
       >
         <NuxtImg
           class="showroom-dive__door-image"
@@ -237,9 +286,14 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-if="activeDoor" class="showroom-dive__product">
-      <p class="showroom-dive__series">
-        {{ activeDoor.series }}
-      </p>
+      <button
+        class="showroom-dive__product-close"
+        type="button"
+        :aria-label="copy.closeDetails"
+        @click="resumeShowcase"
+      >
+        x
+      </button>
 
       <h2 class="showroom-dive__product-name">
         {{ activeDoor.name }}
@@ -264,36 +318,5 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div class="showroom-dive__controls" aria-label="Door carousel controls">
-      <button
-        class="showroom-dive__arrow"
-        type="button"
-        aria-label="Previous door"
-        @click="selectPreviousDoor"
-      >
-        ←
-      </button>
-
-      <div class="showroom-dive__progress">
-        <button
-          v-for="(door, index) in doors"
-          :key="door.id"
-          class="showroom-dive__dot"
-          :class="{ 'showroom-dive__dot--active': index === activeIndex }"
-          type="button"
-          :aria-label="`Show ${door.name}`"
-          @click="selectDoor(index)"
-        />
-      </div>
-
-      <button
-        class="showroom-dive__arrow"
-        type="button"
-        aria-label="Next door"
-        @click="selectNextDoor"
-      >
-        →
-      </button>
-    </div>
   </section>
 </template>

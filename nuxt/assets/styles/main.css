@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap");
-
 /* Base */
 @import "./base/tokens.css";
 @import "./base/reset.css";
@@ -16,4 +14,5 @@
 @import "./sections/door-selector.css";
 @import "./sections/content-pages.css";
 @import "./sections/home-team.css";
+@import "./sections/user-review.css";
 @import "./pages/catalog.css";

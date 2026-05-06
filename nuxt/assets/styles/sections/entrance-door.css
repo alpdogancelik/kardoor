@@ -61,15 +61,15 @@
   background:
     linear-gradient(
       90deg,
-      rgba(0, 0, 0, 0.86) 0%,
-      rgba(0, 0, 0, 0.58) 39%,
-      rgba(0, 0, 0, 0.54) 100%
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(0, 0, 0, 0.18) 45%,
+      rgba(0, 0, 0, 0) 100%
     ),
     linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.18) 0%,
-      transparent 36%,
-      rgba(0, 0, 0, 0.88) 100%
+      rgba(0, 0, 0, 0.04) 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.32) 100%
     );
 }
 
@@ -120,7 +120,7 @@
 
 .entrance-door__image--night {
   opacity: 0;
-  filter: saturate(0.92) contrast(1.12) brightness(0.72);
+  filter: saturate(0.96) contrast(1.06) brightness(1);
 }
 
 .app-shell--night .entrance-door__image--day {
@@ -159,7 +159,7 @@
 }
 
 .app-shell--night .entrance-door__frame {
-  filter: saturate(0.7) brightness(0.76) contrast(1.14);
+  filter: saturate(0.62) brightness(0.42) contrast(1.18);
 }
 
 .entrance-door__copy {
@@ -194,15 +194,19 @@
   margin: 0;
   font-family: var(--font-display);
   font-size: clamp(4.2rem, 7.85vw, 10rem);
-  font-weight: 400;
+  font-weight: 700;
   line-height: 0.81;
-  letter-spacing: -0.052em;
+  letter-spacing: -0.04em;
   text-transform: uppercase;
   text-wrap: balance;
 }
 
-.entrance-door__copy h1 span {
+.entrance-door__copy h1 > span {
   display: block;
+}
+
+.entrance-door__title-accent {
+  color: var(--accent, #22d9ff);
 }
 
 .entrance-door__copy-bottom {
@@ -410,7 +414,7 @@
 
 @media (max-width: 820px) {
   .entrance-door__image {
-    object-position: 56% top;
+    object-position: center top;
   }
 
   .entrance-door::before {
@@ -485,12 +489,18 @@
 }
 
 @media (max-width: 520px) {
+  .entrance-door {
+    min-height: 100svh;
+  }
+
   .entrance-door__copy {
-    bottom: 86px;
+    bottom: max(58px, env(safe-area-inset-bottom));
   }
 
   .entrance-door__copy h1 {
-    font-size: clamp(3rem, 17vw, 4.7rem);
+    max-width: 330px;
+    font-size: clamp(2.8rem, 15.4vw, 4.05rem);
+    line-height: 0.86;
   }
 
   .entrance-door__copy-bottom p {
@@ -509,4 +519,43 @@
   .entrance-door__specs {
     display: none;
   }
+}
+
+.app-shell--day .entrance-door {
+  background: #f8f6ef;
+}
+
+.app-shell--day .entrance-door::before {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.52) 0%,
+      rgba(0, 0, 0, 0.32) 23%,
+      rgba(0, 0, 0, 0.08) 51%,
+      rgba(0, 0, 0, 0.015) 72%,
+      rgba(0, 0, 0, 0.04) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.02) 0%,
+      transparent 42%,
+      rgba(0, 0, 0, 0.38) 100%
+    );
+}
+
+.app-shell--day .entrance-door::after {
+  background:
+    linear-gradient(
+      180deg,
+      transparent,
+      rgba(0, 0, 0, 0.42)
+    );
+}
+
+.app-shell--day .entrance-door__image--day {
+  filter: saturate(1) contrast(1.02) brightness(1.02);
+}
+
+.app-shell--day .entrance-door__frame {
+  filter: saturate(0.9) brightness(0.98) contrast(1.02);
 }

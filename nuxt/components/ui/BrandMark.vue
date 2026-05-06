@@ -8,7 +8,6 @@
 
     <span class="brand-copy">
       <span class="brand-title"><strong>EGE</strong> KARDOOR</span>
-      <span class="brand-tagline">Steel Doors · Global Supply</span>
     </span>
   </span>
 </template>
@@ -76,13 +75,6 @@
   color: #3a83ff;
 }
 
-.brand-tagline {
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
 @media (max-width: 820px) {
   .brand-symbol {
     width: 34px;
@@ -101,8 +93,5 @@
     height: 28px;
   }
 
-  .brand-tagline {
-    display: none;
-  }
 }
 </style>

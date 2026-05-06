@@ -2,6 +2,7 @@
 import { computed } from "vue";
 
 const { mode, isHydrated } = useShowroomAmbience();
+const { locale } = useKardoorLocale();
 
 const shellClasses = computed(() => [
   `app-shell--${mode.value}`,
@@ -9,6 +10,12 @@ const shellClasses = computed(() => [
     "app-shell--hydrated": isHydrated.value
   }
 ]);
+
+useHead({
+  htmlAttrs: {
+    lang: locale
+  }
+});
 </script>
 
 <template>
