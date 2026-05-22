@@ -13,6 +13,7 @@ type ShowroomDoor = {
 };
 
 const { locale } = useKardoorLocale();
+const nuxtApp = useNuxtApp();
 
 const frameCount = 120;
 const croppedRenderDoorRect = { x: 0, y: 0, width: 225, height: 493 };
@@ -26,8 +27,8 @@ const imageKitSeriesImages = {
   classicSand: `${imageKitBaseUrl}/series/3.png?updatedAt=1778762644382`
 } as const;
 const imageKitHomeImages = {
-  day: `${imageKitBaseUrl}/homelight.png?updatedAt=1778756520120`,
-  night: `${imageKitBaseUrl}/homenight.png?updatedAt=1778756519909`
+  day: `${imageKitBaseUrl}/homelight.png?updatedAt=1779402057000`,
+  night: `${imageKitBaseUrl}/homenight.png?updatedAt=1779402057000`
 } as const;
 const doorRenderUpdatedAt = "1778792850469";
 
@@ -134,10 +135,14 @@ onMounted(() => {
   const playhead = { progress: 0 };
   const doorRect = { x: 729, y: 270, width: 195, height: 426 };
 
-  const introPortion = 0.42;
+  const portalDuration = 0.4;
+  const introPortion = portalDuration;
   const sequenceProgressEnd = 0.5;
   const zoomProgressStart = 0.0;
   const blackoutProgressStart = 1.0;
+  const sequenceEndMaster = introPortion * sequenceProgressEnd;
+  const expandEndMaster = introPortion;
+  const horizontalStart = expandEndMaster;
 
   let currentFrameIndex = -1;
   let targetFrameIndex = 0;
@@ -147,10 +152,7 @@ onMounted(() => {
   let fallbackScanTimer: number | null = null;
   let isDoorOpen = false;
   let isShowroomReady = false;
-  let scrollDirection = 1;
-  let doorScreenRect = { left: 0, top: 0, width: 0, height: 0 };
-  let heroBounds = { width: 0, height: 0 };
-  let zoomOriginPx = { x: 0, y: 0 };
+  let pageShowCleanup: (() => void) | null = null;
 
   const setDoorOpen = (nextState: boolean) => {
     if (isDoorOpen === nextState) return;
@@ -164,7 +166,7 @@ onMounted(() => {
   };
 
   const frameUrl = (frameNumber: number) =>
-    `${imageKitBaseUrl}/doorrender/render${String(frameNumber).padStart(4, "0")}.png?updatedAt=${doorRenderUpdatedAt}`;
+    `${imageKitBaseUrl}/doorrender1/${String(frameNumber).padStart(4, "0")}.png?updatedAt=${doorRenderUpdatedAt}`;
 
   const loadFrame = (frameNumber: number) => {
     const loaded = loadedFrames.get(frameNumber);
@@ -268,8 +270,8 @@ onMounted(() => {
   };
 
   const drawFrame = (source: HTMLImageElement) => {
-    const displayWidth = Math.max(1, Math.round(stage.getBoundingClientRect().width));
-    const displayHeight = Math.max(1, Math.round(stage.getBoundingClientRect().height));
+    const displayWidth = Math.max(1, Math.round(stage.clientWidth));
+    const displayHeight = Math.max(1, Math.round(stage.clientHeight));
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     const canvasWidth = Math.max(1, Math.round(displayWidth * pixelRatio));
     const canvasHeight = Math.max(1, Math.round(displayHeight * pixelRatio));
@@ -315,7 +317,6 @@ onMounted(() => {
     const stageHeight = doorRect.height * scale;
     const zoomOriginXPx = offsetX + (doorRect.x + doorRect.width * 0.5) * scale;
     const zoomOriginYPx = offsetY + (doorRect.y + doorRect.height * 0.5) * scale;
-    zoomOriginPx = { x: zoomOriginXPx, y: zoomOriginYPx };
     const zoomOriginX = `${zoomOriginXPx}px`;
     const zoomOriginY = `${zoomOriginYPx}px`;
     const doorCenterX = zoomOriginX;
@@ -324,18 +325,10 @@ onMounted(() => {
     const doorLeftPx = offsetX + doorRect.x * scale;
     const doorTopPx = offsetY + doorRect.y * scale;
 
-    doorScreenRect = { left: doorLeftPx, top: doorTopPx, width: stageWidth, height: stageHeight };
-    heroBounds = { width: bounds.width, height: bounds.height };
-
     stage.style.setProperty("--door-left", `${doorLeftPx}px`);
     stage.style.setProperty("--door-top", `${doorTopPx}px`);
     stage.style.setProperty("--door-width", `${stageWidth}px`);
     stage.style.setProperty("--door-height", `${stageHeight}px`);
-    const baseShowroomScale = Math.max(
-      0.18,
-      Math.min(0.32, stageWidth / 540)
-    );
-    hero.style.setProperty("--showroom-base-scale", `${baseShowroomScale}`);
     zoomLayer.style.setProperty("--zoom-origin-x", zoomOriginX);
     zoomLayer.style.setProperty("--zoom-origin-y", zoomOriginY);
     hero.style.setProperty("--zoom-origin-x", zoomOriginX);
@@ -354,7 +347,7 @@ onMounted(() => {
     const eased = clamped * clamped;
 
     zoomLayer.style.setProperty("--hero-zoom-scale", `${1 + eased * 1.1}`);
-    zoomLayer.style.setProperty("--hero-zoom-brightness", `${1 - eased * 0.35}`);
+    zoomLayer.style.setProperty("--hero-zoom-brightness", `${1 - eased * 0.12}`);
     stage.style.opacity = `${1 - Math.max(0, clamped - 0.92) / 0.08}`;
   };
 
@@ -405,82 +398,47 @@ onMounted(() => {
   const updateMasterProgress = (masterProgress: number) => {
     const progress = Math.min(1, Math.max(0, masterProgress));
 
-    // PHASE 1: frame animation only (master 0 → sequenceEndMaster)
-    // PHASE 2: showroom appears inside door rect, small (sequenceEndMaster → peekEndMaster)
-    // PHASE 3: expand to full screen + zoom (peekEndMaster → introPortion)
-    const sequenceEndMaster = introPortion * sequenceProgressEnd;
-    const peekDuration = 0.04;
-    const peekEndMaster = sequenceEndMaster + peekDuration;
-    const expandEndMaster = introPortion;
-    const horizontalStart = expandEndMaster + 0.04;
-
+    // First play the full 120-frame door opening, then zoom into the doorway.
     const entranceProgress = Math.min(1, progress / introPortion);
     const showroomProgress = Math.min(
       1,
       Math.max(0, (progress - horizontalStart) / (1 - horizontalStart))
     );
 
-    // Peek: showroom fades in inside door rect (no clip expansion)
-    const peekProgress = easeInOut(
-      Math.min(1, Math.max(0, (progress - sequenceEndMaster) / peekDuration))
+    const portalProgress = easeInOut(
+      Math.min(1, Math.max(0, (progress - sequenceEndMaster) / (expandEndMaster - sequenceEndMaster)))
     );
-    // Expand: clip grows to full screen + hero zoom intensifies
-    const expandProgress = easeInOut(
-      Math.min(1, Math.max(0, (progress - peekEndMaster) / (expandEndMaster - peekEndMaster)))
+    const showroomContentProgress = easeInOut(
+      Math.min(1, Math.max(0, (portalProgress - 0.82) / 0.18))
     );
-
-    // Hero zoom — subtle during frame anim, intensifies during expand
-    const frameZoomEased = entranceProgress < sequenceProgressEnd
-      ? Math.pow(entranceProgress / sequenceProgressEnd, 2) * 0.15
-      : 0.15 + expandProgress * 0.95;
+    const frameZoomEased = portalProgress * 24;
+    const overlayFade = 1 - easeInOut(Math.min(1, Math.max(0, (portalProgress - 0.08) / 0.34)));
 
     const distance = Math.max(0, showroomTrack.scrollWidth - window.innerWidth);
 
-    // Base scale: showroom fits inside zoomed door rect during peek
-    const zoomScaleNow = 1 + frameZoomEased;
-    const zoomedDoorW = doorScreenRect.width * zoomScaleNow;
-    const zoomedDoorH = doorScreenRect.height * zoomScaleNow;
-    const baseScale = Math.max(0.18, Math.min(0.55, zoomedDoorW / 540));
-    const showroomScale = baseScale + expandProgress * (1 - baseScale);
-
-    // Clip-path: door rect during peek, expand to full screen during expand phase
-    const t = expandProgress;
-    const scaleMax = Math.max(
-      heroBounds.width / Math.max(1, zoomedDoorW),
-      heroBounds.height / Math.max(1, zoomedDoorH)
-    );
-    const rectScale = 1 + t * (scaleMax - 1);
-    const visibleW = zoomedDoorW * rectScale;
-    const visibleH = zoomedDoorH * rectScale;
-    const screenCx = heroBounds.width / 2;
-    const screenCy = heroBounds.height / 2;
-    const cx = zoomOriginPx.x + (screenCx - zoomOriginPx.x) * t;
-    const cy = zoomOriginPx.y + (screenCy - zoomOriginPx.y) * t;
-    const clipLeft = Math.max(0, cx - visibleW / 2);
-    const clipTop = Math.max(0, cy - visibleH / 2);
-    const clipRight = Math.max(0, heroBounds.width - (cx + visibleW / 2));
-    const clipBottom = Math.max(0, heroBounds.height - (cy + visibleH / 2));
-
-    hero.style.setProperty("--clip-top", `${clipTop}px`);
-    hero.style.setProperty("--clip-right", `${clipRight}px`);
-    hero.style.setProperty("--clip-bottom", `${clipBottom}px`);
-    hero.style.setProperty("--clip-left", `${clipLeft}px`);
+    hero.style.removeProperty("--showroom-clip");
 
     updateEntranceProgress(entranceProgress);
 
     // Override updateZoom's hero-zoom-scale with our phased value
     zoomLayer.style.setProperty("--hero-zoom-scale", `${1 + frameZoomEased}`);
-    zoomLayer.style.setProperty("--hero-zoom-brightness", `${1 - expandProgress * 0.3}`);
+    zoomLayer.style.setProperty("--hero-zoom-brightness", `${1 - portalProgress * 0.18}`);
 
     showroomTrack.style.setProperty("--track-x", `${-distance * showroomProgress}px`);
-    hero.style.setProperty("--showroom-opacity", `${peekProgress}`);
-    hero.style.setProperty("--showroom-reveal", `${expandProgress}`);
-    hero.style.setProperty("--showroom-scale", `${showroomScale}`);
+    hero.style.setProperty("--showroom-opacity", `${portalProgress}`);
+    hero.style.setProperty("--showroom-backdrop-opacity", `${portalProgress}`);
+    hero.style.setProperty("--showroom-content-opacity", `${showroomContentProgress}`);
+    hero.style.setProperty("--showroom-reveal", `${portalProgress}`);
+    hero.style.setProperty(
+      "--showroom-scale",
+      `${0.15 + portalProgress * 0.85}`
+    );
     hero.style.setProperty("--showroom-blur", "0px");
-    const introFade = expandProgress < 0.85 ? 1 : 1 - (expandProgress - 0.85) / 0.15;
+    hero.style.setProperty("--entrance-overlay-opacity", `${overlayFade}`);
+    const introFade = portalProgress < 0.72 ? 1 : 1 - (portalProgress - 0.72) / 0.28;
     hero.style.setProperty("--intro-opacity", `${introFade}`);
     hero.style.setProperty("--portal-blackout-opacity", "0");
-    hero.classList.toggle("entrance-door--showroom", expandProgress >= 0.99);
+    hero.classList.toggle("entrance-door--showroom", portalProgress >= 0.99);
   };
 
   const scrubToMasterProgress = (progress: number) => {
@@ -507,25 +465,17 @@ onMounted(() => {
     showroomTrack.style.setProperty("--track-x", "0px");
     hero.classList.remove("entrance-door--showroom");
     hero.style.setProperty("--showroom-opacity", "0");
+    hero.style.setProperty("--showroom-backdrop-opacity", "0");
+    hero.style.setProperty("--showroom-content-opacity", "0");
     hero.style.setProperty("--intro-opacity", "1");
+    hero.style.setProperty("--entrance-overlay-opacity", "1");
     updateZoom(0);
     updateContentState(0);
     hero.style.setProperty("--portal-blackout-opacity", "0");
     hero.style.setProperty("--showroom-reveal", "0");
-    hero.style.setProperty("--showroom-scale", "1");
+    hero.style.setProperty("--showroom-scale", "0.15");
     hero.style.setProperty("--showroom-blur", "0px");
-    if (heroBounds.width && doorScreenRect.width) {
-      hero.style.setProperty("--clip-top", `${doorScreenRect.top}px`);
-      hero.style.setProperty("--clip-left", `${doorScreenRect.left}px`);
-      hero.style.setProperty(
-        "--clip-right",
-        `${heroBounds.width - doorScreenRect.left - doorScreenRect.width}px`
-      );
-      hero.style.setProperty(
-        "--clip-bottom",
-        `${heroBounds.height - doorScreenRect.top - doorScreenRect.height}px`
-      );
-    }
+    hero.style.removeProperty("--showroom-clip");
     hero.style.setProperty("--doorway-opacity", "0");
     hero.style.setProperty("--frame-fade", "1");
     stage.style.opacity = "1";
@@ -536,6 +486,16 @@ onMounted(() => {
       currentFrameIndex = 0;
       drawFrame(loadedFrame);
     });
+  };
+
+  const resetEntranceScroll = () => {
+    window.history.scrollRestoration = "manual";
+    nuxtApp.$lenis?.scrollTo?.(0, { immediate: true, force: true });
+    window.scrollTo(0, 0);
+    trigger?.scroll(0);
+    trigger?.refresh();
+    ScrollTrigger.refresh();
+    ScrollTrigger.update();
   };
 
   const createEntranceTrigger = () => {
@@ -555,14 +515,12 @@ onMounted(() => {
         updateMasterProgress(playhead.progress);
       },
       onUpdate: (self) => {
-        scrollDirection = self.direction;
         playheadTween?.kill();
         playheadTween = null;
         playhead.progress = self.progress;
         updateMasterProgress(playhead.progress);
       },
       onLeaveBack: () => {
-        scrollDirection = -1;
         resetPortalVisuals();
       }
     });
@@ -588,18 +546,32 @@ onMounted(() => {
   else image.addEventListener("load", updateStagePosition, { once: true });
 
   resetPortalVisuals();
+  resetEntranceScroll();
   warmFrameCache();
   preloadFirstShowroomDoor();
   createEntranceTrigger();
+  resetEntranceScroll();
   requestAnimationFrame(restoreBrokenFallbackImages);
   fallbackScanTimer = window.setTimeout(restoreBrokenFallbackImages, 1400);
   window.addEventListener("resize", onResize);
+  const onPageShow = () => {
+    resetPortalVisuals();
+    resetEntranceScroll();
+    requestAnimationFrame(() => {
+      updateStagePosition();
+      resetPortalVisuals();
+      ScrollTrigger.refresh();
+    });
+  };
+  window.addEventListener("pageshow", onPageShow);
+  pageShowCleanup = () => window.removeEventListener("pageshow", onPageShow);
 
   cleanup = () => {
     playheadTween?.kill();
     trigger?.kill(true);
     if (preloadTimer) window.clearTimeout(preloadTimer);
     if (fallbackScanTimer) window.clearTimeout(fallbackScanTimer);
+    pageShowCleanup?.();
     setDoorOpen(false);
     window.removeEventListener("resize", onResize);
   };
